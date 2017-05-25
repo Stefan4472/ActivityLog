@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Helper class to provide access to the database.
@@ -35,19 +36,24 @@ public class DBManager extends SQLiteOpenHelper {
                 LOG_COLUMN_ACTIVITY + " INTEGER, " +
                 LOG_COLUMN_DURATION + " INTEGER, " +
                 LOG_COLUMN_TIMESTAMP + " INTEGER)");
+        Log.d("DBManager", "Created Database");
     }
 
     @Override // drop the table and re-create database if needs to be ugraded
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
+        Log.d("DBManager", "Request to upgrade from " + oldVersion + " to " + newVersion);
         database.execSQL("DROP TABLE IF EXISTS " + LOG_TABLE_NAME);
         onCreate(database);
     }
 
-    // inserts a LogEntry object to the database
-    public boolean insertEntry(LogEntry newLog) {
+    // inserts a LogEntry object to the database. Returns the id
+    public long insertEntry(LogEntry newEntry) {
+        Log.d("DBManager", "Adding " + newEntry);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(LOG_TABLE_NAME, null, DBUtil.getContentVals(newLog));
-        return true;
+        long id = db.insert(LOG_TABLE_NAME, null, DBUtil.getContentVals(newEntry));
+        assert(id != -1);
+        assert getEntry(id).equals(newEntry);
+        return id;
     }
 
     // returns Cursor containing all the data from the database
@@ -56,16 +62,27 @@ public class DBManager extends SQLiteOpenHelper {
         return db.rawQuery("SELECT * FROM " + LOG_TABLE_NAME, null);
     }
 
-    // updates LogEntry under given id with the new LogEntry object
-    public boolean updateEntry(Integer id, LogEntry newEntry) {
+    // returns LogEntry under given id
+    public LogEntry getEntry(long id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.update(LOG_TABLE_NAME, DBUtil.getContentVals(newEntry), "id = " + id, null);
+        Cursor retrieved = db.rawQuery("SELECT * FROM " + LOG_TABLE_NAME +
+                " WHERE " + LOG_COLUMN_ID + " = " + id, null);
+        return DBUtil.getLogsFromCursor(retrieved).get(0);
+    }
+
+    // updates LogEntry under given id with the new LogEntry object
+    public boolean updateEntry(long id, LogEntry newEntry) {
+        Log.d("DBManager", "Updating " + getEntry(id) + " to " + newEntry);
+        SQLiteDatabase db = this.getWritableDatabase();
+        long new_id = db.update(LOG_TABLE_NAME, DBUtil.getContentVals(newEntry), LOG_COLUMN_ID + " = " + id, null);
+        assert getEntry(new_id).equals(newEntry);
         return true;
     }
 
     // deletes given row from the database
-    public Integer deleteEntry(Integer id) {
+    public void deleteEntry(long id) {
+        Log.d("DBManager", "Deleting " + getEntry(id));
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(LOG_TABLE_NAME, "id = " + id, null);
+        db.delete(LOG_TABLE_NAME, LOG_COLUMN_ID + " = " + id, null);
     }
 }
