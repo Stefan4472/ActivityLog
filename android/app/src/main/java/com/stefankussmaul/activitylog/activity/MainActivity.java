@@ -2,16 +2,11 @@ package com.stefankussmaul.activitylog.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.stefankussmaul.activitylog.content.DBManager;
-import com.stefankussmaul.activitylog.content.DBQueryBuilder;
-import com.stefankussmaul.activitylog.content.DBUtil;
-
-import java.util.Calendar;
-import java.util.Date;
+import com.stefankussmaul.activitylog.content.QueryBuilder;
 
 /**
  * Displays MainScreen of the app.
@@ -30,19 +25,19 @@ public class MainActivity extends Activity {
         DBManager manager = new DBManager(this);
 //        manager.insertEntry(new LogEntry("Testing", System.currentTimeMillis(), 100000));
 //        manager.insertEntry(new LogEntry("Testing", System.currentTimeMillis(), 500));
-        DBQueryBuilder query_builder = new DBQueryBuilder();
+        QueryBuilder query_builder = new QueryBuilder();
 
 //        query_builder.setActivityFilter("Testing");
-//        Log.d("MainActivity", "Generated query: " + query_builder.generateQuery());
-//        Log.d("MainActivity", DBUtil.logListToString(DBUtil.getLogsFromCursor(manager.runQuery(query_builder.generateQuery()))));
+//        Log.d("MainActivity", "Generated query: " + query_builder.getQuery());
+//        Log.d("MainActivity", DBUtil.logListToString(DBUtil.getLogsFromCursor(manager.runQuery(query_builder.getQuery()))));
 //
 //        query_builder.setDateBoundedMinMax(new Date(2017, 5, 25), new Date(2017, 5, 26));
-//        Log.d("MainActivity", "Generated query: " + query_builder.generateQuery());
-//        Log.d("MainActivity", DBUtil.logListToString(DBUtil.getLogsFromCursor(manager.runQuery(query_builder.generateQuery()))));
+//        Log.d("MainActivity", "Generated query: " + query_builder.getQuery());
+//        Log.d("MainActivity", DBUtil.logListToString(DBUtil.getLogsFromCursor(manager.runQuery(query_builder.getQuery()))));
 //
 //        query_builder.setDurationFilter(0, 2000);
-//        Log.d("MainActivity", "Generated query: " + query_builder.generateQuery());
-//        Log.d("MainActivity", DBUtil.logListToString(DBUtil.getLogsFromCursor(manager.runQuery(query_builder.generateQuery()))));
+//        Log.d("MainActivity", "Generated query: " + query_builder.getQuery());
+//        Log.d("MainActivity", DBUtil.logListToString(DBUtil.getLogsFromCursor(manager.runQuery(query_builder.getQuery()))));
         // todo: move to legit testing class
 //        Log.d("MainActivity", DBUtil.dbToString(manager));
 //        manager.insertEntry(new LogEntry("TestInsert", System.currentTimeMillis(), 3_600_000));

@@ -1,5 +1,7 @@
 package com.stefankussmaul.activitylog.content;
 
+import android.util.Log;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -12,17 +14,17 @@ import static com.stefankussmaul.activitylog.content.DBManager.LOG_TABLE_NAME;
  * Builds database queries based on defined filters.
  */
 
-public class DBQueryBuilder {
+public class QueryBuilder {
 
     // generated clauses for each possible filter
-    private String activityClause;
-    private String dateClause;
-    private String durationClause;
+    private String activityClause = "";
+    private String dateClause = "";
+    private String durationClause = "";
 
     // number of filters to be applied
     private int numClauses;
 
-    public DBQueryBuilder() {
+    public QueryBuilder() {
 
     }
 
@@ -69,7 +71,7 @@ public class DBQueryBuilder {
     }
 
     // sets the dateClause to accept timeStamps that happened on the day given
-    public void setDateOnDay(Date date) {
+    public void setDateOnDay(Date date) { // todo: needs to be tested!
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         // set the fields to get midnight of today
@@ -123,26 +125,28 @@ public class DBQueryBuilder {
         }
     }
 
-    public String generateQuery() {
+    public String getQuery() {
         String query = "SELECT * FROM " + LOG_TABLE_NAME;
 
         if (numClauses != 0) {
+            // make a copy of numClauses
+            int clauses_to_add = numClauses;
             query += " WHERE ";
             if (!activityClause.isEmpty()) {
-                numClauses--;
+                clauses_to_add--;
                 query += activityClause;
-                if (numClauses > 0) {
+                if (clauses_to_add > 0) {
                     query += " AND ";
                 }
             }
-            if (numClauses > 0 && !dateClause.isEmpty()) {
-                numClauses--;
+            if (clauses_to_add > 0 && !dateClause.isEmpty()) {
+                clauses_to_add--;
                 query += dateClause;
-                if (numClauses > 0) {
+                if (clauses_to_add > 0) {
                     query += " AND ";
                 }
             }
-            if (numClauses > 0 && !durationClause.isEmpty()) {
+            if (clauses_to_add > 0 && !durationClause.isEmpty()) {
                 query += durationClause;
             }
         }
