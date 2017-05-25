@@ -1,5 +1,6 @@
 package com.stefankussmaul.activitylog.content;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import static com.stefankussmaul.activitylog.content.DBManager.LOG_COLUMN_ACTIVITY;
@@ -13,67 +14,136 @@ import static com.stefankussmaul.activitylog.content.DBManager.LOG_TABLE_NAME;
 
 public class DBQueryBuilder {
 
-    // available filters
-    private String activityName;
-    private long startDate, endDate;
-    private int durationLow, durationHigh;
+    // generated clauses for each possible filter
+    private String activityClause;
+    private String dateClause;
+    private String durationClause;
+
+    // number of filters to be applied
+    private int numClauses;
 
     public DBQueryBuilder() {
 
     }
 
-    public void setNameFilter(String activityName) {
-        this.activityName = activityName;
+    public void setActivityFilter(String activityName) {
+        if (activityClause.isEmpty()) {
+            numClauses++;
+        }
+        activityClause = LOG_COLUMN_ACTIVITY + " = '" + activityName + "'";
     }
 
-    public void setDateFilter(Date startDate, Date endDate) {
-        this.startDate = startDate.getTime();
-        this.endDate = endDate.getTime();
+    public void resetActivityFilter() {
+        if (!activityClause.isEmpty()) {
+            numClauses--;
+            activityClause = "";
+        }
     }
 
-    public void setDurationFilter(int min, int max) {
-        durationLow = min;
-        durationHigh = max;
+    // sets the dateClause to accept timeStamps only greater than/equal to the given Date's ms.
+    // Cannot be combined with setDateBoundedMax! Instead use setDateBoundedMinMax(Date, Date)
+    public void setDateBoundedMin(Date minDate) {
+        if (dateClause.isEmpty()) {
+            numClauses++;
+        }
+        dateClause = LOG_COLUMN_TIMESTAMP + " >= " + minDate.getTime();
+    }
+
+    // sets the dateClause to accept timeStamps only less than/equal to the given maxDate's ms.
+    // Cannot be combined with setDateBoundedMin! Instead use setDateBoundedMinMax(Date, Date)
+    public void setDateBoundedMax(Date maxDate) {
+        if (dateClause.isEmpty()) {
+            numClauses++;
+        }
+        dateClause = LOG_COLUMN_TIMESTAMP + " <= " + maxDate.getTime();
+    }
+
+    // sets the dateClause to accept timeStamps greater than/equal to the given minDate's ms and
+    // less than/equal to the given maxDate's ms
+    public void setDateBoundedMinMax(Date minDate, Date maxDate) {
+        if (dateClause.isEmpty()) {
+            numClauses++;
+        }
+        dateClause = LOG_COLUMN_TIMESTAMP + " >= " + minDate.getTime() + " AND " +
+            LOG_COLUMN_TIMESTAMP + " <= " + maxDate.getTime();
+    }
+
+    // sets the dateClause to accept timeStamps that happened on the day given
+    public void setDateOnDay(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        // set the fields to get midnight of today
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        Date lower_bound = calendar.getTime();
+
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+
+        Date upper_bound = calendar.getTime();
+
+        setDateBoundedMinMax(lower_bound, upper_bound);
+    }
+
+    public void resetDateFilter() {
+        if (!dateClause.isEmpty()) {
+            numClauses--;
+            dateClause = "";
+        }
+    }
+
+    public void setDurationBoundedMin(int min) {
+        if (durationClause.isEmpty()) {
+            numClauses++;
+        }
+        durationClause = LOG_COLUMN_DURATION + " >= " + min;
+    }
+
+    public void setDurationBoundedMax(int max) {
+        if (durationClause.isEmpty()) {
+            numClauses++;
+        }
+        durationClause = LOG_COLUMN_DURATION + " <= " + max;
+    }
+
+    public void setDurationBoundedMinMax(int min, int max) {
+        if (durationClause.isEmpty()) {
+            numClauses++;
+        }
+        durationClause = LOG_COLUMN_DURATION + " >= " + min + " AND " + LOG_COLUMN_DURATION +
+                " <= " + max;
+    }
+
+    public void resetDurationFilter() {
+        if (!durationClause.isEmpty()) {
+            numClauses--;
+            durationClause = "";
+        }
     }
 
     public String generateQuery() {
         String query = "SELECT * FROM " + LOG_TABLE_NAME;
-        int clauses = 0;
-        String activity_clause = "";
-        if (!activityName.isEmpty()) {
-            clauses++;
-            activity_clause = LOG_COLUMN_ACTIVITY + " = " + activityName;
-        }
-        String date_clause = "";
-        if (startDate != 0 && endDate != 0) {
-            clauses++;
-            date_clause = LOG_COLUMN_TIMESTAMP + " >= " + startDate + " AND " +
-                    LOG_COLUMN_TIMESTAMP + " <= " + endDate;
-        }
-        String duration_clause = "";
-        if (durationLow != 0 && durationHigh != 0) {
-            clauses++;
-            duration_clause = LOG_COLUMN_DURATION + " >= " + durationLow + " AND " +
-                    LOG_COLUMN_DURATION + " <= " + durationHigh;
-        }
-        if (clauses != 0) {
+
+        if (numClauses != 0) {
             query += " WHERE ";
-            if (!activity_clause.isEmpty()) {
-                clauses--;
-                query += activity_clause;
-                if (clauses > 0) {
+            if (!activityClause.isEmpty()) {
+                numClauses--;
+                query += activityClause;
+                if (numClauses > 0) {
                     query += " AND ";
                 }
             }
-            if (clauses > 0 && !date_clause.isEmpty()) {
-                clauses--;
-                query += date_clause;
-                if (clauses > 0) {
+            if (numClauses > 0 && !dateClause.isEmpty()) {
+                numClauses--;
+                query += dateClause;
+                if (numClauses > 0) {
                     query += " AND ";
                 }
             }
-            if (clauses > 0 && !duration_clause.isEmpty()) {
-                query += duration_clause;
+            if (numClauses > 0 && !durationClause.isEmpty()) {
+                query += durationClause;
             }
         }
         return query;

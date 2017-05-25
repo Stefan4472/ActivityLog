@@ -9,9 +9,9 @@ import android.view.WindowManager;
 import com.stefankussmaul.activitylog.content.DBManager;
 import com.stefankussmaul.activitylog.content.DBQueryBuilder;
 import com.stefankussmaul.activitylog.content.DBUtil;
-import com.stefankussmaul.activitylog.content.LogEntry;
 
-import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Displays MainScreen of the app.
@@ -28,9 +28,21 @@ public class MainActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 //        setContentView(R.layout.mainscreen_layout);
         DBManager manager = new DBManager(this);
+//        manager.insertEntry(new LogEntry("Testing", System.currentTimeMillis(), 100000));
+//        manager.insertEntry(new LogEntry("Testing", System.currentTimeMillis(), 500));
         DBQueryBuilder query_builder = new DBQueryBuilder();
-        query_builder.setNameFilter("Testing");
-        Log.d("MainActivity", DBUtil.logListToString(DBUtil.getLogsFromCursor(manager.runQuery(query_builder.generateQuery()))));
+
+//        query_builder.setActivityFilter("Testing");
+//        Log.d("MainActivity", "Generated query: " + query_builder.generateQuery());
+//        Log.d("MainActivity", DBUtil.logListToString(DBUtil.getLogsFromCursor(manager.runQuery(query_builder.generateQuery()))));
+//
+//        query_builder.setDateBoundedMinMax(new Date(2017, 5, 25), new Date(2017, 5, 26));
+//        Log.d("MainActivity", "Generated query: " + query_builder.generateQuery());
+//        Log.d("MainActivity", DBUtil.logListToString(DBUtil.getLogsFromCursor(manager.runQuery(query_builder.generateQuery()))));
+//
+//        query_builder.setDurationFilter(0, 2000);
+//        Log.d("MainActivity", "Generated query: " + query_builder.generateQuery());
+//        Log.d("MainActivity", DBUtil.logListToString(DBUtil.getLogsFromCursor(manager.runQuery(query_builder.generateQuery()))));
         // todo: move to legit testing class
 //        Log.d("MainActivity", DBUtil.dbToString(manager));
 //        manager.insertEntry(new LogEntry("TestInsert", System.currentTimeMillis(), 3_600_000));
