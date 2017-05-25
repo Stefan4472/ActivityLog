@@ -14,7 +14,7 @@ import android.util.Log;
 public class DBManager extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "ActivityLog.db";
-    private static final String LOG_TABLE_NAME = "LogTable";
+    public static final String LOG_TABLE_NAME = "LogTable";
     // unique id of log entry
     public static final String LOG_COLUMN_ID = "_id";
     // activity name, stored as a String (todo: use Activity id and another table)
@@ -46,25 +46,25 @@ public class DBManager extends SQLiteOpenHelper {
         onCreate(database);
     }
 
+    // returns Cursor containing all the data from the database
+    public Cursor getAllData() {
+        SQLiteDatabase db = getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + LOG_TABLE_NAME, null);
+    }
+
     // inserts a LogEntry object to the database. Returns the id
     public long insertEntry(LogEntry newEntry) {
         Log.d("DBManager", "Adding " + newEntry);
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         long id = db.insert(LOG_TABLE_NAME, null, DBUtil.getContentVals(newEntry));
         assert(id != -1);
         assert getEntry(id).equals(newEntry);
         return id;
     }
 
-    // returns Cursor containing all the data from the database
-    public Cursor getAllData() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM " + LOG_TABLE_NAME, null);
-    }
-
     // returns LogEntry under given id
     public LogEntry getEntry(long id) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         Cursor retrieved = db.rawQuery("SELECT * FROM " + LOG_TABLE_NAME +
                 " WHERE " + LOG_COLUMN_ID + " = " + id, null);
         return DBUtil.getLogsFromCursor(retrieved).get(0);
@@ -73,7 +73,7 @@ public class DBManager extends SQLiteOpenHelper {
     // updates LogEntry under given id with the new LogEntry object
     public boolean updateEntry(long id, LogEntry newEntry) {
         Log.d("DBManager", "Updating " + getEntry(id) + " to " + newEntry);
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         long new_id = db.update(LOG_TABLE_NAME, DBUtil.getContentVals(newEntry), LOG_COLUMN_ID + " = " + id, null);
         assert getEntry(new_id).equals(newEntry);
         return true;
@@ -82,7 +82,12 @@ public class DBManager extends SQLiteOpenHelper {
     // deletes given row from the database
     public void deleteEntry(long id) {
         Log.d("DBManager", "Deleting " + getEntry(id));
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         db.delete(LOG_TABLE_NAME, LOG_COLUMN_ID + " = " + id, null);
+    }
+
+    // runs the given query and returns the Cursor
+    public Cursor runQuery(String sqlQuery) {
+        return getWritableDatabase().rawQuery(sqlQuery, null);
     }
 }

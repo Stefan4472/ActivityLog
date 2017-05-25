@@ -38,15 +38,20 @@ public class DBUtil {
         return entries;
     }
 
+    // toString for a list of LogEntry objects
+    public static String logListToString(List<LogEntry> logs) {
+        String to_str = "";
+        for (LogEntry log : logs) {
+            to_str += log.toString() + "\n";
+        }
+        return to_str;
+    }
+
     // gets all data from database manager and converts them toString. Must have Log Table!
     public static String dbToString(DBManager dbManager) {
         String to_str = "DATABASE\n";
         Cursor all_data = dbManager.getAllData();
-        List<LogEntry> all_logs = getLogsFromCursor(all_data);
-        for (LogEntry log : all_logs) {
-            to_str += log.toString() + "\n";
-        }
-        return to_str;
+        return logListToString(getLogsFromCursor(all_data));
     }
 
     // takes a LogEntry and correctly stores its data in a ContentValues object
