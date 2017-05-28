@@ -11,7 +11,7 @@ import android.util.Log;
  * Helper class to provide access to the database.
  */
 
-public class DBManager extends SQLiteOpenHelper {
+public class DBManager extends SQLiteOpenHelper { // todo: testing
 
     private static final String DB_NAME = "ActivityLog.db";
     public static final String LOG_TABLE_NAME = "LogTable";

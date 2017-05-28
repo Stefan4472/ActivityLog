@@ -1,63 +1,51 @@
 package com.stefankussmaul.activitylog.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
+import com.stefankussmaul.activitylog.R;
 import com.stefankussmaul.activitylog.content.DBManager;
-import com.stefankussmaul.activitylog.content.QueryBuilder;
 
 /**
  * Displays MainScreen of the app.
  */
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.homescreen_layout);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.home_toolbar);
+        setSupportActionBar(toolbar);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//        setContentView(R.layout.mainscreen_layout);
         DBManager manager = new DBManager(this);
-//        manager.insertEntry(new LogEntry("Testing", System.currentTimeMillis(), 100000));
-//        manager.insertEntry(new LogEntry("Testing", System.currentTimeMillis(), 500));
-        QueryBuilder query_builder = new QueryBuilder();
 
-//        query_builder.setActivityFilter("Testing");
-//        Log.d("MainActivity", "Generated query: " + query_builder.getQuery());
-//        Log.d("MainActivity", DBUtil.logListToString(DBUtil.getLogsFromCursor(manager.runQuery(query_builder.getQuery()))));
-//
-//        query_builder.setDateBoundedMinMax(new Date(2017, 5, 25), new Date(2017, 5, 26));
-//        Log.d("MainActivity", "Generated query: " + query_builder.getQuery());
-//        Log.d("MainActivity", DBUtil.logListToString(DBUtil.getLogsFromCursor(manager.runQuery(query_builder.getQuery()))));
-//
-//        query_builder.setDurationFilter(0, 2000);
-//        Log.d("MainActivity", "Generated query: " + query_builder.getQuery());
-//        Log.d("MainActivity", DBUtil.logListToString(DBUtil.getLogsFromCursor(manager.runQuery(query_builder.getQuery()))));
-        // todo: move to legit testing class
-//        Log.d("MainActivity", DBUtil.dbToString(manager));
-//        manager.insertEntry(new LogEntry("TestInsert", System.currentTimeMillis(), 3_600_000));
-//        Log.d("MainActivity", DBUtil.dbToString(manager));
-//        long id = manager.insertEntry(new LogEntry("TestModify", System.currentTimeMillis(), 7_200_000));
-//        Log.d("MainActivity", DBUtil.dbToString(manager));
-//        manager.updateEntry(id, new LogEntry("TestModify2", System.currentTimeMillis(), 0));
-//        Log.d("MainActivity", DBUtil.dbToString(manager));
-//        manager.deleteEntry(id);
-//        Log.d("MainActivity", DBUtil.dbToString(manager));
-//        Log.d("MainActivity", (new LogEntry("Hi", System.currentTimeMillis(), 1000)).toString());
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.actionbar_menu, menu);
+        return true;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    @Override // handle user clicking something in the action bar
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_shownav:
+                Log.d("MainActivity", "ShowNav clicked");
+                return true;
+            default: // send to be handled by super
+                return super.onOptionsItemSelected(item);
+        }
     }
+
 }

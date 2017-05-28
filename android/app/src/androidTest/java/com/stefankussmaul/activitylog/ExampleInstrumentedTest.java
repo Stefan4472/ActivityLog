@@ -16,6 +16,19 @@ import static org.junit.Assert.*;
  */
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
+
+    // todo: test database
+//        Log.d("MainActivity", DBUtil.dbToString(manager));
+//        manager.insertEntry(new LogEntry("TestInsert", System.currentTimeMillis(), 3_600_000));
+//        Log.d("MainActivity", DBUtil.dbToString(manager));
+//        long id = manager.insertEntry(new LogEntry("TestModify", System.currentTimeMillis(), 7_200_000));
+//        Log.d("MainActivity", DBUtil.dbToString(manager));
+//        manager.updateEntry(id, new LogEntry("TestModify2", System.currentTimeMillis(), 0));
+//        Log.d("MainActivity", DBUtil.dbToString(manager));
+//        manager.deleteEntry(id);
+//        Log.d("MainActivity", DBUtil.dbToString(manager));
+//        Log.d("MainActivity", (new LogEntry("Hi", System.currentTimeMillis(), 1000)).toString());
+
     @Test
     public void useAppContext() throws Exception {
         // Context of the app under test.

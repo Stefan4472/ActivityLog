@@ -71,14 +71,10 @@ public class QueryBuilder {
     }
 
     // sets the dateClause to accept timeStamps that happened on the day given
-    public void setDateOnDay(Date date) { // todo: needs to be tested!
+    public void setDateOnDay(Date date) { // todo: needs to be tested! + clean up
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        // set the fields to get midnight of today
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
+        calendar = DateUtil.getMidnightVal(calendar);
 
         Date lower_bound = calendar.getTime();
 

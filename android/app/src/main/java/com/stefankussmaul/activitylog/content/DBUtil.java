@@ -49,9 +49,11 @@ public class DBUtil {
 
     // gets all data from database manager and converts them toString. Must have Log Table!
     public static String dbToString(DBManager dbManager) {
-        String to_str = "DATABASE\n";
-        Cursor all_data = dbManager.getAllData();
-        return logListToString(getLogsFromCursor(all_data));
+        return "DATABASE\n" + cursorToString(dbManager.getAllData());
+    }
+
+    public static String cursorToString(Cursor cursor) {
+        return logListToString(getLogsFromCursor(cursor));
     }
 
     // takes a LogEntry and correctly stores its data in a ContentValues object
