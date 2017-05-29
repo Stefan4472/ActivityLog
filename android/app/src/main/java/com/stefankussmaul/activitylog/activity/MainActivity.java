@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.homescreen_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.home_toolbar);
+
         setSupportActionBar(toolbar);
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.actionbar_menu, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override // handle user clicking something in the action bar
@@ -48,4 +49,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void launchLogActivity(View view) {
+        Log.d("MainActivity", "Launching Log Activity");
+    }
+
+    public void launchStartActivity(View view) {
+        Log.d("MainActivity", "Launching Start Activity");
+
+    }
+
+    public void launchAnalytics(View view) {
+        Log.d("MainActivity", "Launching Analytics");
+
+    }
+
+    public void launchViewEditLog(View view) {
+        Log.d("MainActivity", "Launching View/Edit Log");
+
+
+    }
 }
