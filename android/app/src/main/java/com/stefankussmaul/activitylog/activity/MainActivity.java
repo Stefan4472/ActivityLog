@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void launchLogDialog(View view) {
         Log.d("MainActivity", "Launching Log Activity");
-        DialogFragment log_dialog = LogActivityDialogFragment.newInstance();
+        DialogFragment log_dialog = new LogActivityDialogFragment();
         log_dialog.show(getFragmentManager(), "Log");
     }
 

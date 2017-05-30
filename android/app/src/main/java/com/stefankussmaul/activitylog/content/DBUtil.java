@@ -2,9 +2,6 @@ package com.stefankussmaul.activitylog.content;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -61,7 +58,7 @@ public class DBUtil {
         ContentValues content_vals = new ContentValues();
         content_vals.put(LOG_COLUMN_ACTIVITY, log.getActivityName());
         content_vals.put(LOG_COLUMN_DURATION, log.getDuration());
-        content_vals.put(LOG_COLUMN_TIMESTAMP, log.getTimeStamp());
+        content_vals.put(LOG_COLUMN_TIMESTAMP, log.getDate());
         return content_vals;
     }
 }

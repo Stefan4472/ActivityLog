@@ -1,7 +1,5 @@
 package com.stefankussmaul.activitylog.content;
 
-import android.util.Log;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -12,12 +10,12 @@ import java.util.Date;
 public class LogEntry {
 
     private String activityName;
-    private long timeStamp;
+    private long date;
     private int duration;
 
-    public LogEntry(String activityName, long timeStamp, int duration) {
+    public LogEntry(String activityName, long date, int duration) {
         this.activityName = activityName;
-        this.timeStamp = timeStamp;
+        this.date = date;
         this.duration = duration;
     }
 
@@ -29,12 +27,12 @@ public class LogEntry {
         this.activityName = activityName;
     }
 
-    public long getTimeStamp() {
-        return timeStamp;
+    public long getDate() {
+        return date;
     }
 
-    public void setTimeStamp(long timeStamp) {
-        this.timeStamp = timeStamp;
+    public void setDate(long date) {
+        this.date = date;
     }
 
     public int getDuration() {
@@ -53,23 +51,23 @@ public class LogEntry {
             return true;
         }
         final LogEntry other = (LogEntry) o;
-        return activityName.equals(other.getActivityName()) && timeStamp == other.getTimeStamp() &&
+        return activityName.equals(other.getActivityName()) && date == other.getDate() &&
                 duration == other.getDuration();
     }
 
     @Override
     public int hashCode() {
         int value = activityName.hashCode();
-        value += Long.valueOf(timeStamp).hashCode();
+        value += Long.valueOf(date).hashCode();
         value += Long.valueOf(duration).hashCode();
         return value;
     }
 
-    private static Date date = new Date();
+    private static Date formatHelper = new Date();
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss");
     @Override
     public String toString() {
-        date.setTime(timeStamp);
-        return "LogEntry(" + activityName + ", timeStamp " + dateFormat.format(date) + ", " + duration + "ms)";
+        formatHelper.setTime(date);
+        return "LogEntry(" + activityName + ", date " + dateFormat.format(formatHelper) + ", " + duration + "ms)";
     }
 }
