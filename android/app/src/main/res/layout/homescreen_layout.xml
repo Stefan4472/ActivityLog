@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/log_activity"
                 android:drawableTop="@drawable/ic_create_black_24dp"
-                android:onClick="launchLogActivity"/>
+                android:onClick="launchLogDialog"/>
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

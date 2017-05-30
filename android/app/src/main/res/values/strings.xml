@@ -1,7 +1,15 @@
 <resources>
     <string name="app_name">ActivityLog</string>
+
+    <!-- names of screens -->
     <string name="log_activity">Log an Activity</string>
     <string name="start_activity">Start an Activity</string>
     <string name="analytics">Analytics</string>
     <string name="view_edit_log">View/Edit Log</string>
+
+    <!-- LogActivityDialogFragment strings -->
+    <string name="log_name_field">Activity Name:</string>
+    <string name="log_duration_field">Duration:</string>
+    <string name="log_timestamp_field">Date:</string>
+    <string name="confirm">Confirm &amp; Save</string>
 </resources>

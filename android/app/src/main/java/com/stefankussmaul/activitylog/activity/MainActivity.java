@@ -1,5 +1,6 @@
 package com.stefankussmaul.activitylog.activity;
 
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -49,8 +50,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void launchLogActivity(View view) {
+    public void launchLogDialog(View view) {
         Log.d("MainActivity", "Launching Log Activity");
+        DialogFragment log_dialog = LogActivityDialogFragment.newInstance();
+        log_dialog.show(getFragmentManager(), "Log");
     }
 
     public void launchStartActivity(View view) {
