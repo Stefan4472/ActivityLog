@@ -64,4 +64,20 @@
             android:layout_height="wrap_content"
             android:background="@drawable/display_menu_button"/>
     </LinearLayout>
+    <!-- error message, if any. Set to GONE by default -->
+    <TextView
+        android:id="@+id/error_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="20sp"
+        android:textColor="@color/colorPrimary"
+        android:visibility="gone"/>
+    <!-- confirmation button to save log and exit -->
+    <Button
+        android:id="@+id/save_and_exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/confirm"/>
 </LinearLayout>

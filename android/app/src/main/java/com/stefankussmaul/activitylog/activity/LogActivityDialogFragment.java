@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -38,6 +39,19 @@ public class LogActivityDialogFragment extends DialogFragment implements DatePic
     private EditText durationField;
     private TextView dateField;
     private Date selectedDate;
+    private TextView errorMessage;
+
+    // interface for receiving dialog callbacks
+    public interface LogDialogListener {
+        void onLogSaved(LogActivityDialogFragment dialogFragment, LogEntry createdEntry);
+    }
+
+    // listener that receives callbacks
+    private LogDialogListener mListener;
+
+    public void setListener(LogDialogListener listener) {
+        mListener = listener;
+    }
 
     // returns a new instance of the fragment with bundle that has the values given by toEdit.
     // Will populate the dialog with data from toEdit.
@@ -82,6 +96,7 @@ public class LogActivityDialogFragment extends DialogFragment implements DatePic
         dateField = (TextView) view.findViewById(R.id.selected_date);
         final ImageButton show_date_picker = (ImageButton) view.findViewById(R.id.show_date_picker);
         selectedDate = new Date(System.currentTimeMillis());
+        errorMessage = (TextView) view.findViewById(R.id.error_message);
 
         // populate fields with data from args (otherwise defaults will remain)
         if (args != null) {
@@ -129,6 +144,14 @@ public class LogActivityDialogFragment extends DialogFragment implements DatePic
             date_picker.show(getFragmentManager(), "DatePicker");
             }
         });
+
+        Button exit_button = (Button) view.findViewById(R.id.save_and_exit);
+        exit_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveLogAndExit(v);
+            }
+        });
     }
 
 
@@ -137,5 +160,21 @@ public class LogActivityDialogFragment extends DialogFragment implements DatePic
         Log.d("LogActivityDialog", "Chose " + selectedDate.toString());
         this.selectedDate = selectedDate;
         dateField.setText(getString(R.string.log_date_field, dateFormat.format(selectedDate)));
+    }
+
+    // called when user clicks button to save data and exit the dialog. Checks to ensure data is
+    // valid before encapsulating it in a new LogEntry object and firing onLogSaved to mListener.
+    public void saveLogAndExit(View view) {
+        // validate input (todo)
+        if (nameField.getText().toString().isEmpty()) {
+            errorMessage.setText(getString(R.string.error_no_name));
+            errorMessage.setVisibility(View.VISIBLE);
+        } else { // todo: better entry of duration
+            LogEntry logged = new LogEntry(nameField.getText().toString(), selectedDate.getTime(),
+                    Integer.parseInt(durationField.getText().toString()));
+            if (mListener != null) {
+                mListener.onLogSaved(this, logged);
+            }
+        }
     }
 }

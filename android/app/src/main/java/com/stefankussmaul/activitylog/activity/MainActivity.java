@@ -12,12 +12,16 @@ import android.view.View;
 
 import com.stefankussmaul.activitylog.R;
 import com.stefankussmaul.activitylog.content.DBManager;
+import com.stefankussmaul.activitylog.content.LogEntry;
 
 /**
  * Displays MainScreen of the app.
  */
 
 public class MainActivity extends AppCompatActivity {
+
+    // handle to database with log data
+    private DBManager logManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,8 +34,7 @@ public class MainActivity extends AppCompatActivity {
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        DBManager manager = new DBManager(this);
-
+        logManager = new DBManager(this);
     }
 
     @Override
@@ -53,7 +56,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void launchLogDialog(View view) {
         Log.d("MainActivity", "Launching Log Activity");
-        DialogFragment log_dialog = new LogActivityDialogFragment();
+        LogActivityDialogFragment log_dialog = new LogActivityDialogFragment();
+        // set listener that inserts new LogEntry to the database and closes the dialog
+        log_dialog.setListener(new LogActivityDialogFragment.LogDialogListener() {
+            @Override
+            public void onLogSaved(LogActivityDialogFragment dialogFragment, LogEntry createdEntry) {
+               logManager.insertEntry(createdEntry);
+                dialogFragment.dismiss();
+            }
+        });
         log_dialog.show(getFragmentManager(), "Log");
     }
 

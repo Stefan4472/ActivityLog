@@ -12,6 +12,7 @@
     <string name="log_duration_field">Duration:</string>
     <string name="log_date_field">Date:%s</string>
     <string name="confirm">Confirm &amp; Save</string>
+    <string name="error_no_name">Please Specify an Activity Name</string>
 
     <!-- TimerActivity Strings -->
     <string name="timer_activity_label">Time an Activity</string>
