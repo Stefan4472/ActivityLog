@@ -21,7 +21,7 @@ import com.stefankussmaul.activitylog.content.LogEntry;
 public class MainActivity extends AppCompatActivity {
 
     // handle to database with log data
-    private DBManager logManager;
+    private static DBManager logManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,5 +83,9 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MainActivity", "Launching View/Edit Log");
 
 
+    }
+
+    public static DBManager getLogManager() {
+        return logManager;
     }
 }

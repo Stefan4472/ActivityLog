@@ -128,11 +128,20 @@ public class TimerActivity extends AppCompatActivity {
         }
     }
 
-    // handles user clicking button to log the Timer's current time. Pre-fills the fields of the
-    // log for convenient entry
+    // handles user clicking button to log the Timer's current time. Pauses the timer and displays
+    // LogEntry dialog pre-filled with duration from timer and current date. Sets listener to save
+    // the entry to the DB when user is done
     public void logTime(View view) {
+        pauseTimer(null);
         LogEntry new_entry = new LogEntry("", System.currentTimeMillis(), (int) msTimer.getTimedMs());
-        DialogFragment log_dialog = LogActivityDialogFragment.newInstance(new_entry);
+        LogActivityDialogFragment log_dialog = LogActivityDialogFragment.newInstance(new_entry);
+        log_dialog.setListener(new LogActivityDialogFragment.LogDialogListener() {
+            @Override
+            public void onLogSaved(LogActivityDialogFragment dialogFragment, LogEntry createdEntry) {
+                MainActivity.getLogManager().insertEntry(createdEntry);
+                dialogFragment.dismiss();
+            }
+        });
         log_dialog.show(getFragmentManager(), "Log");
     }
 
