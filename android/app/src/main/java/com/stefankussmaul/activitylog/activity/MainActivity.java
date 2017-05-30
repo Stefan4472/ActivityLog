@@ -1,6 +1,7 @@
 package com.stefankussmaul.activitylog.activity;
 
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -58,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void launchStartActivity(View view) {
         Log.d("MainActivity", "Launching Start Activity");
-
+        Intent timer_intent = new Intent(this, TimerActivity.class);
+        startActivity(timer_intent);
     }
 
     public void launchAnalytics(View view) {

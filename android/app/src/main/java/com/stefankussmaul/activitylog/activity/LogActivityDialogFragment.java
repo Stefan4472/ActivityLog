@@ -89,7 +89,7 @@ public class LogActivityDialogFragment extends DialogFragment implements DatePic
                 nameField.setText(args.getString(ACTIVITY_KEY));
             }
             if (args.containsKey(DURATION_KEY)) {
-                durationField.setText(args.getInt(DURATION_KEY));
+                durationField.setText(args.getInt(DURATION_KEY) + "");
             }
             if (args.containsKey(DATE_KEY)) {
                 selectedDate.setTime(args.getLong(DATE_KEY));
