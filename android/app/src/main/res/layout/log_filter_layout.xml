@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- layout for configuring a filter on the recorded logs -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/filter_outline">
+    <!-- displays "Filter By" in the top left of the layout -->
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="5dp"
+        android:text="@string/filter_by"/>
+    <!-- position activity name setting below and to right of title -->
+    <TextView
+        android:id="@+id/name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:layout_toRightOf="@+id/title"
+        android:text="@string/name_lable"/>
+    <!-- spinner with list of activity names that could be filtered -->
+    <Spinner
+        android:id="@+id/activity_choices"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/name_label"/>
+    <!-- next line, for setting date filter -->
+    <TextView
+        android:id="@+id/date_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name_label"
+        android:text="@string/date_label"/>
+    <!-- Spinner for keywords (Any, On, Before, After, Between, etc) -->
+    <Spinner
+        android:id="@+id/date_config_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/date_label"
+        android:text="@string/date_label"/>
+    <!-- button that displays first date. Clicking will pop up a DatePicker todo: custom view element?-->
+    <Button
+        android:id="@+id/choose_date_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/date_config_1"
+        android:visibility="invisible"/>
+    <!-- displays conjunction, if necessary, for date config (e.g. between __ AND __) -->
+    <!-- invisible by default -->
+    <TextView
+        android:id="@+id/date_conjunction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/choose_date_1"
+        android:text="@string/date_conjunction"
+        android:visibility="invisible"/>
+    <!-- button that displays second date, if required. Clicking will pop up a DatePicker todo: custom view element?-->
+    <Button
+        android:id="@+id/choose_date_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/date_conjunction"
+        android:visibility="invisible"/>
+</RelativeLayout>

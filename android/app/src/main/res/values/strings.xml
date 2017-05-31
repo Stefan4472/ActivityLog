@@ -23,4 +23,10 @@
     <string name="pause_timer">Pause</string>
     <string name="log_timer">Log This</string>
     <string name="reset_timer">Reset</string>
+
+    <!-- Filter Strings -->
+    <string name="filter_by">Filter By</string>
+    <string name="name_lable">Activity Name:</string>
+    <string name="date_label">Date:</string>
+    <string name="date_conjunction">and</string>
 </resources>
