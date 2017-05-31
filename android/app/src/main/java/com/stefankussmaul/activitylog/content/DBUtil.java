@@ -2,6 +2,7 @@ package com.stefankussmaul.activitylog.content;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.util.Log;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -33,6 +34,18 @@ public class DBUtil {
         }
         cursor.close();
         return entries;
+    }
+
+    public static List<ActivityAggregate> getAggregatesFromCursor(Cursor cursor) {
+        List<ActivityAggregate> aggregates = new LinkedList<>();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            aggregates.add(new ActivityAggregate(cursor.getString(cursor.getColumnIndex(LOG_COLUMN_ACTIVITY)),
+                    cursor.getInt(cursor.getColumnIndex(DBManager.AGGREGATE_KEYWORD))));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return aggregates;
     }
 
     // toString for a list of LogEntry objects

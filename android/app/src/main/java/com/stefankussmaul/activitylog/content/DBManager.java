@@ -26,6 +26,8 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
     public static final String LOG_COLUMN_DURATION = "duration";
     // timestamp of activity, stored as number of milliseconds
     public static final String LOG_COLUMN_TIMESTAMP = "timestamp";
+    // keyword used for aliasing sums, counts, etc.
+    public static final String AGGREGATE_KEYWORD = "Aggregate";
 
     public DBManager(Context context){
         super(context, DB_NAME, null, 1);
@@ -104,6 +106,7 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
             names.add(cursor.getString(cursor.getColumnIndex(LOG_COLUMN_ACTIVITY)));
             cursor.moveToNext();
         }
+        cursor.close();
         return names;
     }
 }

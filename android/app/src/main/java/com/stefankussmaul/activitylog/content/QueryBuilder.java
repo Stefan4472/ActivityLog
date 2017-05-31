@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.stefankussmaul.activitylog.content.DBManager.AGGREGATE_KEYWORD;
 import static com.stefankussmaul.activitylog.content.DBManager.LOG_COLUMN_ACTIVITY;
 import static com.stefankussmaul.activitylog.content.DBManager.LOG_COLUMN_DURATION;
 import static com.stefankussmaul.activitylog.content.DBManager.LOG_COLUMN_TIMESTAMP;
@@ -53,8 +54,21 @@ public class QueryBuilder {
         }
     }
 
-    public void setDateFilter(String keyword, Date date1, Date date2) {
-
+    public void setDateFilter(Context context, String keyword, Date date1, Date date2)
+            throws IllegalArgumentException {
+        if (keyword.equals(context.getString(R.string.date_any))) {
+            resetDateFilter();
+        } else if (keyword.equals(context.getString(R.string.date_before))) {
+            setDateBoundedMax(date1);
+        } else if (keyword.equals(context.getString(R.string.date_after))) {
+            setDateBoundedMin(date1);
+        } else if (keyword.equals(context.getString(R.string.date_on))) {
+            setDateOnDay(date1);
+        } else if (keyword.equals(context.getString(R.string.date_between))) {
+            setDateBoundedMinMax(date1, date2);
+        } else {
+            throw new IllegalArgumentException("Unrecognized Keyword '" + keyword + "'");
+        }
     }
 
     // sets the dateClause to accept timeStamps only greater than/equal to the given Date's ms.
@@ -107,8 +121,21 @@ public class QueryBuilder {
         }
     }
 
-    public void setDurationFilter(String keyword, int duration1, int duration2) {
-
+    public void setDurationFilter(Context context, String keyword, int duration1, int duration2)
+            throws IllegalArgumentException {
+        if (keyword.equals(context.getString(R.string.duration_any))) {
+            resetDurationFilter();
+        } else if (keyword.equals(context.getString(R.string.duration_less))) {
+            setDurationBoundedMax(duration1);
+        } else if (keyword.equals(context.getString(R.string.duration_more))) {
+            setDurationBoundedMin(duration1);
+        } else if (keyword.equals(context.getString(R.string.duration_exactly))) {
+            setDurationExactly(duration1);
+        } else if (keyword.equals(context.getString(R.string.duration_between))) {
+            setDurationBoundedMinMax(duration1, duration2);
+        } else {
+            throw new IllegalArgumentException("Unrecognized Keyword '" + keyword + "'");
+        }
     }
 
     public void setDurationBoundedMin(int min) {
@@ -133,6 +160,13 @@ public class QueryBuilder {
                 " <= " + max;
     }
 
+    public void setDurationExactly(int val) {
+        if (durationClause.isEmpty()) {
+            numClauses++;
+        }
+        durationClause = LOG_COLUMN_DURATION + " = " + val;
+    }
+
     public void resetDurationFilter() {
         if (!durationClause.isEmpty()) {
             numClauses--;
@@ -140,32 +174,47 @@ public class QueryBuilder {
         }
     }
 
-    public String getQuery() {
-        String query = "SELECT * FROM " + LOG_TABLE_NAME;
-
+    private String getWhereClause() {
+        String clause = "";
         if (numClauses != 0) {
             // make a copy of numClauses
             int clauses_to_add = numClauses;
-            query += " WHERE ";
+            clause += " WHERE ";
             if (!activityClause.isEmpty()) {
                 clauses_to_add--;
-                query += activityClause;
+                clause += activityClause;
                 if (clauses_to_add > 0) {
-                    query += " AND ";
+                    clause += " AND ";
                 }
             }
             if (clauses_to_add > 0 && !dateClause.isEmpty()) {
                 clauses_to_add--;
-                query += dateClause;
+                clause += dateClause;
                 if (clauses_to_add > 0) {
-                    query += " AND ";
+                    clause += " AND ";
                 }
             }
             if (clauses_to_add > 0 && !durationClause.isEmpty()) {
-                query += durationClause;
+                clause += durationClause;
             }
         }
-        return query;
+        return clause;
+    }
+
+    public String getQuery() {
+        return "SELECT * FROM " + LOG_TABLE_NAME + getWhereClause();
+    }
+
+    public String getDurationSumQuery() {
+        return "SELECT " + LOG_COLUMN_ACTIVITY + ", SUM(" + LOG_COLUMN_DURATION
+                + ") AS " + AGGREGATE_KEYWORD + " FROM " + LOG_TABLE_NAME + getWhereClause() +
+                " GROUP BY (" + LOG_COLUMN_ACTIVITY + ") ORDER BY " + AGGREGATE_KEYWORD + " DESC";
+    }
+
+    public String getActivityCountQuery() {
+        return "SELECT " + LOG_COLUMN_ACTIVITY + ", COUNT(" + LOG_COLUMN_ACTIVITY
+                + ") AS " + AGGREGATE_KEYWORD + " FROM " + LOG_TABLE_NAME + getWhereClause() +
+                " GROUP BY (" + LOG_COLUMN_ACTIVITY + ") ORDER BY " + AGGREGATE_KEYWORD + " DESC";
     }
 
     // returns list of keywords for configuring date filter. Loaded from R.string for consistency

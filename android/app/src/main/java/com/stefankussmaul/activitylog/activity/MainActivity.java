@@ -11,8 +11,15 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.stefankussmaul.activitylog.R;
+import com.stefankussmaul.activitylog.content.ActivityAggregate;
 import com.stefankussmaul.activitylog.content.DBManager;
+import com.stefankussmaul.activitylog.content.DBUtil;
 import com.stefankussmaul.activitylog.content.LogEntry;
+import com.stefankussmaul.activitylog.content.QueryBuilder;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Displays MainScreen of the app.
@@ -35,6 +42,29 @@ public class MainActivity extends AppCompatActivity {
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         logManager = new DBManager(this);
+
+        Log.d("MainActivity", "Printing Database\n" + DBUtil.dbToString(logManager));
+
+        QueryBuilder query_builder = new QueryBuilder();
+        query_builder.setActivityFilter("Testing");
+
+        Log.d("MainActivity", "Printing calculated aggregates");
+        Log.d("MainActivity", query_builder.getActivityCountQuery());
+        Log.d("MainActivity", query_builder.getDurationSumQuery());
+        Log.d("MainActivity", "Aggregate Durations");
+        int counter = 1;
+        List<ActivityAggregate> sums = DBUtil.getAggregatesFromCursor(logManager.runQuery(query_builder.getDurationSumQuery()));
+        for (ActivityAggregate a : sums) {
+            Log.d("MainActivity", counter + ". " + a.toString());
+            counter++;
+        }
+        Log.d("MainActivity", "Aggregate Logged Sessions");
+        counter = 1;
+        List<ActivityAggregate> counts = DBUtil.getAggregatesFromCursor(logManager.runQuery(query_builder.getActivityCountQuery()));
+        for (ActivityAggregate c : counts) {
+            Log.d("MainActivity", counter + ". " + c.toString());
+            counter++;
+        }
     }
 
     @Override

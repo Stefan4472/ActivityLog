@@ -4,6 +4,11 @@
     android:layout_height="match_parent">
     <!-- include default app toolbar -->
     <include layout="@layout/toolbar_layout"/>
+    <!-- piechart -->
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/pie_chart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <!-- LogFilterFragment so user can configure how they want to filter activities -->
     <fragment android:name="com.stefankussmaul.activitylog.activity.LogFilterFragment"
         class="com.stefankussmaul.activitylog.activity.LogFilterFragment"
