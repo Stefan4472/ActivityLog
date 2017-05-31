@@ -16,6 +16,12 @@ import static com.stefankussmaul.activitylog.content.DBManager.LOG_TABLE_NAME;
 
 public class QueryBuilder {
 
+//    public static final String DATE_ANY = "ANY";
+//    public static final String DATE_ON = "ON";
+//    public static final String DATE_BEFORE = "BEFORE";
+//    public static final String DATE_AFTER = "AFTER";
+//    public static final String DATE_BETWEEN = "BETWEEN";
+
     // generated clauses for each possible filter
     private String activityClause = "";
     private String dateClause = "";

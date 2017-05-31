@@ -15,55 +15,111 @@
         android:layout_alignParentTop="true"
         android:layout_margin="5dp"
         android:text="@string/filter_by"/>
-    <!-- position activity name setting below and to right of title -->
-    <TextView
-        android:id="@+id/name_label"
+    <!-- row of UI elements for configuring Activity filter -->
+    <LinearLayout
+        android:id="@+id/activity_row"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_below="@+id/title"
         android:layout_toRightOf="@+id/title"
-        android:text="@string/name_lable"/>
-    <!-- spinner with list of activity names that could be filtered -->
-    <Spinner
-        android:id="@+id/activity_choices"
+        android:layout_toEndOf="@+id/title">
+        <!-- label "Activity Name:" -->
+        <TextView
+            android:id="@+id/name_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/name_lable"
+            android:layout_gravity="center_vertical"/>
+        <!-- spinner with list of activity names that could be filtered -->
+        <Spinner
+            android:id="@+id/activity_choices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+    <!-- row of UI elements for configuring Date filter -->
+    <LinearLayout
+        android:id="@+id/date_row"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/name_label"/>
-    <!-- next line, for setting date filter -->
-    <TextView
-        android:id="@+id/date_label"
+        android:orientation="horizontal"
+        android:layout_below="@+id/activity_row"
+        android:layout_alignLeft="@+id/activity_row"
+        android:layout_alignStart="@+id/activity_row">
+        <!-- next line, for setting date filter -->
+        <TextView
+            android:id="@+id/date_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date_label"/>
+        <!-- Spinner for keywords (Any, On, Before, After, Between, etc) -->
+        <Spinner
+            android:id="@+id/date_config_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <!-- button that displays first date. Clicking will pop up a DatePicker todo: custom view element?-->
+        <Button
+            android:id="@+id/choose_date_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"/>
+        <!-- displays conjunction, if necessary, for date config (e.g. between __ AND __) -->
+        <!-- invisible by default -->
+        <TextView
+            android:id="@+id/date_conjunction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date_conjunction"
+            android:visibility="invisible"/>
+        <!-- button that displays second date, if required. Clicking will pop up a DatePicker todo: custom view element?-->
+        <Button
+            android:id="@+id/choose_date_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"/>
+    </LinearLayout>
+    <!-- row of UI elements for configuring Duration filter -->
+    <LinearLayout
+        android:id="@+id/duration_row"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/name_label"
-        android:text="@string/date_label"/>
-    <!-- Spinner for keywords (Any, On, Before, After, Between, etc) -->
-    <Spinner
-        android:id="@+id/date_config_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/date_label"
-        android:text="@string/date_label"/>
-    <!-- button that displays first date. Clicking will pop up a DatePicker todo: custom view element?-->
-    <Button
-        android:id="@+id/choose_date_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/date_config_1"
-        android:visibility="invisible"/>
-    <!-- displays conjunction, if necessary, for date config (e.g. between __ AND __) -->
-    <!-- invisible by default -->
-    <TextView
-        android:id="@+id/date_conjunction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/choose_date_1"
-        android:text="@string/date_conjunction"
-        android:visibility="invisible"/>
-    <!-- button that displays second date, if required. Clicking will pop up a DatePicker todo: custom view element?-->
-    <Button
-        android:id="@+id/choose_date_2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/date_conjunction"
-        android:visibility="invisible"/>
+        android:orientation="horizontal"
+        android:layout_below="@+id/date_row"
+        android:layout_alignLeft="@+id/activity_row"
+        android:layout_alignStart="@+id/activity_row">
+        <!-- next line, for setting date filter -->
+        <TextView
+            android:id="@+id/duration_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/duration_label"/>
+        <!-- Spinner for keywords (Any, On, Before, After, Between, etc) -->
+        <Spinner
+            android:id="@+id/duration_config_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <!-- EditText for entering first duration-->
+        <EditText
+            android:id="@+id/choose_duration_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:inputType="number"
+            android:maxLength="10"
+            android:maxLines="1"/>
+        <!-- displays conjunction, if necessary, for date config (e.g. between __ AND __) -->
+        <TextView
+            android:id="@+id/duration_conjunction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/duration_conjunction"
+            android:visibility="invisible"/>
+        <!-- EditText for entering first duration -->
+        <Button
+            android:id="@+id/choose_duration_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"/>
+    </LinearLayout>
 </RelativeLayout>

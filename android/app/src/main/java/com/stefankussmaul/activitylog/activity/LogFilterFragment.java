@@ -13,6 +13,9 @@ import android.widget.Spinner;
 import com.stefankussmaul.activitylog.R;
 import com.stefankussmaul.activitylog.content.DBManager;
 
+import java.lang.reflect.Array;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -29,6 +32,8 @@ public class LogFilterFragment extends Fragment {
     private Button datePicker1;
     // button that displays second date chosen for Date config, if needed
     private Button datePicker2;
+    private Date date1;
+    private Date date2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,9 +52,10 @@ public class LogFilterFragment extends Fragment {
 
         View view = getView();
 
-        activityChoices = (Spinner) view.findViewById(R.id.activity_choices);
         // get a handle to the log database
         DBManager db_manager = new DBManager(getActivity());
+
+        activityChoices = (Spinner) view.findViewById(R.id.activity_choices);
         // get the possible choices for activity
         List<String> activity_choices = db_manager.getAllActivityNames();
         // add the option "Any" up front
@@ -57,11 +63,17 @@ public class LogFilterFragment extends Fragment {
         // create adapter using the choices
         ArrayAdapter<String> activity_adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_item, activity_choices);
-        activity_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        activity_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         activityChoices.setAdapter(activity_adapter);
 
+        // set spinner choices to those defined in R.array.date_prepositions
         dateConfig = (Spinner) view.findViewById(R.id.date_config_1);
+        ArrayAdapter<CharSequence> date_preps_adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.date_prepositions, android.R.layout.simple_spinner_dropdown_item);
+        dateConfig.setAdapter(date_preps_adapter);
+
         datePicker1 = (Button) view.findViewById(R.id.choose_date_1);
+
         datePicker2 = (Button) view.findViewById(R.id.choose_date_2);
     }
 
