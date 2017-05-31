@@ -1,9 +1,14 @@
 package com.stefankussmaul.activitylog.content;
 
+import android.content.Context;
 import android.util.Log;
+
+import com.stefankussmaul.activitylog.R;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import static com.stefankussmaul.activitylog.content.DBManager.LOG_COLUMN_ACTIVITY;
 import static com.stefankussmaul.activitylog.content.DBManager.LOG_COLUMN_DURATION;
@@ -153,5 +158,29 @@ public class QueryBuilder {
             }
         }
         return query;
+    }
+
+    // returns list of keywords for configuring date filter. Loaded from R.string for consistency
+    // across different languages
+    public static List<String> getDateKeyWords(Context context) {
+        List<String> key_words = new LinkedList<>();
+        key_words.add(context.getString(R.string.date_any));
+        key_words.add(context.getString(R.string.date_on));
+        key_words.add(context.getString(R.string.date_before));
+        key_words.add(context.getString(R.string.date_after));
+        key_words.add(context.getString(R.string.date_between));
+        return key_words;
+    }
+
+    // returns list of keywords for configuring duration filter. Loaded from R.string for consistency
+    // across different languages
+    public static List<String> getDurationKeyWords(Context context) {
+        List<String> key_words = new LinkedList<>();
+        key_words.add(context.getString(R.string.duration_any));
+        key_words.add(context.getString(R.string.duration_exactly));
+        key_words.add(context.getString(R.string.duration_less));
+        key_words.add(context.getString(R.string.duration_more));
+        key_words.add(context.getString(R.string.duration_between));
+        return key_words;
     }
 }

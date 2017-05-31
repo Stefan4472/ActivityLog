@@ -29,15 +29,21 @@
     <string name="name_lable">Activity Name:</string>
     <string name="date_label">Date:</string>
     <string name="date_conjunction">and</string>
-    <string-array name="date_prepositions">
-        <item>Any</item>
-        <item>On</item>
-        <item>Before</item>
-        <item>After</item>
-        <item>Between</item>
-    </string-array>
+
+    <string name="date_any">Any</string>
+    <string name="date_on">On</string>
+    <string name="date_before">Before</string>
+    <string name="date_after">After</string>
+    <string name="date_between">Between</string>
+
     <string name="duration_label">Duration:</string>
     <string name="duration_conjunction">and</string>
+
+    <string name="duration_any">Any</string>
+    <string name="duration_exactly">Exactly</string>
+    <string name="duration_more">More Than</string>
+    <string name="duration_less">Less Than</string>
+    <string name="duration_between">Between</string>
 
     <!-- AnalyticsActivity Strings -->
     <string name="analytics_activity_label">Analytics</string>
