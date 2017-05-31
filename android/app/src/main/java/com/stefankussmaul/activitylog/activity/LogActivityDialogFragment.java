@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.stefankussmaul.activitylog.R;
+import com.stefankussmaul.activitylog.content.DateUtil;
 import com.stefankussmaul.activitylog.content.LogEntry;
 
 import java.text.SimpleDateFormat;
@@ -31,9 +32,6 @@ public class LogActivityDialogFragment extends DialogFragment implements DatePic
     private static final String ACTIVITY_KEY = "LOGGED_ACTIVITY";
     private static final String DURATION_KEY = "LOGGED_DURATION";
     private static final String DATE_KEY = "LOGGED_DATE";
-
-    // used to format dates
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy"); // todo: correct locale
 
     private EditText nameField;
     private EditText durationField;
@@ -126,12 +124,12 @@ public class LogActivityDialogFragment extends DialogFragment implements DatePic
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 show_date_picker.requestFocus();
-                return false;
+                return true;
             }
         });
 
         // set chosen date field to the selected date
-        dateField.setText(getString(R.string.log_date_field, dateFormat.format(selectedDate)));
+        dateField.setText(getString(R.string.log_date_field, DateUtil.format(selectedDate)));
 
         // pull up DatePickerFragment initialized to selected_date
         show_date_picker.setOnClickListener(new View.OnClickListener() {
@@ -159,7 +157,7 @@ public class LogActivityDialogFragment extends DialogFragment implements DatePic
     public void onDateSelected(DatePickerFragment dialogFragment, Date selectedDate) {
         Log.d("LogActivityDialog", "Chose " + selectedDate.toString());
         this.selectedDate = selectedDate;
-        dateField.setText(getString(R.string.log_date_field, dateFormat.format(selectedDate)));
+        dateField.setText(getString(R.string.log_date_field, DateUtil.format(selectedDate)));
     }
 
     // called when user clicks button to save data and exit the dialog. Checks to ensure data is

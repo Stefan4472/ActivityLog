@@ -116,10 +116,13 @@
             android:text="@string/duration_conjunction"
             android:visibility="invisible"/>
         <!-- EditText for entering first duration -->
-        <Button
+        <EditText
             android:id="@+id/choose_duration_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible"/>
+            android:visibility="invisible"
+            android:inputType="number"
+            android:maxLength="10"
+            android:maxLines="1"/>
     </LinearLayout>
 </RelativeLayout>
