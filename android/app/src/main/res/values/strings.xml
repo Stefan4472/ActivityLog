@@ -49,6 +49,8 @@
 
     <!-- AnalyticsActivity Strings -->
     <string name="analytics_activity_label">Analytics</string>
+    <string name="other">Other</string>
+    <string name="no_data_available">No Entries Meet The Given Criteria</string>
 
     <!-- ViewEditLogActivity Strings -->
     <string name="viewlog_activity_label">View/Edit Log</string>

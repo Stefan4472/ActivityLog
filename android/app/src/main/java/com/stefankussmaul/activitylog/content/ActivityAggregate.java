@@ -15,6 +15,14 @@ public class ActivityAggregate {
         this.val = val;
     }
 
+    public void setName(String activityName) {
+        this.activityName = activityName;
+    }
+
+    public void addToVal(long add) {
+        val += add;
+    }
+
     public long getVal() {
         return val;
     }

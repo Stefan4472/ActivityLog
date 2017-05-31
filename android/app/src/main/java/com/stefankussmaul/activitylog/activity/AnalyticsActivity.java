@@ -8,9 +8,16 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
 import com.stefankussmaul.activitylog.R;
+import com.stefankussmaul.activitylog.content.ActivityAggregate;
+import com.stefankussmaul.activitylog.content.ChartUtil;
 import com.stefankussmaul.activitylog.content.DBManager;
+import com.stefankussmaul.activitylog.content.DBUtil;
 import com.stefankussmaul.activitylog.content.QueryBuilder;
+
+import java.util.List;
 
 /**
  * Created by Stefan on 5/29/2017.
@@ -34,7 +41,14 @@ public class AnalyticsActivity extends AppCompatActivity implements LogFilterFra
         ActionBar action_bar = getSupportActionBar();
         action_bar.setDisplayHomeAsUpEnabled(true);
 
-//        pieChart = (PieChart) findViewById(R.id.pie_chart);
+        DBManager logManager = new DBManager(this);
+        QueryBuilder query_builder = new QueryBuilder();
+        List<ActivityAggregate> counts = DBUtil.getAggregatesFromCursor(logManager.runQuery(query_builder.getActivityCountQuery()));
+        pieChart = (PieChart) findViewById(R.id.pie_chart);
+        PieDataSet data_set = new PieDataSet(ChartUtil.getPieChartEntries(counts), "Session Counts");
+        PieData data = new PieData(data_set);
+        pieChart.setData(data);
+        pieChart.invalidate();
     }
 
     @Override

@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MainActivity", "Printing Database\n" + DBUtil.dbToString(logManager));
 
         QueryBuilder query_builder = new QueryBuilder();
-        query_builder.setActivityFilter("Testing");
 
         Log.d("MainActivity", "Printing calculated aggregates");
         Log.d("MainActivity", query_builder.getActivityCountQuery());
