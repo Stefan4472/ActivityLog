@@ -11,9 +11,18 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"/>
     <!-- LogFilterFragment so user can configure how they want to filter activities -->
-    <fragment android:name="com.stefankussmaul.activitylog.activity.LogFilterFragment"
+    <fragment
+        android:name="com.stefankussmaul.activitylog.activity.LogFilterFragment"
         class="com.stefankussmaul.activitylog.activity.LogFilterFragment"
         android:id="@+id/logfilter_config"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"/>
+    <!-- ChartConfigFragment so user can configure the chart -->
+    <fragment
+        android:name="com.stefankussmaul.activitylog.activity.ChartConfigFragment"
+        class="com.stefankussmaul.activitylog.activity.ChartConfigFragment"
+        android:id="@+id/chart_config"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"/>

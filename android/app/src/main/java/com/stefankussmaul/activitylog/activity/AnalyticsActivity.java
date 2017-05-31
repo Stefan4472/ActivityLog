@@ -12,6 +12,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.stefankussmaul.activitylog.R;
+import com.stefankussmaul.activitylog.charts.ChartConfig;
 import com.stefankussmaul.activitylog.charts.SessionsValueFormatter;
 import com.stefankussmaul.activitylog.content.ActivityAggregate;
 import com.stefankussmaul.activitylog.charts.ChartUtil;
@@ -25,7 +26,8 @@ import java.util.List;
  * Created by Stefan on 5/29/2017.
  */
 
-public class AnalyticsActivity extends AppCompatActivity implements LogFilterFragment.OnFilterUpdatedListener {
+public class AnalyticsActivity extends AppCompatActivity implements
+        LogFilterFragment.OnFilterUpdatedListener, ChartConfigFragment.OnConfigChangeListener {
 
     // todo: better management of activity lifecycle?
     private PieChart pieChart;
@@ -47,7 +49,10 @@ public class AnalyticsActivity extends AppCompatActivity implements LogFilterFra
         QueryBuilder query_builder = new QueryBuilder();
         List<ActivityAggregate> counts = DBUtil.getAggregatesFromCursor(logManager.runQuery(query_builder.getActivityCountQuery()));
         pieChart = (PieChart) findViewById(R.id.pie_chart);
-
+        pieChart.setDrawEntryLabels(false);
+        // todo: programmatically with respect to screen dimensions
+        pieChart.setMinimumHeight(500);
+        pieChart.setMinimumWidth(500);
         PieDataSet data_set = new PieDataSet(ChartUtil.getPieChartEntries(counts), "Session Counts");
         data_set.setColors(ColorTemplate.JOYFUL_COLORS);
         data_set.setValueFormatter(new SessionsValueFormatter());
@@ -59,9 +64,14 @@ public class AnalyticsActivity extends AppCompatActivity implements LogFilterFra
     @Override
     public void onFilterUpdated(LogFilterFragment logFilterFragment, QueryBuilder query) {
         Log.d("AnalyticsActivity", "Received query " + query.getQuery());
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        pieChart.setMinimumWidth((int) (displaymetrics.widthPixels * 0.7f));
-        pieChart.setMinimumHeight((int) (displaymetrics.widthPixels * 0.7f));
-        pieChart.invalidate();
+//        DisplayMetrics displaymetrics = new DisplayMetrics();
+//        pieChart.setMinimumWidth((int) (displaymetrics.widthPixels * 0.7f));
+//        pieChart.setMinimumHeight((int) (displaymetrics.widthPixels * 0.7f));
+//        pieChart.invalidate();
+    }
+
+    @Override
+    public void onConfigChanged(ChartConfigFragment chartConfigFragment, ChartConfig config) {
+        Log.d("AnalyticsActivity", "Received Chart Config Change to " + config);
     }
 }

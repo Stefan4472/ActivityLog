@@ -36,4 +36,9 @@ public class ChartConfig {
     public void setChartBy(ChartBy chartBy) {
         this.chartBy = chartBy;
     }
+
+    @Override
+    public String toString() {
+        return "[" + chartBy + "," + chartType + "]";
+    }
 }

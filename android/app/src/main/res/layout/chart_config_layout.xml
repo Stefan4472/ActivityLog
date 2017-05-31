@@ -9,6 +9,7 @@
         android:id="@+id/chart_config_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
@@ -24,7 +25,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/chart_by_label"
+            android:text="@string/chart_type_label"
             android:layout_gravity="center_vertical"/>
         <Spinner
             android:id="@+id/chart_type_spinner"
@@ -43,7 +44,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/chart_type_label"
+            android:text="@string/chart_by_label"
             android:layout_gravity="center_vertical"/>
         <Spinner
             android:id="@+id/chart_by_spinner"
