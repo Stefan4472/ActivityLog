@@ -29,7 +29,17 @@
                 android:value=".activity.MainActivity"/>
         </activity>
         <activity android:name=".activity.AnalyticsActivity"
-            android:label="@string/analytics_activity_label"
+            android:label="@string/analytics"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activity.MainActivity">
+
+            <!-- parent activity meta-data to support 4.0 or below -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity"/>
+        </activity>
+        <activity android:name=".activity.ViewEditLogActivity"
+            android:label="@string/view_edit_log"
             android:screenOrientation="portrait"
             android:parentActivityName=".activity.MainActivity">
 

@@ -32,4 +32,7 @@
 
     <!-- AnalyticsActivity Strings -->
     <string name="analytics_activity_label">Analytics</string>
+
+    <!-- ViewEditLogActivity Strings -->
+    <string name="viewlog_activity_label">View/Edit Log</string>
 </resources>

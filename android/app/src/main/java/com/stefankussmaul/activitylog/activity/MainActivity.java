@@ -82,7 +82,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void launchViewEditLog(View view) {
         Log.d("MainActivity", "Launching View/Edit Log");
-
+        Intent view_intent = new Intent(this, ViewEditLogActivity.class);
+        startActivity(view_intent);
 
     }
 
