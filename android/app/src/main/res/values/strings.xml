@@ -52,6 +52,15 @@
     <string name="other">Other</string>
     <string name="no_data_available">No Entries Meet The Given Criteria</string>
 
+    <!-- ChartConfigFragment Strings -->
+    <string name="chart_config_label">Configure Chart</string>
+    <string name="chart_by_label">Chart By:</string>
+    <string name="chart_type_label">Chart Type:</string>
+    <string name="pie_chart">Pie Chart</string>
+    <string name="line_chart">Line Chart</string>
+    <string name="time_spend">Time Spent</string>
+    <string name="num_logs">Number of Logs</string>
+
     <!-- ViewEditLogActivity Strings -->
     <string name="viewlog_activity_label">View/Edit Log</string>
 </resources>

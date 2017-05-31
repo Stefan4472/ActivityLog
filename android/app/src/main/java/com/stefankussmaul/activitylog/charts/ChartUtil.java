@@ -1,7 +1,8 @@
-package com.stefankussmaul.activitylog.content;
+package com.stefankussmaul.activitylog.charts;
 
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieEntry;
+import com.stefankussmaul.activitylog.content.ActivityAggregate;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
