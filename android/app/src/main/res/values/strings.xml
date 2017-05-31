@@ -58,8 +58,8 @@
     <string name="chart_type_label">Chart Type:</string>
     <string name="pie_chart">Pie Chart</string>
     <string name="line_chart">Line Chart</string>
-    <string name="time_spend">Time Spent</string>
-    <string name="num_logs">Number of Logs</string>
+    <string name="time_spent">Time Spent</string>
+    <string name="num_sessions">Number of Logs</string>
 
     <!-- ViewEditLogActivity Strings -->
     <string name="viewlog_activity_label">View/Edit Log</string>
