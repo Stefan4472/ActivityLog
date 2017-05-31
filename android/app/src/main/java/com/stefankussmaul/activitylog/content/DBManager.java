@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Helper class to provide access to the database.
  */
@@ -89,5 +92,18 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
     // runs the given query and returns the Cursor
     public Cursor runQuery(String sqlQuery) {
         return getWritableDatabase().rawQuery(sqlQuery, null);
+    }
+
+    // returns alphabetically-sorted list of all Activity names that exist
+    public List<String> getAllActivityNames() {
+        Cursor cursor = runQuery("SELECT DISTINCT " + LOG_COLUMN_ACTIVITY + " FROM " + LOG_TABLE_NAME +
+                " ORDER BY " + LOG_COLUMN_ACTIVITY + " DESC");
+        List<String> names = new LinkedList<>();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            names.add(cursor.getString(cursor.getColumnIndex(LOG_COLUMN_ACTIVITY)));
+            cursor.moveToNext();
+        }
+        return names;
     }
 }

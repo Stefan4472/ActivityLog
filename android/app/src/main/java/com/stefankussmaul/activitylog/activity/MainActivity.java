@@ -76,7 +76,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void launchAnalytics(View view) {
         Log.d("MainActivity", "Launching Analytics");
-
+        Intent analytics_intent = new Intent(this, AnalyticsActivity.class);
+        startActivity(analytics_intent);
     }
 
     public void launchViewEditLog(View view) {

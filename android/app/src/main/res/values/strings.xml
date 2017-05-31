@@ -29,4 +29,7 @@
     <string name="name_lable">Activity Name:</string>
     <string name="date_label">Date:</string>
     <string name="date_conjunction">and</string>
+
+    <!-- AnalyticsActivity Strings -->
+    <string name="analytics_activity_label">Analytics</string>
 </resources>
