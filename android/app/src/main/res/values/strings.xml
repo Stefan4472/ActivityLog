@@ -27,6 +27,8 @@
     <!-- Filter Strings -->
     <string name="filter_by">Filter By</string>
     <string name="name_lable">Activity Name:</string>
+    <string name="update_filter">Update Filter</string>
+    <string name="activity_any">Any</string>
     <string name="date_label">Date:</string>
     <string name="date_conjunction">and</string>
 

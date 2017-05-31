@@ -53,6 +53,10 @@ public class QueryBuilder {
         }
     }
 
+    public void setDateFilter(String keyword, Date date1, Date date2) {
+
+    }
+
     // sets the dateClause to accept timeStamps only greater than/equal to the given Date's ms.
     // Cannot be combined with setDateBoundedMax! Instead use setDateBoundedMinMax(Date, Date)
     public void setDateBoundedMin(Date minDate) {
@@ -101,6 +105,10 @@ public class QueryBuilder {
             numClauses--;
             dateClause = "";
         }
+    }
+
+    public void setDurationFilter(String keyword, int duration1, int duration2) {
+
     }
 
     public void setDurationBoundedMin(int min) {

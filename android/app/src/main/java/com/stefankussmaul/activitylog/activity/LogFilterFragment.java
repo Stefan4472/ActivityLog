@@ -31,20 +31,22 @@ public class LogFilterFragment extends Fragment {
     // displays choices for activity filters
     private Spinner activityChoices;
     // displays choices for date filter prepositions (before, after, between, etc)
-    private Spinner dateConfig;
+    private Spinner dateChoices;
     // button that displays first date chosen for Date config
     private Button datePicker1;
     // button that displays second date chosen for Date config, if needed
     private Button datePicker2;
     private Date date1;
     private Date date2;
-    private Spinner durationConfig;
+    private Spinner durationChoices;
     private EditText durationPicker1;
     private EditText durationPicker2;
     private TextView dateConjunction;
     private TextView durationConjunction;
     private int duration1;
     private int duration2;
+    // the query defined by the user
+    private QueryBuilder configuredQuery;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,7 @@ public class LogFilterFragment extends Fragment {
         date2 = new Date(System.currentTimeMillis());
         duration1 = 0;
         duration2 = 0;
+        configuredQuery = new QueryBuilder();
     }
 
     @Override
@@ -74,7 +77,7 @@ public class LogFilterFragment extends Fragment {
         // get the possible choices for activity
         List<String> activity_choices = db_manager.getAllActivityNames();
         // add the option "Any" up front
-        activity_choices.add(0, "Any");
+        activity_choices.add(0, getString(R.string.activity_any));
         // create adapter using the choices
         ArrayAdapter<String> activity_adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_item, activity_choices);
@@ -82,7 +85,7 @@ public class LogFilterFragment extends Fragment {
         activityChoices.setAdapter(activity_adapter);
 
         // get date-related UI elements
-        dateConfig = (Spinner) view.findViewById(R.id.date_config_1);
+        dateChoices = (Spinner) view.findViewById(R.id.date_config_1);
         datePicker1 = (Button) view.findViewById(R.id.choose_date_1);
         datePicker2 = (Button) view.findViewById(R.id.choose_date_2);
         dateConjunction = (TextView) view.findViewById(R.id.date_conjunction);
@@ -90,9 +93,9 @@ public class LogFilterFragment extends Fragment {
         // create adapter using date key words from QueryBuilder
         ArrayAdapter<String> date_adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_item, QueryBuilder.getDateKeyWords(getActivity()));
-        dateConfig.setAdapter(date_adapter);
+        dateChoices.setAdapter(date_adapter);
         // configure reaction to an item being selected
-        dateConfig.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        dateChoices.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override // item selected: figure out which it was and show/hide date pickers based on that
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String preposition = (String) parent.getItemAtPosition(position);
@@ -138,7 +141,7 @@ public class LogFilterFragment extends Fragment {
         });
 
         // get duration UI elements
-        durationConfig = (Spinner) view.findViewById(R.id.duration_config_1);
+        durationChoices = (Spinner) view.findViewById(R.id.duration_config_1);
         durationPicker1 = (EditText) view.findViewById(R.id.choose_duration_1);
         durationPicker2 = (EditText) view.findViewById(R.id.choose_duration_2);
         durationConjunction = (TextView) view.findViewById(R.id.duration_conjunction);
@@ -146,9 +149,9 @@ public class LogFilterFragment extends Fragment {
         // create adapter using Duration keywords from QueryBuilder
         ArrayAdapter<String> duration_adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item, QueryBuilder.getDurationKeyWords(getActivity()));
-        durationConfig.setAdapter(duration_adapter);
+        durationChoices.setAdapter(duration_adapter);
         // configure reaction to an item being selected
-        durationConfig.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        durationChoices.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override // item selected: figure out which it was and show/hide date pickers based on that
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String preposition = (String) parent.getItemAtPosition(position);
@@ -193,6 +196,14 @@ public class LogFilterFragment extends Fragment {
                 return true;
             }
         });
+
+        Button update_button = (Button) view.findViewById(R.id.update_button);
+        update_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onFilterUpdated(v);
+            }
+        });
     }
 
     // handles user clicking a button to select a date. Determines which date we are setting
@@ -227,5 +238,29 @@ public class LogFilterFragment extends Fragment {
                 Log.d("LogfilterFragment", "Unrecognized View");
                 throw new IllegalArgumentException();
         }
+    }
+
+    // handles user clicking button to update the filter. Takes data from UI fields and uses it
+    // to create a QueryBuilder
+    public void onFilterUpdated(View view) {
+        String activity_config = activityChoices.getSelectedItem().toString();
+        if (activity_config.equals(getString(R.string.activity_any))) {
+            configuredQuery.resetActivityFilter();
+        } else {
+            configuredQuery.setActivityFilter(activity_config);
+        }
+        String date_config = dateChoices.getSelectedItem().toString();
+        if (date_config.equals(getString(R.string.date_any))) {
+            configuredQuery.resetDateFilter();
+        } else {
+            configuredQuery.setDateFilter(date_config, date1, date2);
+        }
+        String duration_config = durationChoices.getSelectedItem().toString();
+        if (duration_config.equals(getString(R.string.duration_any))) {
+            configuredQuery.resetDurationFilter();
+        } else {
+            configuredQuery.setDurationFilter(date_config, duration1, duration2);
+        }
+        Log.d("LogFilterFragment", "Generated Query: " + configuredQuery.getQuery());
     }
 }
