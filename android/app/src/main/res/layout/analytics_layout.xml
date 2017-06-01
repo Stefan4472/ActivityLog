@@ -4,43 +4,53 @@
     android:layout_height="match_parent">
     <!-- include default app toolbar -->
     <include layout="@layout/toolbar_layout"/>
-    <!-- chart title -->
-    <TextView
-        android:id="@+id/chart_title"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:textSize="30sp"
-        android:text="@string/analytics_activity_label"
-        android:textAlignment="center"/>
-    <!-- piechart -->
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/pie_chart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"/>
-    <!-- displays total stats below the piechart -->
-    <TextView
-        android:id="@+id/stats_overview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:textSize="20sp"
-        android:textAlignment="center"/>
-    <!-- LogFilterFragment so user can configure how they want to filter activities -->
-    <fragment
-        android:name="com.stefankussmaul.activitylog.activity.LogFilterFragment"
-        class="com.stefankussmaul.activitylog.activity.LogFilterFragment"
-        android:id="@+id/logfilter_config"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"/>
-    <!-- ChartConfigFragment so user can configure the chart -->
-    <fragment
-        android:name="com.stefankussmaul.activitylog.activity.ChartConfigFragment"
-        class="com.stefankussmaul.activitylog.activity.ChartConfigFragment"
-        android:id="@+id/chart_config"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!-- chart title -->
+            <TextView
+                android:id="@+id/chart_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textSize="30sp"
+                android:text="@string/analytics_activity_label"
+                android:textAlignment="center"/>
+            <!-- piechart -->
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pie_chart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"/>
+            <!-- displays total stats below the piechart -->
+            <TextView
+                android:id="@+id/stats_overview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textSize="20sp"
+                android:textAlignment="center"/>
+            <!-- LogFilterFragment so user can configure how they want to filter activities -->
+            <fragment
+                android:name="com.stefankussmaul.activitylog.activity.LogFilterFragment"
+                class="com.stefankussmaul.activitylog.activity.LogFilterFragment"
+                android:id="@+id/logfilter_config"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"/>
+            <!-- ChartConfigFragment so user can configure the chart -->
+            <fragment
+                android:name="com.stefankussmaul.activitylog.activity.ChartConfigFragment"
+                class="com.stefankussmaul.activitylog.activity.ChartConfigFragment"
+                android:id="@+id/chart_config"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
