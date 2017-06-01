@@ -70,4 +70,5 @@
 
     <!-- ViewEditLogActivity Strings -->
     <string name="viewlog_activity_label">View/Edit Log</string>
+    <string name="edit_log_entry">Edit</string>
 </resources>

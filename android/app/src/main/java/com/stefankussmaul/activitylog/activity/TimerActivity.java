@@ -1,11 +1,9 @@
 package com.stefankussmaul.activitylog.activity;
 
-import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +20,7 @@ import java.util.TimerTask;
  * Provides Stopwatch/Timer functionality for the user, with ability to then log it.
  */
 
-public class TimerActivity extends AppCompatActivity {
+public class TimerActivity extends AppCompatActivity implements EditLogEntryFragment.LogDialogListener {
 
     private MsTimer msTimer;
     private Timer timerThread;
@@ -134,15 +132,14 @@ public class TimerActivity extends AppCompatActivity {
     public void logTime(View view) {
         pauseTimer(null);
         LogEntry new_entry = new LogEntry("", System.currentTimeMillis(), (int) msTimer.getTimedMs());
-        LogActivityDialogFragment log_dialog = LogActivityDialogFragment.newInstance(new_entry);
-        log_dialog.setListener(new LogActivityDialogFragment.LogDialogListener() {
-            @Override
-            public void onLogSaved(LogActivityDialogFragment dialogFragment, LogEntry createdEntry) {
-                MainActivity.getLogManager().insertEntry(createdEntry);
-                dialogFragment.dismiss();
-            }
-        });
+        EditLogEntryFragment log_dialog = EditLogEntryFragment.newInstance(new_entry);
         log_dialog.show(getFragmentManager(), "Log");
+    }
+
+    @Override // handles user saving a LogEntry they edited through EditLogEntryFragment
+    public void onLogSaved(EditLogEntryFragment dialogFragment, LogEntry createdEntry) {
+        MainActivity.getLogManager().insertEntry(createdEntry);
+        dialogFragment.dismiss();
     }
 
     // handles user clicking button to reset the timer. Resets the Timer object, stops the timerTask,

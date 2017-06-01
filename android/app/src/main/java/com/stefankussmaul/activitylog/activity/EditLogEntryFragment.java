@@ -1,5 +1,6 @@
 package com.stefankussmaul.activitylog.activity;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
@@ -19,14 +20,13 @@ import com.stefankussmaul.activitylog.R;
 import com.stefankussmaul.activitylog.content.DateUtil;
 import com.stefankussmaul.activitylog.content.LogEntry;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * Created by Stefan on 5/29/2017.
  */
 
-public class LogActivityDialogFragment extends DialogFragment implements DatePickerFragment.DatePickerListener {
+public class EditLogEntryFragment extends DialogFragment implements DatePickerFragment.DatePickerListener {
 
     // keys used for storing data in bundle
     private static final String ACTIVITY_KEY = "LOGGED_ACTIVITY";
@@ -41,26 +41,22 @@ public class LogActivityDialogFragment extends DialogFragment implements DatePic
 
     // interface for receiving dialog callbacks
     public interface LogDialogListener {
-        void onLogSaved(LogActivityDialogFragment dialogFragment, LogEntry createdEntry);
+        void onLogSaved(EditLogEntryFragment dialogFragment, LogEntry createdEntry);
     }
 
     // listener that receives callbacks
     private LogDialogListener mListener;
 
-    public void setListener(LogDialogListener listener) {
-        mListener = listener;
-    }
-
     // returns a new instance of the fragment with bundle that has the values given by toEdit.
     // Will populate the dialog with data from toEdit.
-    public static LogActivityDialogFragment newInstance(LogEntry toEdit) {
-        LogActivityDialogFragment fragment = new LogActivityDialogFragment();
+    public static EditLogEntryFragment newInstance(LogEntry toEdit) {
+        EditLogEntryFragment fragment = new EditLogEntryFragment();
 
         // populate bundle
         Bundle args = new Bundle();
         args.putString(ACTIVITY_KEY, toEdit.getActivityName());
         args.putInt(DURATION_KEY, toEdit.getDuration());
-        args.putLong(DATE_KEY, toEdit.getDate());
+        args.putLong(DATE_KEY, toEdit.getDateInMS());
         fragment.setArguments(args);
 
         return fragment;
@@ -74,6 +70,16 @@ public class LogActivityDialogFragment extends DialogFragment implements DatePic
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         return dialog;
+    }
+
+    @Override // ensures activity implements LogDialogListener
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (LogDialogListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement LogDialogListener");
+        }
     }
 
     @Override
@@ -138,7 +144,7 @@ public class LogActivityDialogFragment extends DialogFragment implements DatePic
             Log.d("LogActivityDialog", "Showing DatePicker");
             // will be initialized to today's date
             DatePickerFragment date_picker = DatePickerFragment.newInstance(selectedDate);
-            date_picker.setListener(LogActivityDialogFragment.this);
+            date_picker.setListener(EditLogEntryFragment.this);
             date_picker.show(getFragmentManager(), "DatePicker");
             }
         });

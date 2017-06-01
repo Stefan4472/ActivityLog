@@ -22,7 +22,7 @@ import java.util.List;
  * Displays MainScreen of the app.
  */
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements EditLogEntryFragment.LogDialogListener {
 
     // handle to database with log data
     private static DBManager logManager;
@@ -82,16 +82,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void launchLogDialog(View view) {
         Log.d("MainActivity", "Launching Log Activity");
-        LogActivityDialogFragment log_dialog = new LogActivityDialogFragment();
-        // set listener that inserts new LogEntry to the database and closes the dialog
-        log_dialog.setListener(new LogActivityDialogFragment.LogDialogListener() {
-            @Override
-            public void onLogSaved(LogActivityDialogFragment dialogFragment, LogEntry createdEntry) {
-               logManager.insertEntry(createdEntry);
-                dialogFragment.dismiss();
-            }
-        });
+        EditLogEntryFragment log_dialog = new EditLogEntryFragment();
         log_dialog.show(getFragmentManager(), "Log");
+    }
+
+    @Override // called when a LogEntry is being closed
+    public void onLogSaved(EditLogEntryFragment dialogFragment, LogEntry createdEntry) {
+        logManager.insertEntry(createdEntry);
+        dialogFragment.dismiss();
     }
 
     public void launchStartActivity(View view) {

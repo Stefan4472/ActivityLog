@@ -4,18 +4,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Stores data required for a log.
+ * Stores data required for a log. The Date can be set/retrieved via msSinceEpoch.
  */
 
 public class LogEntry {
 
     private String activityName;
-    private long date;
+    private Date date;
     private int duration;
 
-    public LogEntry(String activityName, long date, int duration) {
+    public LogEntry(String activityName, long msSinceEpoch, int duration) {
         this.activityName = activityName;
-        this.date = date;
+        this.date = new Date(msSinceEpoch);
         this.duration = duration;
     }
 
@@ -27,12 +27,22 @@ public class LogEntry {
         this.activityName = activityName;
     }
 
-    public long getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(long date) {
+    public void setDate(Date date) {
         this.date = date;
+    }
+
+    // returns date as MS since epoch
+    public long getDateInMS() {
+        return date.getTime();
+    }
+
+    // sets date as MS since epoch
+    public void setDateMS(long msSinceEpoch) {
+        date.setTime(msSinceEpoch);
     }
 
     public int getDuration() {
@@ -51,23 +61,20 @@ public class LogEntry {
             return true;
         }
         final LogEntry other = (LogEntry) o;
-        return activityName.equals(other.getActivityName()) && date == other.getDate() &&
+        return activityName.equals(other.getActivityName()) && date.equals(other.getDate()) &&
                 duration == other.getDuration();
     }
 
     @Override
     public int hashCode() {
         int value = activityName.hashCode();
-        value += Long.valueOf(date).hashCode();
+        value += date.hashCode();
         value += Long.valueOf(duration).hashCode();
         return value;
     }
 
-    private static Date formatHelper = new Date();
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss");
     @Override
     public String toString() {
-        formatHelper.setTime(date);
-        return "LogEntry(" + activityName + ", date " + dateFormat.format(formatHelper) + ", " + duration + "ms)";
+        return "LogEntry(" + activityName + ", date " + DateUtil.format(date) + ", " + duration + "ms)";
     }
 }
