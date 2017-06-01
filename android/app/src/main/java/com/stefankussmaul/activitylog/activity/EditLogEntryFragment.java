@@ -23,7 +23,8 @@ import com.stefankussmaul.activitylog.content.LogEntry;
 import java.util.Date;
 
 /**
- * Created by Stefan on 5/29/2017.
+ * DialogFragment that allows the user to set/edit the contents of a LogEntry via TextFields and a
+ * DatePicker.
  */
 
 public class EditLogEntryFragment extends DialogFragment implements DatePickerFragment.DatePickerListener {

@@ -19,6 +19,11 @@ public class LogEntry {
         this.duration = duration;
     }
 
+    // returns deep-copied clone of the given LogEntry
+    public LogEntry(LogEntry toClone) {
+        this(toClone.getActivityName(), toClone.getDateInMS(), toClone.getDuration());
+    }
+
     public String getActivityName() {
         return activityName;
     }

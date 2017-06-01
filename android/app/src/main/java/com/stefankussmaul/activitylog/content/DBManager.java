@@ -62,8 +62,6 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
         Log.d("DBManager", "Adding " + newEntry);
         SQLiteDatabase db = getWritableDatabase();
         long id = db.insert(LOG_TABLE_NAME, null, DBUtil.getContentVals(newEntry));
-        assert(id != -1);
-        assert getEntry(id).equals(newEntry);
         return id;
     }
 
@@ -80,8 +78,17 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
         Log.d("DBManager", "Updating " + getEntry(id) + " to " + newEntry);
         SQLiteDatabase db = getWritableDatabase();
         long new_id = db.update(LOG_TABLE_NAME, DBUtil.getContentVals(newEntry), LOG_COLUMN_ID + " = " + id, null);
-        assert getEntry(new_id).equals(newEntry);
-        return true;
+        return new_id > -1;
+    }
+
+    // uses LogEntry's timestamp to look it up in the database. If found, sets new values
+    public boolean updateEntry(LogEntry oldEntry, LogEntry newEntry) {
+        Cursor result = runQuery("SELECT " + LOG_COLUMN_ID + " FROM " + LOG_TABLE_NAME + " WHERE "
+                + LOG_COLUMN_TIMESTAMP + " = '" + newEntry.getDateInMS() + "'");
+        result.moveToFirst();
+        long id = result.getLong(result.getColumnIndex(LOG_COLUMN_ID));
+        result.close();
+        return updateEntry(id, newEntry);
     }
 
     // deletes given row from the database
@@ -89,6 +96,14 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
         Log.d("DBManager", "Deleting " + getEntry(id));
         SQLiteDatabase db = getWritableDatabase();
         db.delete(LOG_TABLE_NAME, LOG_COLUMN_ID + " = " + id, null);
+    }
+
+    // uses LogEntry's timestamp to find it in the database and delete it. Although it is not guaranteed
+    // the TimeStamp will be unique (there is an insanely low chance it isn't) it almost
+    // certainly will be
+    public void deleteEntry(LogEntry toDelete) {
+        getWritableDatabase().delete(LOG_TABLE_NAME, LOG_COLUMN_TIMESTAMP + " = '" +
+                toDelete.getDateInMS() + "'", null);
     }
 
     // runs the given query and returns the Cursor
