@@ -275,7 +275,7 @@ public class LogFilterFragment extends Fragment {
         String duration_config = durationChoices.getSelectedItem().toString();
         configuredQuery.setDurationFilter(getActivity(), duration_config, duration1, duration2);
         Log.d("LogFilterFragment", "Generated Query: " + configuredQuery.getQuery());
-        // fire event to OnFilterUpdated listener
+        // fire event to OnFilterUpdated listener todo: should return a new QueryBuilder object each time?
         mListener.onFilterUpdated(this, configuredQuery);
     }
 

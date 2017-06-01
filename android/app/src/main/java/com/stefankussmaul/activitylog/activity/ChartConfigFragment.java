@@ -22,23 +22,28 @@ import java.util.List;
 
 public class ChartConfigFragment extends Fragment {
 
+    // spinners for selecting chartType and chartBy values
     private Spinner chartTypeSpinner;
     private Spinner chartBySpinner;
-    private ChartConfig configuration;
+    // selected chartType and chartBy settings
+    private ChartConfig.ChartType chartType;
+    private ChartConfig.ChartBy chartBy;
     private OnConfigChangeListener mListener;
 
+    // interface parent activity must implement
     public interface OnConfigChangeListener {
         void onConfigChanged(ChartConfigFragment chartConfigFragment, ChartConfig config);
     }
 
     public ChartConfig getConfiguration() {
-        return configuration;
+        return new ChartConfig(chartType, chartBy);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        configuration = new ChartConfig(ChartConfig.ChartType.PIE, ChartConfig.ChartBy.NUM_SESSIONS);
+        chartType = ChartConfig.ChartType.PIE;
+        chartBy = ChartConfig.ChartBy.NUM_SESSIONS;
     }
 
     @Override // ensures activity implements OnFilterUpdatedListener
@@ -76,13 +81,13 @@ public class ChartConfigFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String type = (String) parent.getItemAtPosition(position);
                 if (type.equals(getString(R.string.pie_chart))) {
-                    configuration.setChartType(ChartConfig.ChartType.PIE);
+                    chartType = ChartConfig.ChartType.PIE;
                 } else if (type.equals(getString(R.string.line_chart))) {
-                    configuration.setChartType(ChartConfig.ChartType.LINE);
+                    chartType = ChartConfig.ChartType.LINE;
                 } else {
                     throw new IllegalArgumentException("Unrecognized Type '" + type + "'. Invalid Spinner option.");
                 }
-                mListener.onConfigChanged(ChartConfigFragment.this, configuration);
+                mListener.onConfigChanged(ChartConfigFragment.this, new ChartConfig(chartType, chartBy));
             }
 
             @Override
@@ -105,13 +110,13 @@ public class ChartConfigFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String type = (String) parent.getItemAtPosition(position);
                 if (type.equals(getString(R.string.time_spent))) {
-                    configuration.setChartBy(ChartConfig.ChartBy.TOTAL_DURATION);
+                    chartBy = ChartConfig.ChartBy.TOTAL_DURATION;
                 } else if (type.equals(getString(R.string.num_sessions))) {
-                    configuration.setChartBy(ChartConfig.ChartBy.NUM_SESSIONS);
+                    chartBy = ChartConfig.ChartBy.NUM_SESSIONS;
                 } else {
                     throw new IllegalArgumentException("Unrecognized Type '" + type + "'. Invalid Spinner option.");
                 }
-                mListener.onConfigChanged(ChartConfigFragment.this, configuration);
+                mListener.onConfigChanged(ChartConfigFragment.this, new ChartConfig(chartType, chartBy));
             }
 
             @Override

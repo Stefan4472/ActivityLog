@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -32,6 +33,8 @@ public class AnalyticsActivity extends AppCompatActivity implements
 
     // todo: better management of activity lifecycle?
     private PieChart pieChart;
+    private TextView chartTitle;
+    private TextView statsOverviewLabel;
     private DBManager dbManager;
 
     private QueryBuilder currentQuery;
@@ -60,6 +63,8 @@ public class AnalyticsActivity extends AppCompatActivity implements
         dbManager = new DBManager(this);
 
         pieChart = (PieChart) findViewById(R.id.pie_chart);
+        chartTitle = (TextView) findViewById(R.id.chart_title);
+        statsOverviewLabel = (TextView) findViewById(R.id.stats_overview);
 //        pieChart.setDrawEntryLabels(false);
         // todo: programmatically with respect to screen dimensions
         pieChart.setMinimumHeight(650);
@@ -84,6 +89,10 @@ public class AnalyticsActivity extends AppCompatActivity implements
             // calculate overall statistics
             totalTimeSpent = DBUtil.getTotalOfAggregates(timeSpentAggregates);
             totalNumSessions = DBUtil.getTotalOfAggregates(numSessionAggregates);
+            // updates the title to reflect the new query
+            chartTitle.setText(ChartUtil.getChartLabel(this, newQuery));
+            // updates the overview stats to reflect the calculated overall stats
+            statsOverviewLabel.setText(ChartUtil.getOverviewLabel(this, totalNumSessions, totalTimeSpent));
             // call a refresh of whatever chart is currently displayed
             refreshChart();
             // update currentQuery to a clone of the given query
@@ -107,11 +116,17 @@ public class AnalyticsActivity extends AppCompatActivity implements
     }
 
     public void drawPieChart(List<ActivityAggregate> data, String setLabel) {
-        PieDataSet data_set = new PieDataSet(ChartUtil.getPieChartEntries(data), setLabel);
-        data_set.setColors(ColorTemplate.JOYFUL_COLORS);
-        data_set.setValueFormatter(new SessionsValueFormatter());
-        data_set.setValueTextColor(Color.WHITE);
-        pieChart.setData(new PieData(data_set));
-        pieChart.invalidate();
+        // if no data to display, set the Chart to blank data
+        if (data.isEmpty()) { // todo: crashes
+            pieChart.setData(new PieData());
+            pieChart.invalidate();
+        } else {
+            PieDataSet data_set = new PieDataSet(ChartUtil.getPieChartEntries(data), setLabel);
+            data_set.setColors(ColorTemplate.JOYFUL_COLORS);
+            data_set.setValueFormatter(new SessionsValueFormatter());
+            data_set.setValueTextColor(Color.WHITE);
+            pieChart.setData(new PieData(data_set));
+            pieChart.invalidate();
+        }
     }
 }

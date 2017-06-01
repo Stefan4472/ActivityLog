@@ -51,6 +51,13 @@
     <string name="analytics_activity_label">Analytics</string>
     <string name="other">Other</string>
     <string name="no_data_available">No Entries Meet The Given Criteria</string>
+    <string name="showing">Showing</string>
+    <string name="all_sessions">All Sessions</string>
+    <string name="all_time">All Time</string>
+    <string name="in_filter">In Filter</string>
+    <!-- todo: singular? -->
+    <string name="sessions">Sessions</string>
+    <string name="hours">Hours</string>
 
     <!-- ChartConfigFragment Strings -->
     <string name="chart_config_label">Configure Chart</string>

@@ -33,6 +33,9 @@ public class QueryBuilder {
     private String dateClause = "";
     private String durationClause = "";
 
+    // name of activity being used for Activity Filter, if exists
+    private String activityFilter = "";
+
     // number of filters to be applied
     private int numClauses;
 
@@ -49,10 +52,19 @@ public class QueryBuilder {
         numClauses = toClone.numClauses;
     }
 
+    public boolean hasActivityFilter() {
+        return !activityClause.isEmpty();
+    }
+
+    public String getActivityFilter() {
+        return activityFilter;
+    }
+
     public void setActivityFilter(String activityName) {
         if (activityClause.isEmpty()) {
             numClauses++;
         }
+        activityFilter = activityName;
         activityClause = LOG_COLUMN_ACTIVITY + " = '" + activityName + "'";
     }
 
@@ -61,6 +73,10 @@ public class QueryBuilder {
             numClauses--;
             activityClause = "";
         }
+    }
+
+    public boolean hasDateFilter() {
+        return !dateClause.isEmpty();
     }
 
     public void setDateFilter(Context context, String keyword, Date date1, Date date2)
@@ -128,6 +144,10 @@ public class QueryBuilder {
             numClauses--;
             dateClause = "";
         }
+    }
+
+    public boolean hasDurationFilter() {
+        return !durationClause.isEmpty();
     }
 
     public void setDurationFilter(Context context, String keyword, int duration1, int duration2)
