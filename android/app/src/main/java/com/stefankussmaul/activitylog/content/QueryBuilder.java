@@ -40,6 +40,15 @@ public class QueryBuilder {
 
     }
 
+    // creates and returns a deep copy of the given QueryBuilder
+    public QueryBuilder(QueryBuilder toClone) {
+        this();
+        activityClause = toClone.activityClause;
+        dateClause = toClone.dateClause;
+        durationClause = toClone.durationClause;
+        numClauses = toClone.numClauses;
+    }
+
     public void setActivityFilter(String activityName) {
         if (activityClause.isEmpty()) {
             numClauses++;
@@ -205,13 +214,13 @@ public class QueryBuilder {
         return "SELECT * FROM " + LOG_TABLE_NAME + getWhereClause();
     }
 
-    public String getDurationSumQuery() {
+    public String getTimeSpentQuery() {
         return "SELECT " + LOG_COLUMN_ACTIVITY + ", SUM(" + LOG_COLUMN_DURATION
                 + ") AS " + AGGREGATE_KEYWORD + " FROM " + LOG_TABLE_NAME + getWhereClause() +
                 " GROUP BY (" + LOG_COLUMN_ACTIVITY + ") ORDER BY " + AGGREGATE_KEYWORD + " DESC";
     }
 
-    public String getActivityCountQuery() {
+    public String getSessionCountQuery() {
         return "SELECT " + LOG_COLUMN_ACTIVITY + ", COUNT(" + LOG_COLUMN_ACTIVITY
                 + ") AS " + AGGREGATE_KEYWORD + " FROM " + LOG_TABLE_NAME + getWhereClause() +
                 " GROUP BY (" + LOG_COLUMN_ACTIVITY + ") ORDER BY " + AGGREGATE_KEYWORD + " DESC";
@@ -239,5 +248,19 @@ public class QueryBuilder {
         key_words.add(context.getString(R.string.duration_more));
         key_words.add(context.getString(R.string.duration_between));
         return key_words;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || !(o instanceof QueryBuilder)) {
+            return false;
+        } else {
+            return getQuery().equals(((QueryBuilder) o).getQuery());
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return getQuery().hashCode();
     }
 }

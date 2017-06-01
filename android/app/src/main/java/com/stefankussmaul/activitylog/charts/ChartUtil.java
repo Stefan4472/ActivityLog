@@ -32,20 +32,9 @@ public class ChartUtil {
     public static List<PieEntry> getPieChartEntries(List<ActivityAggregate> dataPoints) {
         List<PieEntry> entries = new ArrayList<>(dataPoints.size());
 
-        long total = getTotal(dataPoints);
         for (ActivityAggregate dp : dataPoints) {
-//            entries.add(new PieEntry((float) dp.getVal() / total, dp.getActivityName()));
             entries.add(new PieEntry(dp.getVal(), dp.getActivityName()));
         }
         return entries;
-    }
-
-    // calculates and returns total of all vals in given list of ActivityAggregates
-    public static long getTotal(List<ActivityAggregate> aggregates) {
-        long total = 0;
-        for (ActivityAggregate a : aggregates) {
-            total += a.getVal();
-        }
-        return total;
     }
 }

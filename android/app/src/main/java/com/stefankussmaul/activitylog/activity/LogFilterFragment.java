@@ -270,17 +270,10 @@ public class LogFilterFragment extends Fragment {
             configuredQuery.setActivityFilter(activity_config);
         }
         String date_config = dateChoices.getSelectedItem().toString();
-        if (date_config.equals(getString(R.string.date_any))) {
-            configuredQuery.resetDateFilter();
-        } else {
-            configuredQuery.setDateFilter(getActivity(), date_config, date1, date2);
-        }
+        configuredQuery.setDateFilter(getActivity(), date_config, date1, date2);
+
         String duration_config = durationChoices.getSelectedItem().toString();
-        if (duration_config.equals(getString(R.string.duration_any))) {
-            configuredQuery.resetDurationFilter();
-        } else {
-            configuredQuery.setDurationFilter(getActivity(), date_config, duration1, duration2);
-        }
+        configuredQuery.setDurationFilter(getActivity(), duration_config, duration1, duration2);
         Log.d("LogFilterFragment", "Generated Query: " + configuredQuery.getQuery());
         // fire event to OnFilterUpdated listener
         mListener.onFilterUpdated(this, configuredQuery);

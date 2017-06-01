@@ -1,6 +1,5 @@
 package com.stefankussmaul.activitylog.activity;
 
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,8 +16,6 @@ import com.stefankussmaul.activitylog.content.DBUtil;
 import com.stefankussmaul.activitylog.content.LogEntry;
 import com.stefankussmaul.activitylog.content.QueryBuilder;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,18 +45,18 @@ public class MainActivity extends AppCompatActivity {
         QueryBuilder query_builder = new QueryBuilder();
 
         Log.d("MainActivity", "Printing calculated aggregates");
-        Log.d("MainActivity", query_builder.getActivityCountQuery());
-        Log.d("MainActivity", query_builder.getDurationSumQuery());
+        Log.d("MainActivity", query_builder.getSessionCountQuery());
+        Log.d("MainActivity", query_builder.getTimeSpentQuery());
         Log.d("MainActivity", "Aggregate Durations");
         int counter = 1;
-        List<ActivityAggregate> sums = DBUtil.getAggregatesFromCursor(logManager.runQuery(query_builder.getDurationSumQuery()));
+        List<ActivityAggregate> sums = DBUtil.getAggregatesFromCursor(logManager.runQuery(query_builder.getTimeSpentQuery()));
         for (ActivityAggregate a : sums) {
             Log.d("MainActivity", counter + ". " + a.toString());
             counter++;
         }
         Log.d("MainActivity", "Aggregate Logged Sessions");
         counter = 1;
-        List<ActivityAggregate> counts = DBUtil.getAggregatesFromCursor(logManager.runQuery(query_builder.getActivityCountQuery()));
+        List<ActivityAggregate> counts = DBUtil.getAggregatesFromCursor(logManager.runQuery(query_builder.getSessionCountQuery()));
         for (ActivityAggregate c : counts) {
             Log.d("MainActivity", counter + ". " + c.toString());
             counter++;

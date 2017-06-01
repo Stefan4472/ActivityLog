@@ -48,6 +48,15 @@ public class DBUtil {
         return aggregates;
     }
 
+    // sums the values of each ActivityAggregate in the list and returns this sum
+    public static long getTotalOfAggregates(List<ActivityAggregate> aggregates) {
+        long total = 0;
+        for (ActivityAggregate a : aggregates) {
+            total += a.getVal();
+        }
+        return total;
+    }
+
     // toString for a list of LogEntry objects
     public static String logListToString(List<LogEntry> logs) {
         String to_str = "";

@@ -31,6 +31,10 @@ public class ChartConfigFragment extends Fragment {
         void onConfigChanged(ChartConfigFragment chartConfigFragment, ChartConfig config);
     }
 
+    public ChartConfig getConfiguration() {
+        return configuration;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

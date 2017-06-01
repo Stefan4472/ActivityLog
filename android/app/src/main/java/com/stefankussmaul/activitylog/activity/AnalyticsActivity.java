@@ -1,10 +1,11 @@
 package com.stefankussmaul.activitylog.activity;
 
+import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.github.mikephil.charting.charts.PieChart;
@@ -31,6 +32,17 @@ public class AnalyticsActivity extends AppCompatActivity implements
 
     // todo: better management of activity lifecycle?
     private PieChart pieChart;
+    private DBManager dbManager;
+
+    private QueryBuilder currentQuery;
+    private ChartConfig.ChartBy chartBy = ChartConfig.ChartBy.NUM_SESSIONS;
+    private ChartConfig.ChartType chartType = ChartConfig.ChartType.PIE;
+
+    List<ActivityAggregate> timeSpentAggregates;
+    List<ActivityAggregate> numSessionAggregates;
+
+    private long totalTimeSpent;
+    private long totalNumSessions;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,33 +57,61 @@ public class AnalyticsActivity extends AppCompatActivity implements
         ActionBar action_bar = getSupportActionBar();
         action_bar.setDisplayHomeAsUpEnabled(true);
 
-        DBManager logManager = new DBManager(this);
-        QueryBuilder query_builder = new QueryBuilder();
-        List<ActivityAggregate> counts = DBUtil.getAggregatesFromCursor(logManager.runQuery(query_builder.getActivityCountQuery()));
+        dbManager = new DBManager(this);
+
         pieChart = (PieChart) findViewById(R.id.pie_chart);
-        pieChart.setDrawEntryLabels(false);
+//        pieChart.setDrawEntryLabels(false);
         // todo: programmatically with respect to screen dimensions
-        pieChart.setMinimumHeight(500);
-        pieChart.setMinimumWidth(500);
-        PieDataSet data_set = new PieDataSet(ChartUtil.getPieChartEntries(counts), "Session Counts");
-        data_set.setColors(ColorTemplate.JOYFUL_COLORS);
-        data_set.setValueFormatter(new SessionsValueFormatter());
-        PieData data = new PieData(data_set);
-        pieChart.setData(data);
-        pieChart.invalidate();
+        pieChart.setMinimumHeight(650);
+        pieChart.setMinimumWidth(650);
+
+        onFilterUpdated(null, new QueryBuilder());
     }
 
     @Override
-    public void onFilterUpdated(LogFilterFragment logFilterFragment, QueryBuilder query) {
-        Log.d("AnalyticsActivity", "Received query " + query.getQuery());
-//        DisplayMetrics displaymetrics = new DisplayMetrics();
-//        pieChart.setMinimumWidth((int) (displaymetrics.widthPixels * 0.7f));
-//        pieChart.setMinimumHeight((int) (displaymetrics.widthPixels * 0.7f));
-//        pieChart.invalidate();
+    public void onFilterUpdated(LogFilterFragment logFilterFragment, QueryBuilder newQuery) {
+        if (currentQuery != null) {
+            Log.d("AnalyticsActivity", "Current Query is " + currentQuery.getQuery());
+        }
+        Log.d("AnalyticsActivity", "Received query " + newQuery.getQuery());
+        if (!newQuery.equals(currentQuery)) {
+            // run queries for both time spent and num sessions for the new query
+            Cursor time_cursor = dbManager.runQuery(newQuery.getTimeSpentQuery());
+            Cursor sessions_cursor = dbManager.runQuery(newQuery.getSessionCountQuery());
+            // retrieve aggregates from each cursor
+            timeSpentAggregates = DBUtil.getAggregatesFromCursor(time_cursor);
+            numSessionAggregates = DBUtil.getAggregatesFromCursor(sessions_cursor);
+            // calculate overall statistics
+            totalTimeSpent = DBUtil.getTotalOfAggregates(timeSpentAggregates);
+            totalNumSessions = DBUtil.getTotalOfAggregates(numSessionAggregates);
+            // call a refresh of whatever chart is currently displayed
+            refreshChart();
+            // update currentQuery to a clone of the given query
+            currentQuery = new QueryBuilder(newQuery);
+        }
     }
 
     @Override
     public void onConfigChanged(ChartConfigFragment chartConfigFragment, ChartConfig config) {
         Log.d("AnalyticsActivity", "Received Chart Config Change to " + config);
+    }
+
+    private void refreshChart() {
+        if (chartType == ChartConfig.ChartType.PIE) {
+            if (chartBy == ChartConfig.ChartBy.NUM_SESSIONS) {
+                drawPieChart(numSessionAggregates, getString(R.string.num_sessions));
+            } else {
+                drawPieChart(timeSpentAggregates, getString(R.string.time_spent));
+            }
+        }
+    }
+
+    public void drawPieChart(List<ActivityAggregate> data, String setLabel) {
+        PieDataSet data_set = new PieDataSet(ChartUtil.getPieChartEntries(data), setLabel);
+        data_set.setColors(ColorTemplate.JOYFUL_COLORS);
+        data_set.setValueFormatter(new SessionsValueFormatter());
+        data_set.setValueTextColor(Color.WHITE);
+        pieChart.setData(new PieData(data_set));
+        pieChart.invalidate();
     }
 }
