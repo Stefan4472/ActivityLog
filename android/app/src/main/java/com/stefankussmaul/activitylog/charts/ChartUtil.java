@@ -4,12 +4,15 @@ import android.app.DownloadManager;
 import android.content.Context;
 
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.stefankussmaul.activitylog.R;
 import com.stefankussmaul.activitylog.content.ActivityAggregate;
+import com.stefankussmaul.activitylog.content.LogEntry;
 import com.stefankussmaul.activitylog.content.QueryBuilder;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -43,6 +46,13 @@ public class ChartUtil {
         return entries;
     }
 
+//    public static List<String> getQueriesForDateRange(QueryBuilder origQuery, int daysPrecision) {
+//        Date start = origQuery.
+//    }
+    // converts a list of ActivityAggregates into data that can be understood and plotted on a LineChart
+//    public static List<LineDataSet> getLineChartEntries(List<LogEntry> entries) {
+//
+//    }
     // generates a chart label for the chart given the query charted. Requires context to access
     // R.string. Such a label will be: "All Sessions All Time" "All Sessions In Filter"
     // "[Activity Name] All Time" or "[Activity Name] In Filter", depending on the given Query
@@ -62,5 +72,15 @@ public class ChartUtil {
     public static String getOverviewLabel(Context context, long numSessions, long timeSpent) {
         return numSessions + " " + context.getString(R.string.sessions) + " / " +
                 (int) (timeSpent / 3_600_000) + " " + context.getString(R.string.hours);
+    }
+
+    public static String aggregatesToString(List<ActivityAggregate> aggregates) {
+        String to_str = "";
+        int i = 0;
+        for (ActivityAggregate a : aggregates) {
+            i++;
+            to_str += i + ". " + a.toString() + "\n";
+        }
+        return to_str;
     }
 }

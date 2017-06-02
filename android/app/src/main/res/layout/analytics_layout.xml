@@ -21,12 +21,24 @@
                 android:textSize="30sp"
                 android:text="@string/analytics_activity_label"
                 android:textAlignment="center"/>
-            <!-- piechart -->
-            <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/pie_chart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"/>
+            <!-- switches between PieChart and LineChart -->
+            <ViewSwitcher
+                android:id="@+id/chart_switcher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <!-- piechart -->
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pie_chart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"/>
+                <!-- linechart -->
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/line_chart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"/>
+            </ViewSwitcher>
             <!-- displays total stats below the piechart -->
             <TextView
                 android:id="@+id/stats_overview"

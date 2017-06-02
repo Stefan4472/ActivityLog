@@ -8,8 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
+import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
@@ -32,9 +37,17 @@ public class AnalyticsActivity extends AppCompatActivity implements
         LogFilterFragment.OnFilterUpdatedListener, ChartConfigFragment.OnConfigChangeListener {
 
     // todo: better management of activity lifecycle?
+    // used to switch between charts
+    private ViewSwitcher chartSwitcher;
+    // pie chart for displaying percentages of each activity
     private PieChart pieChart;
+    // line chart for displaying aggregates over a date range for each activity
+    private LineChart lineChart;
+    // title displayed at top of screen
     private TextView chartTitle;
+    // textview displaying total number of sessions and time spent in selected filter
     private TextView statsOverviewLabel;
+    // handle to database
     private DBManager dbManager;
 
     private QueryBuilder currentQuery;
@@ -62,14 +75,23 @@ public class AnalyticsActivity extends AppCompatActivity implements
 
         dbManager = new DBManager(this);
 
+        chartSwitcher = (ViewSwitcher) findViewById(R.id.chart_switcher);
+
         pieChart = (PieChart) findViewById(R.id.pie_chart);
-        chartTitle = (TextView) findViewById(R.id.chart_title);
-        statsOverviewLabel = (TextView) findViewById(R.id.stats_overview);
 //        pieChart.setDrawEntryLabels(false);
         // todo: programmatically with respect to screen dimensions
         pieChart.setMinimumHeight(650);
         pieChart.setMinimumWidth(650);
+        pieChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
 
+        lineChart = (LineChart) findViewById(R.id.line_chart);
+        lineChart.setMinimumHeight(650);
+        lineChart.setMinimumWidth(650);
+
+        chartTitle = (TextView) findViewById(R.id.chart_title);
+        statsOverviewLabel = (TextView) findViewById(R.id.stats_overview);
+
+        // generate standard chart, no filter
         onFilterUpdated(null, new QueryBuilder());
     }
 
@@ -103,6 +125,13 @@ public class AnalyticsActivity extends AppCompatActivity implements
     @Override
     public void onConfigChanged(ChartConfigFragment chartConfigFragment, ChartConfig config) {
         Log.d("AnalyticsActivity", "Received Chart Config Change to " + config);
+        boolean switch_chart;
+        if (config.getChartType() != chartType) {
+            switch_chart = true;
+        }
+        chartType = config.getChartType();
+        chartBy = config.getChartBy();
+        refreshChart();
     }
 
     private void refreshChart() {
@@ -111,6 +140,7 @@ public class AnalyticsActivity extends AppCompatActivity implements
                 drawPieChart(numSessionAggregates, getString(R.string.num_sessions));
             } else {
                 drawPieChart(timeSpentAggregates, getString(R.string.time_spent));
+                Log.d("Analytics Activity", "Drawing Time Spent " + ChartUtil.aggregatesToString(timeSpentAggregates));
             }
         }
     }
@@ -126,7 +156,23 @@ public class AnalyticsActivity extends AppCompatActivity implements
             data_set.setValueFormatter(new SessionsValueFormatter());
             data_set.setValueTextColor(Color.WHITE);
             pieChart.setData(new PieData(data_set));
+            pieChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
             pieChart.invalidate();
+        }
+    }
+
+    public void drawLineChart(List<ActivityAggregate> data, String setLabel) {
+        // if no data to display, set the Chart to blank data
+        if (data.isEmpty()) { // todo: crashes
+            lineChart.setData(new LineData());
+            lineChart.invalidate();
+        } else {
+//            LineDataSet data_set = new LineDataSet(ChartUtil.getPieChartEntries(data), setLabel);
+//            data_set.setColors(ColorTemplate.JOYFUL_COLORS);
+//            data_set.setValueFormatter(new SessionsValueFormatter());
+//            data_set.setValueTextColor(Color.WHITE);
+//            pieChart.setData(new PieData(data_set));
+//            pieChart.invalidate();
         }
     }
 }

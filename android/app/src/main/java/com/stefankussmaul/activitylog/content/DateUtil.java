@@ -30,4 +30,19 @@ public class DateUtil {
     public static String format(Date date) {
         return dateFormat.format(date);
     }
+
+    // formats and returns the duration (given in ms) into hours and minutes
+    public static String format(long ms) {
+        String formatted = "";
+        int hours = (int) ms / 3_600_000;
+        formatted += hours + "h";
+        int min = (int) ((ms % 3_600_000) / 60_000);
+        formatted += min + "m";
+        return formatted;
+    }
+
+    // converts given value in milliseconds to a float of hours
+    public static float msToHours(long ms) {
+        return (float) ms / 3_600_000;
+    }
 }
