@@ -83,4 +83,15 @@ public class ChartUtil {
         }
         return to_str;
     }
+
+    // todo: how to attach dates and work with them?
+    public static LineDataSet aggsToLineData(List<ActivityAggregate> aggregates) {
+        List<Entry> entries = new ArrayList<>();
+        int i = 0;
+        for (ActivityAggregate a : aggregates) {
+            entries.add(new Entry(i, a.getVal()));
+            i++;
+        }
+        return new LineDataSet(entries, aggregates.get(0).getActivityName());
+    }
 }

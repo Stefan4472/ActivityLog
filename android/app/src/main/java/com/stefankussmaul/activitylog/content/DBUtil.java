@@ -3,6 +3,9 @@ package com.stefankussmaul.activitylog.content;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.stefankussmaul.activitylog.charts.ChartConfig;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -81,5 +84,21 @@ public class DBUtil {
         content_vals.put(LOG_COLUMN_DURATION, log.getDuration());
         content_vals.put(LOG_COLUMN_TIMESTAMP, log.getDateInMS());
         return content_vals;
+    }
+
+
+    public static List<List<ActivityAggregate>> runQueries(DBManager db, List<QueryBuilder> queries,
+                                                           ChartConfig.ChartBy chartBy) {
+        List<List<ActivityAggregate>> results = new ArrayList<>();
+        for (QueryBuilder q : queries) {
+            if (chartBy == ChartConfig.ChartBy.NUM_SESSIONS) {
+                results.add(DBUtil.getAggregatesFromCursor(db.runQuery(q.getSessionCountQuery())));
+            } else if (chartBy == ChartConfig.ChartBy.TOTAL_DURATION) {
+                results.add(DBUtil.getAggregatesFromCursor(db.runQuery(q.getTimeSpentQuery())));
+            } else {
+                throw new IllegalArgumentException("ChartBy not recognized");
+            }
+        }
+        return results;
     }
 }

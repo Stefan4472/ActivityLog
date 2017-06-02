@@ -28,6 +28,8 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
     public static final String LOG_COLUMN_TIMESTAMP = "timestamp";
     // keyword used for aliasing sums, counts, etc.
     public static final String AGGREGATE_KEYWORD = "Aggregate";
+    // keyword used for aliasing min values
+    public static final String MIN_KEYWORD = "MinVal";
 
     public DBManager(Context context){
         super(context, DB_NAME, null, 1);

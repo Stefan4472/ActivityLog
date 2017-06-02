@@ -35,6 +35,8 @@ public class QueryBuilder {
 
     // name of activity being used for Activity Filter, if exists
     private String activityFilter = "";
+    private Date minDate;
+    private Date maxDate;
 
     // number of filters to be applied
     private int numClauses;
@@ -79,6 +81,14 @@ public class QueryBuilder {
         return !dateClause.isEmpty();
     }
 
+    public boolean hasMinDate() {
+        return !(minDate == null);
+    }
+
+    public boolean hasMaxDate() {
+        return !(maxDate == null);
+    }
+
     public void setDateFilter(Context context, String keyword, Date date1, Date date2)
             throws IllegalArgumentException {
         if (keyword.equals(context.getString(R.string.date_any))) {
@@ -102,6 +112,7 @@ public class QueryBuilder {
         if (dateClause.isEmpty()) {
             numClauses++;
         }
+        this.minDate = minDate;
         dateClause = LOG_COLUMN_TIMESTAMP + " >= " + minDate.getTime();
     }
 
@@ -111,6 +122,7 @@ public class QueryBuilder {
         if (dateClause.isEmpty()) {
             numClauses++;
         }
+        this.maxDate = maxDate;
         dateClause = LOG_COLUMN_TIMESTAMP + " <= " + maxDate.getTime();
     }
 
@@ -120,6 +132,8 @@ public class QueryBuilder {
         if (dateClause.isEmpty()) {
             numClauses++;
         }
+        this.minDate = minDate;
+        this.maxDate = maxDate;
         dateClause = LOG_COLUMN_TIMESTAMP + " >= " + minDate.getTime() + " AND " +
             LOG_COLUMN_TIMESTAMP + " <= " + maxDate.getTime();
     }
@@ -139,10 +153,20 @@ public class QueryBuilder {
         setDateBoundedMinMax(lower_bound, upper_bound);
     }
 
+    public Date getMinDate() {
+        return minDate;
+    }
+
+    public Date getMaxDate() {
+        return maxDate;
+    }
+
     public void resetDateFilter() {
         if (!dateClause.isEmpty()) {
             numClauses--;
             dateClause = "";
+            minDate = null;
+            maxDate = null;
         }
     }
 
@@ -231,19 +255,30 @@ public class QueryBuilder {
     }
 
     public String getQuery() {
-        return "SELECT * FROM " + LOG_TABLE_NAME + getWhereClause();
+        return "SELECT * FROM " + LOG_TABLE_NAME + getWhereClause() +
+                " ORDER BY " + LOG_COLUMN_TIMESTAMP + " DESC";
     }
 
     public String getTimeSpentQuery() {
         return "SELECT " + LOG_COLUMN_ACTIVITY + ", SUM(" + LOG_COLUMN_DURATION
                 + ") AS " + AGGREGATE_KEYWORD + " FROM " + LOG_TABLE_NAME + getWhereClause() +
-                " GROUP BY (" + LOG_COLUMN_ACTIVITY + ") ORDER BY " + AGGREGATE_KEYWORD + " DESC";
+                " GROUP BY (" + LOG_COLUMN_ACTIVITY + ") ORDER BY " + LOG_COLUMN_TIMESTAMP + " DESC";
     }
 
     public String getSessionCountQuery() {
         return "SELECT " + LOG_COLUMN_ACTIVITY + ", COUNT(" + LOG_COLUMN_ACTIVITY
                 + ") AS " + AGGREGATE_KEYWORD + " FROM " + LOG_TABLE_NAME + getWhereClause() +
-                " GROUP BY (" + LOG_COLUMN_ACTIVITY + ") ORDER BY " + AGGREGATE_KEYWORD + " DESC";
+                " GROUP BY (" + LOG_COLUMN_ACTIVITY + ") ORDER BY " + LOG_COLUMN_TIMESTAMP + " DESC";
+    }
+
+    public String getXOldestQuery(int numOldest) {
+        return "SELECT * FROM " + LOG_TABLE_NAME + getWhereClause() + " ORDER BY " +
+                LOG_COLUMN_TIMESTAMP + " ASC LIMIT " + numOldest;
+    }
+
+    public String getXNewestQuery(int numNewest) {
+        return "SELECT * FROM " + LOG_TABLE_NAME + getWhereClause() + " ORDER BY " +
+                LOG_COLUMN_TIMESTAMP + " DESC LIMIT " + numNewest;
     }
 
     // returns list of keywords for configuring date filter. Loaded from R.string for consistency
