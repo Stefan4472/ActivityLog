@@ -1,5 +1,7 @@
 package com.stefankussmaul.activitylog.charts;
 
+import com.github.mikephil.charting.formatter.IValueFormatter;
+
 /**
  * Defines a configuration for the AnalyticsActivity chart
  */
@@ -9,8 +11,19 @@ public class ChartConfig {
     public enum ChartType {
         PIE, LINE;
     }
+    // possibilities for what data can be charted. Stores the correct ValueFormatter to be used with
     public enum ChartBy {
-        NUM_SESSIONS, TOTAL_DURATION;
+        NUM_SESSIONS(new SessionsValueFormatter()), TOTAL_DURATION(new DurationValueFormatter());
+
+        private IValueFormatter formatter;
+
+        ChartBy(IValueFormatter valFormatter) {
+            formatter = valFormatter;
+        }
+
+        public IValueFormatter getFormatter() {
+            return formatter;
+        }
     }
 
     private ChartType chartType;

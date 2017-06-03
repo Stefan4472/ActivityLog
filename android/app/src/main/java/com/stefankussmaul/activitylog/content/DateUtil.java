@@ -141,4 +141,12 @@ public class DateUtil {
         }
         return gen_queries;
     }
+
+    public static String datesToString(List<Date> dates) {
+        String str = "";
+        for (Date d : dates) {
+            str += d.toString() + "\n";
+        }
+        return str;
+    }
 }

@@ -5,14 +5,13 @@ import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
 /**
- * ValueFormatter to be used for formatting num session data. Converts the float to an integer and
- * adds the word "Session(s)" after
+ * Formats the given sessions value (a float) to an int followed by the word "Session(s)"
  */
 
 public class SessionsValueFormatter implements IValueFormatter {
 
     @Override
     public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-        return Integer.toString((int) value) + " Session" + (value != 1f ? "s" : "");
+        return ((int) value) + " Session" + (value == 1f ? "" : "s");
     }
 }

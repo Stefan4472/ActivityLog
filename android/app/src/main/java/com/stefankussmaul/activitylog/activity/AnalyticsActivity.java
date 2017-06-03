@@ -13,17 +13,14 @@ import android.widget.ViewSwitcher;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.stefankussmaul.activitylog.R;
 import com.stefankussmaul.activitylog.charts.ChartConfig;
-import com.stefankussmaul.activitylog.charts.SessionsValueFormatter;
+import com.stefankussmaul.activitylog.charts.LineXValueFormatter;
 import com.stefankussmaul.activitylog.content.ActivityAggregate;
 import com.stefankussmaul.activitylog.charts.ChartUtil;
 import com.stefankussmaul.activitylog.content.DBManager;
@@ -35,7 +32,6 @@ import com.stefankussmaul.activitylog.content.QueryBuilder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -166,9 +162,9 @@ public class AnalyticsActivity extends AppCompatActivity implements
             pieChart.setData(new PieData());
             pieChart.invalidate();
         } else {
-            PieDataSet data_set = new PieDataSet(ChartUtil.getPieChartEntries(data), setLabel);
+            PieDataSet data_set = new PieDataSet(ChartUtil.getPieChartEntries(data, chartBy), setLabel);
             data_set.setColors(ColorTemplate.JOYFUL_COLORS);
-            data_set.setValueFormatter(new SessionsValueFormatter());
+            data_set.setValueFormatter(chartBy.getFormatter());
             data_set.setValueTextColor(Color.WHITE);
             pieChart.setData(new PieData(data_set));
             pieChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
@@ -177,6 +173,7 @@ public class AnalyticsActivity extends AppCompatActivity implements
     }
 
     public void drawLineChart(QueryBuilder query, String setLabel) {
+        Log.d("Analytics", "Drawing Line Chart: Query is " + query.getQuery());
         int precision = Calendar.DAY_OF_MONTH;
         Date min_date, max_date;
         // we need to establish a date range for the graph
@@ -197,11 +194,15 @@ public class AnalyticsActivity extends AppCompatActivity implements
             LogEntry newest = DBUtil.getLogsFromCursor(dbManager.runQuery(query.getXNewestQuery(1))).get(0);
             max_date = newest.getDate();
         }
+        Log.d("Analytics", "Date range set to " + DateUtil.format(min_date) + " - " + DateUtil.format(max_date));
         // strip min/max dates to proper precision
         min_date = DateUtil.stripToPrecision(min_date, precision);
         max_date = DateUtil.stripToPrecision(max_date, precision);
+        Log.d("Analytics", "Precision cut to " + DateUtil.format(min_date) + " - " + DateUtil.format(max_date));
         // generate list of dates for the intervals in the larger range
         List<Date> intervals = DateUtil.getIntervals(min_date, max_date, DateUtil.getMSInPrecision(precision));
+        Log.d("Analytics", "Intervals Calculated");
+        Log.d("Analytics", DateUtil.datesToString(intervals));
         // use calculated intervals to get a list of queries with all filters the same but dates
         // modified to be between the intervals
         List<QueryBuilder> queries = DateUtil.getQueriesOverInterval(query, intervals);
@@ -209,33 +210,14 @@ public class AnalyticsActivity extends AppCompatActivity implements
         List<List<ActivityAggregate>> aggregates = DBUtil.runQueries(dbManager, queries, chartBy);
         // convert list of lists into a list of LineDataSets
         List<ILineDataSet> sets = new ArrayList<>();
-        for (List<ActivityAggregate> l : aggregates) {
-            sets.add(ChartUtil.aggsToLineData(l));
+        ILineDataSet set;
+        for (int i = 0; i < aggregates.size(); i++) {
+            set = ChartUtil.aggsToLineData(aggregates.get(i), intervals, chartBy);
+            set.setValueFormatter(chartBy.getFormatter());
+            sets.add(set);
         }
         lineChart.setData(new LineData(sets));
+        lineChart.getXAxis().setValueFormatter(new LineXValueFormatter());
         lineChart.invalidate();
-//        Date min_date = (query.hasMinDate() ? query.getMinDate() : dbManager.run)
-//            List<Entry> set_1_e = new LinkedList<>();
-//            set_1_e.add(new Entry(100, 200));
-//            set_1_e.add(new Entry(300, 50));
-//            LineDataSet set_1 = new LineDataSet(set_1_e, "test1");
-//
-//            List<Entry> set_2_e = new LinkedList<>();
-//            set_2_e.add(new Entry(100, 100));
-//            set_2_e.add(new Entry(300, 170));
-//            LineDataSet set_2 = new LineDataSet(set_2_e, "test2");
-//
-//            set_1.setColor(Color.GREEN);
-//            set_1.setAxisDependency(YAxis.AxisDependency.LEFT);
-//            set_2.setColor(Color.BLUE);
-//            set_2.setAxisDependency(YAxis.AxisDependency.LEFT);
-//            data_set.setValueFormatter(new SessionsValueFormatter());
-//            data_set.setValueTextColor(Color.WHITE);
-//            List<ILineDataSet> all_date = new LinkedList<>();
-//            all_date.add(set_1);
-//            all_date.add(set_2);
-//            lineChart.setData(new LineData(all_date));
-//            lineChart.invalidate();
-//        }
     }
 }

@@ -38,6 +38,8 @@ public class DBUtil {
         return entries;
     }
 
+    // given a cursor attempts to read off the AGGREGATE column and build a list of ActivityAggregates.
+
     public static List<ActivityAggregate> getAggregatesFromCursor(Cursor cursor) {
         List<ActivityAggregate> aggregates = new LinkedList<>();
         cursor.moveToFirst();
@@ -47,6 +49,9 @@ public class DBUtil {
             cursor.moveToNext();
         }
         cursor.close();
+        if (aggregates.isEmpty()) {
+            aggregates.add(new ActivityAggregate("", 0)); // todo: need to know activity name!!!
+        }
         return aggregates;
     }
 

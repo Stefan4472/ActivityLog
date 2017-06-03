@@ -36,23 +36,24 @@ public class ChartUtil {
         }
     }
 
-    // converts a list of ActivityAggregates into data that can be understood and plotted on a PieChart
-    public static List<PieEntry> getPieChartEntries(List<ActivityAggregate> dataPoints) {
+    // converts a list of ActivityAggregates into data that can be understood and plotted on a PieChart.
+    // If ChartBy == TOTAL_DURATION, sets the value to the number of hours since Epoch
+    public static List<PieEntry> getPieChartEntries(List<ActivityAggregate> dataPoints,
+                                                    ChartConfig.ChartBy chartBy) {
         List<PieEntry> entries = new LinkedList<>();
 
         for (ActivityAggregate dp : dataPoints) {
-            entries.add(new PieEntry(dp.getVal(), dp.getActivityName()));
+            if (chartBy == ChartConfig.ChartBy.TOTAL_DURATION) {
+                entries.add(new PieEntry((float) dp.getVal() / 3_600_000, dp.getActivityName()));
+            } else if (chartBy == ChartConfig.ChartBy.NUM_SESSIONS){
+                entries.add(new PieEntry(dp.getVal(), dp.getActivityName()));
+            } else {
+                throw new IllegalArgumentException();
+            }
         }
         return entries;
     }
 
-//    public static List<String> getQueriesForDateRange(QueryBuilder origQuery, int daysPrecision) {
-//        Date start = origQuery.
-//    }
-    // converts a list of ActivityAggregates into data that can be understood and plotted on a LineChart
-//    public static List<LineDataSet> getLineChartEntries(List<LogEntry> entries) {
-//
-//    }
     // generates a chart label for the chart given the query charted. Requires context to access
     // R.string. Such a label will be: "All Sessions All Time" "All Sessions In Filter"
     // "[Activity Name] All Time" or "[Activity Name] In Filter", depending on the given Query
@@ -85,12 +86,25 @@ public class ChartUtil {
     }
 
     // todo: how to attach dates and work with them?
-    public static LineDataSet aggsToLineData(List<ActivityAggregate> aggregates) {
+    // takes a list of ActivityAggregates and enters them into a LineDataSet with their corresponding
+    // dates (given by the dates list, which must have at least as many elements). So, each aggregate
+    // will be paired with its corresponding date in the Dates list. Dates are converted to hours.
+    // If ChartBy = TOTAL_DURATION, convert the millisecond aggregates to hours (float)
+    public static LineDataSet aggsToLineData(List<ActivityAggregate> aggregates,
+                                             List<Date> dates,
+                                             ChartConfig.ChartBy chartBy) throws IllegalArgumentException {
+        if (aggregates.size() != dates.size()) {
+            throw new IllegalArgumentException("Aggregates and Dates must be equal sizes");
+        }
         List<Entry> entries = new ArrayList<>();
-        int i = 0;
-        for (ActivityAggregate a : aggregates) {
-            entries.add(new Entry(i, a.getVal()));
-            i++;
+        for (int i = 0; i < aggregates.size(); i++) {
+            if (chartBy == ChartConfig.ChartBy.TOTAL_DURATION) { // convert to hours
+                entries.add(new Entry((float) dates.get(i).getTime() / 3_600_000,
+                        (float) aggregates.get(i).getVal() / 3_600_000));
+            } else {
+                entries.add(new Entry((float) dates.get(i).getTime() / 3_600_000,
+                        aggregates.get(i).getVal()));
+            }
         }
         return new LineDataSet(entries, aggregates.get(0).getActivityName());
     }

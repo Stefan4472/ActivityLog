@@ -260,15 +260,15 @@ public class QueryBuilder {
     }
 
     public String getTimeSpentQuery() {
-        return "SELECT " + LOG_COLUMN_ACTIVITY + ", SUM(" + LOG_COLUMN_DURATION
+        return "SELECT " + LOG_COLUMN_ACTIVITY + ", TOTAL(" + LOG_COLUMN_DURATION
                 + ") AS " + AGGREGATE_KEYWORD + " FROM " + LOG_TABLE_NAME + getWhereClause() +
-                " GROUP BY (" + LOG_COLUMN_ACTIVITY + ") ORDER BY " + LOG_COLUMN_TIMESTAMP + " DESC";
+                " GROUP BY (" + LOG_COLUMN_ACTIVITY + ") ORDER BY " + AGGREGATE_KEYWORD + " DESC";
     }
 
     public String getSessionCountQuery() {
         return "SELECT " + LOG_COLUMN_ACTIVITY + ", COUNT(" + LOG_COLUMN_ACTIVITY
                 + ") AS " + AGGREGATE_KEYWORD + " FROM " + LOG_TABLE_NAME + getWhereClause() +
-                " GROUP BY (" + LOG_COLUMN_ACTIVITY + ") ORDER BY " + LOG_COLUMN_TIMESTAMP + " DESC";
+                " GROUP BY (" + LOG_COLUMN_ACTIVITY + ") ORDER BY " + AGGREGATE_KEYWORD + " DESC";
     }
 
     public String getXOldestQuery(int numOldest) {
@@ -317,5 +317,13 @@ public class QueryBuilder {
     @Override
     public int hashCode() {
         return getQuery().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Activity Filter: " + (hasActivityFilter() ? getActivityFilter() : "[NONE]") + ":" +
+                "Date Filter: " + (hasMinDate() ? DateUtil.format(getMinDate()) : "[NONE]") + "/" +
+                (hasMaxDate() ? DateUtil.format(getMaxDate()) : "[NONE]");
+//                "Duration Filter: " + (hasDurationFilter() ? DateUtil.format(getDuration()) : "[NONE]");
     }
 }
