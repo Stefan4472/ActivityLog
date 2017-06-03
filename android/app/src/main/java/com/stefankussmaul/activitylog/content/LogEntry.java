@@ -13,6 +13,12 @@ public class LogEntry {
     private Date date;
     private int duration;
 
+    public LogEntry(String activityName, Date date, int duration) {
+        this.activityName = activityName;
+        this.date = date;
+        this.duration = duration;
+    }
+
     public LogEntry(String activityName, long msSinceEpoch, int duration) {
         this.activityName = activityName;
         this.date = new Date(msSinceEpoch);

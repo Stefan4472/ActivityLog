@@ -15,6 +15,7 @@ import com.stefankussmaul.activitylog.content.DBManager;
 import com.stefankussmaul.activitylog.content.DBUtil;
 import com.stefankussmaul.activitylog.content.LogEntry;
 import com.stefankussmaul.activitylog.content.QueryBuilder;
+import com.stefankussmaul.activitylog.content.StringUtil;
 
 import java.util.List;
 
@@ -23,9 +24,6 @@ import java.util.List;
  */
 
 public class MainActivity extends AppCompatActivity implements EditLogEntryFragment.LogDialogListener {
-
-    // handle to database with log data
-    private static DBManager logManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,9 +36,9 @@ public class MainActivity extends AppCompatActivity implements EditLogEntryFragm
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        logManager = new DBManager(this);
+        DBManager.init(this);
 
-        Log.d("MainActivity", "Printing Database\n" + DBUtil.dbToString(logManager));
+        Log.d("MainActivity", "Printing Database\n" + StringUtil.cursorToString(DBManager.getAllData()));
 
         QueryBuilder query_builder = new QueryBuilder();
 
@@ -49,14 +47,14 @@ public class MainActivity extends AppCompatActivity implements EditLogEntryFragm
         Log.d("MainActivity", query_builder.getTimeSpentQuery());
         Log.d("MainActivity", "Aggregate Durations");
         int counter = 1;
-        List<ActivityAggregate> sums = DBUtil.getAggregatesFromCursor(logManager.runQuery(query_builder.getTimeSpentQuery()));
+        List<ActivityAggregate> sums = DBUtil.getAggregatesFromCursor(DBManager.runQuery(query_builder.getTimeSpentQuery()));
         for (ActivityAggregate a : sums) {
             Log.d("MainActivity", counter + ". " + a.toString());
             counter++;
         }
         Log.d("MainActivity", "Aggregate Logged Sessions");
         counter = 1;
-        List<ActivityAggregate> counts = DBUtil.getAggregatesFromCursor(logManager.runQuery(query_builder.getSessionCountQuery()));
+        List<ActivityAggregate> counts = DBUtil.getAggregatesFromCursor(DBManager.runQuery(query_builder.getSessionCountQuery()));
         for (ActivityAggregate c : counts) {
             Log.d("MainActivity", counter + ". " + c.toString());
             counter++;
@@ -88,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements EditLogEntryFragm
 
     @Override // called when a LogEntry is being closed
     public void onLogSaved(EditLogEntryFragment dialogFragment, LogEntry createdEntry) {
-        logManager.insertEntry(createdEntry);
+        DBManager.insertEntry(createdEntry);
         dialogFragment.dismiss();
     }
 
@@ -109,9 +107,5 @@ public class MainActivity extends AppCompatActivity implements EditLogEntryFragm
         Intent view_intent = new Intent(this, ViewEditLogActivity.class);
         startActivity(view_intent);
 
-    }
-
-    public static DBManager getLogManager() {
-        return logManager;
     }
 }

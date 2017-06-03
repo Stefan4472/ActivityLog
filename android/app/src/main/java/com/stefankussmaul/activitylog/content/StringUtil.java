@@ -1,5 +1,7 @@
 package com.stefankussmaul.activitylog.content;
 
+import android.database.Cursor;
+
 import java.util.List;
 
 /**
@@ -18,5 +20,16 @@ public class StringUtil {
         return to_str;
     }
 
+    // toString for a list of LogEntry objects
+    public static String logListToString(List<LogEntry> logs) {
+        String to_str = "";
+        for (LogEntry log : logs) {
+            to_str += log.toString() + "\n";
+        }
+        return to_str;
+    }
 
+    public static String cursorToString(Cursor cursor) {
+        return logListToString(DBUtil.getLogsFromCursor(cursor));
+    }
 }

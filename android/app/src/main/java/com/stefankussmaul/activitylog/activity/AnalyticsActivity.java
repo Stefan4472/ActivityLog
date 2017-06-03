@@ -79,8 +79,6 @@ public class AnalyticsActivity extends AppCompatActivity implements
         ActionBar action_bar = getSupportActionBar();
         action_bar.setDisplayHomeAsUpEnabled(true);
 
-        dbManager = new DBManager(this);
-
         chartSwitcher = (ViewSwitcher) findViewById(R.id.chart_switcher);
 
         pieChart = (PieChart) findViewById(R.id.pie_chart);
@@ -109,8 +107,8 @@ public class AnalyticsActivity extends AppCompatActivity implements
         Log.d("AnalyticsActivity", "Received query " + newQuery.getQuery());
         if (!newQuery.equals(currentQuery)) {
             // run queries for both time spent and num sessions for the new query
-            Cursor time_cursor = dbManager.runQuery(newQuery.getTimeSpentQuery());
-            Cursor sessions_cursor = dbManager.runQuery(newQuery.getSessionCountQuery());
+            Cursor time_cursor = DBManager.runQuery(newQuery.getTimeSpentQuery());
+            Cursor sessions_cursor = DBManager.runQuery(newQuery.getSessionCountQuery());
             // retrieve aggregates from each cursor
             timeSpentAggregates = DBUtil.getAggregatesFromCursor(time_cursor);
             numSessionAggregates = DBUtil.getAggregatesFromCursor(sessions_cursor);

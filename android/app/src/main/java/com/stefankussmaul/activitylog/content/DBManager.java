@@ -31,7 +31,17 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
     // keyword used for aliasing min values
     public static final String MIN_KEYWORD = "MinVal";
 
-    public DBManager(Context context){
+    // handle to the database
+    private static SQLiteOpenHelper dbHandle;
+
+    // takes copy of context and initializes the DBManager Singleton. REQUIRED!
+    public static void init(Context context) {
+        if (dbHandle == null) {
+            dbHandle = new DBManager(context);
+        }
+    }
+
+    private DBManager(Context context){
         super(context, DB_NAME, null, 1);
     }
 
@@ -52,39 +62,37 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
         database.execSQL("DROP TABLE IF EXISTS " + LOG_TABLE_NAME);
         onCreate(database);
     }
-
+    // todo: need to defend against leaks by ensuring DBManager and all Cursors are closed after use
     // returns Cursor containing all the data from the database
-    public Cursor getAllData() {
-        SQLiteDatabase db = getReadableDatabase();
-        return db.rawQuery("SELECT * FROM " + LOG_TABLE_NAME, null);
+    public static Cursor getAllData() {
+        return dbHandle.getReadableDatabase().rawQuery("SELECT * FROM " + LOG_TABLE_NAME, null);
     }
 
     // inserts a LogEntry object to the database. Returns the id
-    public long insertEntry(LogEntry newEntry) {
+    public static long insertEntry(LogEntry newEntry) {
         Log.d("DBManager", "Adding " + newEntry);
-        SQLiteDatabase db = getWritableDatabase();
-        long id = db.insert(LOG_TABLE_NAME, null, DBUtil.getContentVals(newEntry));
-        return id;
+        SQLiteDatabase db = dbHandle.getWritableDatabase();
+        return db.insert(LOG_TABLE_NAME, null, DBUtil.getContentVals(newEntry));
     }
 
     // returns LogEntry under given id
-    public LogEntry getEntry(long id) {
-        SQLiteDatabase db = getWritableDatabase();
+    public static LogEntry getEntry(long id) {
+        SQLiteDatabase db = dbHandle.getWritableDatabase();
         Cursor retrieved = db.rawQuery("SELECT * FROM " + LOG_TABLE_NAME +
                 " WHERE " + LOG_COLUMN_ID + " = " + id, null);
         return DBUtil.getLogsFromCursor(retrieved).get(0);
     }
 
     // updates LogEntry under given id with the new LogEntry object
-    public boolean updateEntry(long id, LogEntry newEntry) {
+    public static boolean updateEntry(long id, LogEntry newEntry) {
         Log.d("DBManager", "Updating " + getEntry(id) + " to " + newEntry);
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = dbHandle.getWritableDatabase();
         long new_id = db.update(LOG_TABLE_NAME, DBUtil.getContentVals(newEntry), LOG_COLUMN_ID + " = " + id, null);
         return new_id > -1;
     }
 
     // uses LogEntry's timestamp to look it up in the database. If found, sets new values
-    public boolean updateEntry(LogEntry oldEntry, LogEntry newEntry) {
+    public static boolean updateEntry(LogEntry oldEntry, LogEntry newEntry) {
         Cursor result = runQuery("SELECT " + LOG_COLUMN_ID + " FROM " + LOG_TABLE_NAME + " WHERE "
                 + LOG_COLUMN_TIMESTAMP + " = '" + newEntry.getDateInMS() + "'");
         result.moveToFirst();
@@ -94,27 +102,26 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
     }
 
     // deletes given row from the database
-    public void deleteEntry(long id) {
+    public static void deleteEntry(long id) {
         Log.d("DBManager", "Deleting " + getEntry(id));
-        SQLiteDatabase db = getWritableDatabase();
-        db.delete(LOG_TABLE_NAME, LOG_COLUMN_ID + " = " + id, null);
+        dbHandle.getWritableDatabase().delete(LOG_TABLE_NAME, LOG_COLUMN_ID + " = " + id, null);
     }
 
     // uses LogEntry's timestamp to find it in the database and delete it. Although it is not guaranteed
     // the TimeStamp will be unique (there is an insanely low chance it isn't) it almost
     // certainly will be
-    public void deleteEntry(LogEntry toDelete) {
-        getWritableDatabase().delete(LOG_TABLE_NAME, LOG_COLUMN_TIMESTAMP + " = '" +
+    public static void deleteEntry(LogEntry toDelete) {
+        dbHandle.getWritableDatabase().delete(LOG_TABLE_NAME, LOG_COLUMN_TIMESTAMP + " = '" +
                 toDelete.getDateInMS() + "'", null);
     }
 
     // runs the given query and returns the Cursor
-    public Cursor runQuery(String sqlQuery) {
-        return getWritableDatabase().rawQuery(sqlQuery, null);
+    public static Cursor runQuery(String sqlQuery) {
+        return dbHandle.getWritableDatabase().rawQuery(sqlQuery, null);
     }
 
     // returns alphabetically-sorted list of all Activity names that exist
-    public List<String> getAllActivityNames() {
+    public static List<String> getAllActivityNames() {
         Cursor cursor = runQuery("SELECT DISTINCT " + LOG_COLUMN_ACTIVITY + " FROM " + LOG_TABLE_NAME +
                 " ORDER BY " + LOG_COLUMN_ACTIVITY + " DESC");
         List<String> names = new LinkedList<>();

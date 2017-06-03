@@ -90,12 +90,9 @@ public class LogFilterFragment extends Fragment {
 
         View view = getView();
 
-        // get a handle to the log database
-        DBManager db_manager = new DBManager(getActivity());
-
         activityChoices = (Spinner) view.findViewById(R.id.activity_choices);
         // get the possible choices for activity
-        List<String> activity_choices = db_manager.getAllActivityNames();
+        List<String> activity_choices = DBManager.getAllActivityNames();
         // add the option "Any" up front
         activity_choices.add(0, getString(R.string.activity_any));
         // create adapter using the choices

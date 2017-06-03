@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.stefankussmaul.activitylog.R;
+import com.stefankussmaul.activitylog.content.DBManager;
 import com.stefankussmaul.activitylog.content.LogEntry;
 import com.stefankussmaul.activitylog.content.MsTimer;
 
@@ -138,7 +139,7 @@ public class TimerActivity extends AppCompatActivity implements EditLogEntryFrag
 
     @Override // handles user saving a LogEntry they edited through EditLogEntryFragment
     public void onLogSaved(EditLogEntryFragment dialogFragment, LogEntry createdEntry) {
-        MainActivity.getLogManager().insertEntry(createdEntry);
+        DBManager.insertEntry(createdEntry);
         dialogFragment.dismiss();
     }
 
@@ -159,6 +160,8 @@ public class TimerActivity extends AppCompatActivity implements EditLogEntryFrag
     @Override
     public void onPause() {
         super.onPause();
-        timerThread.cancel();
+        if (timerThread != null) {
+            timerThread.cancel();
+        }
     }
 }

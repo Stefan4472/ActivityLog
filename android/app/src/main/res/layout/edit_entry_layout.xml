@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- provides UI for user to create or edit a LogEntry -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
+    <!-- title -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,15 +22,21 @@
             android:textSize="20sp"
             android:text="@string/log_name_field"
             android:layout_weight="1"/>
+        <!-- spinner for user to choose from possible activity names, or elect to create a new activity -->
+        <Spinner
+            android:id="@+id/name_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <!-- field for user to enter a new activity name if they chose to do so in the spinner -->
         <EditText
-            android:id="@+id/name_field"
+            android:id="@+id/new_activity_field"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:inputType="textCapWords|textNoSuggestions"
             android:imeOptions="actionNext"
             android:maxLength="15"
-            android:layout_weight="1" />
+            android:layout_weight="1"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"

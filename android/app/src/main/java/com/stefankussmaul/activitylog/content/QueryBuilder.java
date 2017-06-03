@@ -267,7 +267,7 @@ public class QueryBuilder {
                 " ORDER BY " + LOG_COLUMN_TIMESTAMP + " DESC";
     }
 
-    // todo: use a subquery?
+    // todo: use a subquery? we need to get values of zero even if where clause finds no entries
     public String getTimeSpentQuery() {
         return "SELECT " + LOG_COLUMN_ACTIVITY + ", TOTAL(" + LOG_COLUMN_DURATION
                 + ") AS " + AGGREGATE_KEYWORD + " FROM " + LOG_TABLE_NAME + getWhereClause() +
@@ -278,6 +278,11 @@ public class QueryBuilder {
         return "SELECT " + LOG_COLUMN_ACTIVITY + ", COUNT(" + LOG_COLUMN_ACTIVITY
                 + ") AS " + AGGREGATE_KEYWORD + " FROM " + LOG_TABLE_NAME + getWhereClause() +
                 " GROUP BY (" + LOG_COLUMN_ACTIVITY + ") ORDER BY " + AGGREGATE_KEYWORD + " DESC";
+    }
+
+    public String getActivityNamesQuery() {
+        return "SELECT DISTINCT " + LOG_COLUMN_ACTIVITY + " FROM " + LOG_TABLE_NAME +
+                getWhereClause() + " ORDER BY " + LOG_COLUMN_ACTIVITY + " DESC";
     }
 
     // given the chartBy type, returns the specific aggregate query (TimeSpent or SessionCount)

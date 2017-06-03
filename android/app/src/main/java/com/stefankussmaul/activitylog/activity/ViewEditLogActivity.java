@@ -52,8 +52,6 @@ public class ViewEditLogActivity extends AppCompatActivity implements
         ActionBar action_bar = getSupportActionBar();
         action_bar.setDisplayHomeAsUpEnabled(true);
 
-        dbManager = new DBManager(this);
-
         logEntryDisplay = (RecyclerView) findViewById(R.id.log_display);
         logEntryDisplay.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 //        logEntryDisplay.setAdapter(new LogEntryAdapter(this, demo, this));
