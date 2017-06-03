@@ -2,6 +2,7 @@ package com.stefankussmaul.activitylog.charts;
 
 import android.app.DownloadManager;
 import android.content.Context;
+import android.util.Log;
 
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -75,17 +76,6 @@ public class ChartUtil {
                 (int) (timeSpent / 3_600_000) + " " + context.getString(R.string.hours);
     }
 
-    public static String aggregatesToString(List<ActivityAggregate> aggregates) {
-        String to_str = "";
-        int i = 0;
-        for (ActivityAggregate a : aggregates) {
-            i++;
-            to_str += i + ". " + a.toString() + "\n";
-        }
-        return to_str;
-    }
-
-    // todo: how to attach dates and work with them?
     // takes a list of ActivityAggregates and enters them into a LineDataSet with their corresponding
     // dates (given by the dates list, which must have at least as many elements). So, each aggregate
     // will be paired with its corresponding date in the Dates list. Dates are converted to hours.
@@ -93,9 +83,10 @@ public class ChartUtil {
     public static LineDataSet aggsToLineData(List<ActivityAggregate> aggregates,
                                              List<Date> dates,
                                              ChartConfig.ChartBy chartBy) throws IllegalArgumentException {
-        if (aggregates.size() != dates.size()) {
-            throw new IllegalArgumentException("Aggregates and Dates must be equal sizes");
-        }
+        Log.d("ChartUtil", "a" + aggregates.size() + " d" + dates.size());
+//        if (aggregates.size() != dates.size()) {
+//            throw new IllegalArgumentException("Aggregates and Dates must be equal sizes");
+//        }
         List<Entry> entries = new ArrayList<>();
         for (int i = 0; i < aggregates.size(); i++) {
             if (chartBy == ChartConfig.ChartBy.TOTAL_DURATION) { // convert to hours

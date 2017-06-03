@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.stefankussmaul.activitylog.R;
+import com.stefankussmaul.activitylog.charts.ChartConfig;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -52,6 +53,13 @@ public class QueryBuilder {
         dateClause = toClone.dateClause;
         durationClause = toClone.durationClause;
         numClauses = toClone.numClauses;
+        activityFilter = toClone.activityFilter;
+        if (toClone.minDate != null) {
+            minDate = new Date(toClone.minDate.getTime());
+        }
+        if (toClone.maxDate != null) {
+            maxDate = new Date(toClone.maxDate.getTime());
+        }
     }
 
     public boolean hasActivityFilter() {
@@ -259,6 +267,7 @@ public class QueryBuilder {
                 " ORDER BY " + LOG_COLUMN_TIMESTAMP + " DESC";
     }
 
+    // todo: use a subquery?
     public String getTimeSpentQuery() {
         return "SELECT " + LOG_COLUMN_ACTIVITY + ", TOTAL(" + LOG_COLUMN_DURATION
                 + ") AS " + AGGREGATE_KEYWORD + " FROM " + LOG_TABLE_NAME + getWhereClause() +
@@ -269,6 +278,18 @@ public class QueryBuilder {
         return "SELECT " + LOG_COLUMN_ACTIVITY + ", COUNT(" + LOG_COLUMN_ACTIVITY
                 + ") AS " + AGGREGATE_KEYWORD + " FROM " + LOG_TABLE_NAME + getWhereClause() +
                 " GROUP BY (" + LOG_COLUMN_ACTIVITY + ") ORDER BY " + AGGREGATE_KEYWORD + " DESC";
+    }
+
+    // given the chartBy type, returns the specific aggregate query (TimeSpent or SessionCount)
+    public String getAggregateQuery(ChartConfig.ChartBy chartBy) {
+        switch (chartBy) {
+            case TOTAL_DURATION:
+                return getTimeSpentQuery();
+            case NUM_SESSIONS:
+                return getSessionCountQuery();
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 
     public String getXOldestQuery(int numOldest) {

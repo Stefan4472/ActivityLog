@@ -2,10 +2,12 @@ package com.stefankussmaul.activitylog.content;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.util.Log;
 
 import com.stefankussmaul.activitylog.charts.ChartConfig;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -50,6 +52,7 @@ public class DBUtil {
         }
         cursor.close();
         if (aggregates.isEmpty()) {
+            Log.d("DbUtil", "Empty");
             aggregates.add(new ActivityAggregate("", 0)); // todo: need to know activity name!!!
         }
         return aggregates;
@@ -91,6 +94,17 @@ public class DBUtil {
         return content_vals;
     }
 
+    // given an original QueryBuilder and a list of dates in order, creates and returns a list of
+    // QueryBuilders whose minMaxDates span the intervals.
+    public static List<QueryBuilder> getQueriesOverInterval(QueryBuilder origQuery, List<Date> intervals) {
+        List<QueryBuilder> gen_queries = new ArrayList<>();
+        QueryBuilder copy = new QueryBuilder(origQuery);
+        for (int i = 0; i < intervals.size() - 1; i++) {
+            copy.setDateBoundedMinMax(intervals.get(i), intervals.get(i + 1));
+            gen_queries.add(new QueryBuilder(copy));
+        }
+        return gen_queries;
+    }
 
     public static List<List<ActivityAggregate>> runQueries(DBManager db, List<QueryBuilder> queries,
                                                            ChartConfig.ChartBy chartBy) {

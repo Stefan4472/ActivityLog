@@ -28,6 +28,7 @@ import com.stefankussmaul.activitylog.content.DBUtil;
 import com.stefankussmaul.activitylog.content.DateUtil;
 import com.stefankussmaul.activitylog.content.LogEntry;
 import com.stefankussmaul.activitylog.content.QueryBuilder;
+import com.stefankussmaul.activitylog.content.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -149,7 +150,7 @@ public class AnalyticsActivity extends AppCompatActivity implements
                 drawPieChart(numSessionAggregates, getString(R.string.num_sessions));
             } else {
                 drawPieChart(timeSpentAggregates, getString(R.string.time_spent));
-                Log.d("Analytics Activity", "Drawing Time Spent " + ChartUtil.aggregatesToString(timeSpentAggregates));
+                Log.d("Analytics Activity", "Drawing Time Spent " + StringUtil.aggregatesToString(timeSpentAggregates));
             }
         } else {
             drawLineChart(currentQuery, "TestLineChart");
@@ -205,14 +206,27 @@ public class AnalyticsActivity extends AppCompatActivity implements
         Log.d("Analytics", DateUtil.datesToString(intervals));
         // use calculated intervals to get a list of queries with all filters the same but dates
         // modified to be between the intervals
-        List<QueryBuilder> queries = DateUtil.getQueriesOverInterval(query, intervals);
-        // run the queries to get a list of activity aggregates
-        List<List<ActivityAggregate>> aggregates = DBUtil.runQueries(dbManager, queries, chartBy);
+        List<QueryBuilder> queries = DBUtil.getQueriesOverInterval(query, intervals);
+        // using our list of queries, build a 2-d list of aggregates. Each column will be the aggregates
+        // from the corresponding QueryBuilder. Each row can then be plotted as the set of data from
+        // a specific Activity over the time period previously calculated
+        List<List<ActivityAggregate>> all_aggs = new ArrayList<>();
+        Cursor cursor;
+        for (QueryBuilder q : queries) {
+            Log.d("Analytics", "Running QueryBuilder " + q);
+            cursor = dbManager.runQuery(q.getAggregateQuery(chartBy));
+            // todo: issue here is activities that don't match the filter are just equal to null, and
+            // todo screw the data up
+            List<ActivityAggregate> q_aggs = DBUtil.getAggregatesFromCursor(cursor);
+            Log.d("Analytics", "Aggregates are \n" + StringUtil.aggregatesToString(q_aggs));
+            all_aggs.add(q_aggs);
+        }
+//        List<List<ActivityAggregate>> aggregates = DBUtil.runQueries(dbManager, queries, chartBy);
         // convert list of lists into a list of LineDataSets
         List<ILineDataSet> sets = new ArrayList<>();
         ILineDataSet set;
-        for (int i = 0; i < aggregates.size(); i++) {
-            set = ChartUtil.aggsToLineData(aggregates.get(i), intervals, chartBy);
+        for (int i = 0; i < all_aggs.size(); i++) {
+            set = ChartUtil.aggsToLineData(all_aggs.get(i), intervals, chartBy);
             set.setValueFormatter(chartBy.getFormatter());
             sets.add(set);
         }
