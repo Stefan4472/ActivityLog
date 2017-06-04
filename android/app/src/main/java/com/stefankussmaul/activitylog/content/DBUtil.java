@@ -82,7 +82,7 @@ public class DBUtil {
         List<QueryBuilder> gen_queries = new ArrayList<>();
         QueryBuilder copy = new QueryBuilder(origQuery);
         for (int i = 0; i < intervals.size() - 1; i++) {
-            copy.setDateBoundedMinMax(intervals.get(i), intervals.get(i + 1));
+            copy.setDateBoundedBtwn(intervals.get(i), intervals.get(i + 1));
             gen_queries.add(new QueryBuilder(copy));
         }
         return gen_queries;

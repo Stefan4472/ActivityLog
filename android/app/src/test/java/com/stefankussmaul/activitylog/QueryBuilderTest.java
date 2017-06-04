@@ -65,11 +65,11 @@ public class QueryBuilderTest {
         builder.setDateBoundedMax(now_2);
         assertEquals(BASE + " WHERE " + LOG_COLUMN_TIMESTAMP + " <= " + now_2.getTime(), builder.getQuery());
 
-        builder.setDateBoundedMinMax(now, now);
+        builder.setDateBoundedBtwn(now, now);
         assertEquals(BASE + " WHERE " + LOG_COLUMN_TIMESTAMP + " >= " + now.getTime() +
                 " AND " + LOG_COLUMN_TIMESTAMP + " <= " + now.getTime(), builder.getQuery());
 
-        builder.setDateBoundedMinMax(now, now_2);
+        builder.setDateBoundedBtwn(now, now_2);
         assertEquals(BASE + " WHERE " + LOG_COLUMN_TIMESTAMP + " >= " + now.getTime() +
                 " AND " + LOG_COLUMN_TIMESTAMP + " <= " + now_2.getTime(), builder.getQuery());
 
@@ -96,11 +96,11 @@ public class QueryBuilderTest {
         builder.setDurationBoundedMax(d_2);
         assertEquals(BASE + " WHERE " + LOG_COLUMN_DURATION + " <= " + d_2, builder.getQuery());
 
-        builder.setDurationBoundedMinMax(d_1, d_1);
+        builder.setDurationBoundedBtwn(d_1, d_1);
         assertEquals(BASE + " WHERE " + LOG_COLUMN_DURATION + " >= " + d_1 +
                 " AND " + LOG_COLUMN_DURATION + " <= " + d_1, builder.getQuery());
 
-        builder.setDurationBoundedMinMax(d_1, d_2);
+        builder.setDurationBoundedBtwn(d_1, d_2);
         assertEquals(BASE + " WHERE " + LOG_COLUMN_DURATION + " >= " + d_1 +
                 " AND " + LOG_COLUMN_DURATION + " <= " + d_2, builder.getQuery());
 

@@ -108,7 +108,7 @@ public class DateUtil {
     // returns a new Date that is the given date plus num * the given field value (which must be
     // a Calendar constant)
     public static Date addToDate(Date date, int num, int field) {
-        return new Date(date.getTime() - num * getMSInPrecision(field));
+        return new Date(date.getTime() + num * getMSInPrecision(field));
     }
 
     // returns the millisecond interval for the given precision (a Calendar constant)

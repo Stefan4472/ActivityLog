@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,13 +82,13 @@ public class DailyReportDialog extends DialogFragment {
         today = DateUtil.stripToPrecision(today, Calendar.DAY_OF_MONTH);
 
         TextView yesterday_stats = (TextView) view.findViewById(R.id.yesterday_stat);
-        yesterday_stats.setText(generateOverview(getActivity(), today, 1));
+        yesterday_stats.setText(generateOverview(getActivity(), today, 1) + " " + getString(R.string.yesterday));
 
         TextView seven_days = (TextView) view.findViewById(R.id.seven_day_stat);
-        seven_days.setText(generateOverview(getActivity(), today, 7));
+        seven_days.setText(generateOverview(getActivity(), today, 7) + " " + getString(R.string.last_7_days));
 
         TextView thirty_days = (TextView) view.findViewById(R.id.thirty_day_stat);
-        thirty_days.setText(generateOverview(getActivity(), today, 30));
+        thirty_days.setText(generateOverview(getActivity(), today, 30) + " " + getString(R.string.last_30_days));
     }
 
     private static String generateOverview(Context context, Date endDate, int numDays) {
@@ -100,7 +101,7 @@ public class DailyReportDialog extends DialogFragment {
         QueryBuilder query = new QueryBuilder();
         // set the min/max to numDays behind startDate
         Date startDate = DateUtil.addToDate(endDate, -numDays, Calendar.DAY_OF_YEAR);
-        query.setDateBoundedMinMax(startDate, endDate);
+        query.setDateBoundedBtwn(startDate, endDate);
         Cursor data = DBManager.runQuery(query.getAggregateQuery(chartBy));
         long total = DBUtil.getTotalOfAggregates(DBUtil.getAggregatesFromCursor(data));
         data.close();

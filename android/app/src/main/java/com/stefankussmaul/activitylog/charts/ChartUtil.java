@@ -10,6 +10,7 @@ import com.stefankussmaul.activitylog.R;
 import com.stefankussmaul.activitylog.content.ActivityAggregate;
 import com.stefankussmaul.activitylog.content.QueryBuilder;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -68,10 +69,11 @@ public class ChartUtil {
 
     // generates a String in the form "[numSessions] Sessions / [timeSpent] Hours"
     // uses Context to get the Sessions and Hours Strings in proper language. Displays timeSpent
-    // as a value in hours, rounded down todo: what if less than one?
+    // as a value in hours, with one decimal place
     public static String getOverviewLabel(Context context, long numSessions, long timeSpent) {
         return numSessions + " " + context.getString(R.string.sessions) + " / " +
-                (int) (timeSpent / 3_600_000) + " " + context.getString(R.string.hours);
+                (int) (timeSpent / 3_600_000) + "." + (int) (timeSpent / 36_000_000) + " " +
+                context.getString(R.string.hours);
     }
 
     // takes a list of ActivityAggregates and enters them into a LineDataSet with their corresponding

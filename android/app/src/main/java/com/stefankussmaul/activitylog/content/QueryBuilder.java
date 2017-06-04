@@ -107,14 +107,14 @@ public class QueryBuilder {
         } else if (keyword.equals(context.getString(R.string.date_on))) {
             setDateOnDay(date1);
         } else if (keyword.equals(context.getString(R.string.date_between))) {
-            setDateBoundedMinMax(date1, date2);
+            setDateBoundedBtwn(date1, date2);
         } else {
             throw new IllegalArgumentException("Unrecognized Keyword '" + keyword + "'");
         }
     }
 
     // sets the dateClause to accept timeStamps only greater than/equal to the given Date's ms.
-    // Cannot be combined with setDateBoundedMax! Instead use setDateBoundedMinMax(Date, Date)
+    // Cannot be combined with setDateBoundedMax! Instead use setDateBoundedBtwn(Date, Date)
     public void setDateBoundedMin(Date minDate) {
         if (dateClause.isEmpty()) {
             numClauses++;
@@ -124,7 +124,7 @@ public class QueryBuilder {
     }
 
     // sets the dateClause to accept timeStamps only less than/equal to the given maxDate's ms.
-    // Cannot be combined with setDateBoundedMin! Instead use setDateBoundedMinMax(Date, Date)
+    // Cannot be combined with setDateBoundedMin! Instead use setDateBoundedBtwn(Date, Date)
     public void setDateBoundedMax(Date maxDate) {
         if (dateClause.isEmpty()) {
             numClauses++;
@@ -133,16 +133,21 @@ public class QueryBuilder {
         dateClause = LOG_COLUMN_TIMESTAMP + " <= " + maxDate.getTime();
     }
 
-    // sets the dateClause to accept timeStamps greater than/equal to the given minDate's ms and
-    // less than/equal to the given maxDate's ms
-    public void setDateBoundedMinMax(Date minDate, Date maxDate) {
+    // sets the dateClause to accept timeStamps between the two given dates
+    public void setDateBoundedBtwn(Date date1, Date date2) {
         if (dateClause.isEmpty()) {
             numClauses++;
         }
-        this.minDate = minDate;
-        this.maxDate = maxDate;
-        dateClause = LOG_COLUMN_TIMESTAMP + " >= " + minDate.getTime() + " AND " +
-            LOG_COLUMN_TIMESTAMP + " <= " + maxDate.getTime();
+        if (date1.getTime() <= date2.getTime()) {
+            this.minDate = date1;
+            this.maxDate = date2;
+        } else {
+            this.minDate = date2;
+            this.maxDate = date1;
+        }
+
+        dateClause = LOG_COLUMN_TIMESTAMP + " >= " + date1.getTime() + " AND " +
+            LOG_COLUMN_TIMESTAMP + " <= " + date2.getTime();
     }
 
     // sets the dateClause to accept timeStamps that happened on the day given
@@ -157,7 +162,7 @@ public class QueryBuilder {
 
         Date upper_bound = calendar.getTime();
 
-        setDateBoundedMinMax(lower_bound, upper_bound);
+        setDateBoundedBtwn(lower_bound, upper_bound);
     }
 
     public Date getMinDate() {
@@ -192,7 +197,7 @@ public class QueryBuilder {
         } else if (keyword.equals(context.getString(R.string.duration_exactly))) {
             setDurationExactly(duration1);
         } else if (keyword.equals(context.getString(R.string.duration_between))) {
-            setDurationBoundedMinMax(duration1, duration2);
+            setDurationBoundedBtwn(duration1, duration2);
         } else {
             throw new IllegalArgumentException("Unrecognized Keyword '" + keyword + "'");
         }
@@ -212,7 +217,15 @@ public class QueryBuilder {
         durationClause = LOG_COLUMN_DURATION + " <= " + max;
     }
 
-    public void setDurationBoundedMinMax(int min, int max) {
+    public void setDurationBoundedBtwn(int duration1, int duration2) {
+        int min, max;
+        if (duration1 <= duration2) {
+            min = duration1;
+            max = duration2;
+        } else {
+            min = duration2;
+            max = duration1;
+        }
         if (durationClause.isEmpty()) {
             numClauses++;
         }
