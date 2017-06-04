@@ -13,7 +13,7 @@ public class ChartConfig {
     }
     // possibilities for what data can be charted. Stores the correct ValueFormatter to be used with
     public enum ChartBy {
-        NUM_SESSIONS(new SessionsValueFormatter()), TOTAL_DURATION(new DurationValueFormatter());
+        NUM_SESSIONS(new SessionsValueFormatter()), TIME_SPENT(new DurationValueFormatter());
 
         private IValueFormatter formatter;
 

@@ -94,7 +94,7 @@ public class DBUtil {
         for (QueryBuilder q : queries) {
             if (chartBy == ChartConfig.ChartBy.NUM_SESSIONS) {
                 results.add(DBUtil.getAggregatesFromCursor(db.runQuery(q.getSessionCountQuery())));
-            } else if (chartBy == ChartConfig.ChartBy.TOTAL_DURATION) {
+            } else if (chartBy == ChartConfig.ChartBy.TIME_SPENT) {
                 results.add(DBUtil.getAggregatesFromCursor(db.runQuery(q.getTimeSpentQuery())));
             } else {
                 throw new IllegalArgumentException("ChartBy not recognized");

@@ -21,7 +21,7 @@ import java.util.TimerTask;
  * Provides Stopwatch/Timer functionality for the user, with ability to then log it.
  */
 
-public class TimerActivity extends AppCompatActivity implements EditLogEntryFragment.LogDialogListener {
+public class TimerActivity extends AppCompatActivity implements EditLogEntryDialog.LogDialogListener {
 
     private MsTimer msTimer;
     private Timer timerThread;
@@ -133,12 +133,12 @@ public class TimerActivity extends AppCompatActivity implements EditLogEntryFrag
     public void logTime(View view) {
         pauseTimer(null);
         LogEntry new_entry = new LogEntry("", System.currentTimeMillis(), (int) msTimer.getTimedMs());
-        EditLogEntryFragment log_dialog = EditLogEntryFragment.newInstance(new_entry);
+        EditLogEntryDialog log_dialog = EditLogEntryDialog.newInstance(new_entry);
         log_dialog.show(getFragmentManager(), "Log");
     }
 
     @Override // handles user saving a LogEntry they edited through EditLogEntryFragment
-    public void onLogSaved(EditLogEntryFragment dialogFragment, LogEntry createdEntry) {
+    public void onLogSaved(EditLogEntryDialog dialogFragment, LogEntry createdEntry) {
         DBManager.insertEntry(createdEntry);
         dialogFragment.dismiss();
     }

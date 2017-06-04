@@ -110,7 +110,7 @@ public class ChartConfigFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String type = (String) parent.getItemAtPosition(position);
                 if (type.equals(getString(R.string.time_spent))) {
-                    chartBy = ChartConfig.ChartBy.TOTAL_DURATION;
+                    chartBy = ChartConfig.ChartBy.TIME_SPENT;
                 } else if (type.equals(getString(R.string.num_sessions))) {
                     chartBy = ChartConfig.ChartBy.NUM_SESSIONS;
                 } else {

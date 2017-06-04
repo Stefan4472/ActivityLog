@@ -105,6 +105,12 @@ public class DateUtil {
         return intervals;
     }
 
+    // returns a new Date that is the given date plus num * the given field value (which must be
+    // a Calendar constant)
+    public static Date addToDate(Date date, int num, int field) {
+        return new Date(date.getTime() - num * getMSInPrecision(field));
+    }
+
     // returns the millisecond interval for the given precision (a Calendar constant)
     public static long getMSInPrecision(int precision) {
         switch (precision) {
@@ -128,13 +134,5 @@ public class DateUtil {
             default:
                 throw new IllegalArgumentException("Precision hasn't been accounted for");
         }
-    }
-
-    public static String datesToString(List<Date> dates) {
-        String str = "";
-        for (Date d : dates) {
-            str += d.toString() + "\n";
-        }
-        return str;
     }
 }

@@ -112,6 +112,9 @@ public class AnalyticsActivity extends AppCompatActivity implements
             // retrieve aggregates from each cursor
             timeSpentAggregates = DBUtil.getAggregatesFromCursor(time_cursor);
             numSessionAggregates = DBUtil.getAggregatesFromCursor(sessions_cursor);
+            // close the cursors
+            time_cursor.close();
+            sessions_cursor.close();
             // calculate overall statistics
             totalTimeSpent = DBUtil.getTotalOfAggregates(timeSpentAggregates);
             totalNumSessions = DBUtil.getTotalOfAggregates(numSessionAggregates);
@@ -201,7 +204,7 @@ public class AnalyticsActivity extends AppCompatActivity implements
         // generate list of dates for the intervals in the larger range
         List<Date> intervals = DateUtil.getIntervals(min_date, max_date, DateUtil.getMSInPrecision(precision));
         Log.d("Analytics", "Intervals Calculated");
-        Log.d("Analytics", DateUtil.datesToString(intervals));
+        Log.d("Analytics", StringUtil.datesToString(intervals));
         // use calculated intervals to get a list of queries with all filters the same but dates
         // modified to be between the intervals
         List<QueryBuilder> queries = DBUtil.getQueriesOverInterval(query, intervals);

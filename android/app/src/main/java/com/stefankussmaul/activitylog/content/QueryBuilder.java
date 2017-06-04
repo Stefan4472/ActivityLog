@@ -1,7 +1,6 @@
 package com.stefankussmaul.activitylog.content;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.stefankussmaul.activitylog.R;
 import com.stefankussmaul.activitylog.charts.ChartConfig;
@@ -288,7 +287,7 @@ public class QueryBuilder {
     // given the chartBy type, returns the specific aggregate query (TimeSpent or SessionCount)
     public String getAggregateQuery(ChartConfig.ChartBy chartBy) {
         switch (chartBy) {
-            case TOTAL_DURATION:
+            case TIME_SPENT:
                 return getTimeSpentQuery();
             case NUM_SESSIONS:
                 return getSessionCountQuery();

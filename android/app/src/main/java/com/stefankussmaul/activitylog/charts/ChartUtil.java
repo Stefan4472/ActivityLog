@@ -1,6 +1,5 @@
 package com.stefankussmaul.activitylog.charts;
 
-import android.app.DownloadManager;
 import android.content.Context;
 import android.util.Log;
 
@@ -9,7 +8,6 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.stefankussmaul.activitylog.R;
 import com.stefankussmaul.activitylog.content.ActivityAggregate;
-import com.stefankussmaul.activitylog.content.LogEntry;
 import com.stefankussmaul.activitylog.content.QueryBuilder;
 
 import java.util.ArrayList;
@@ -38,13 +36,13 @@ public class ChartUtil {
     }
 
     // converts a list of ActivityAggregates into data that can be understood and plotted on a PieChart.
-    // If ChartBy == TOTAL_DURATION, sets the value to the number of hours since Epoch
+    // If ChartBy == TIME_SPENT, sets the value to the number of hours since Epoch
     public static List<PieEntry> getPieChartEntries(List<ActivityAggregate> dataPoints,
                                                     ChartConfig.ChartBy chartBy) {
         List<PieEntry> entries = new LinkedList<>();
 
         for (ActivityAggregate dp : dataPoints) {
-            if (chartBy == ChartConfig.ChartBy.TOTAL_DURATION) {
+            if (chartBy == ChartConfig.ChartBy.TIME_SPENT) {
                 entries.add(new PieEntry((float) dp.getVal() / 3_600_000, dp.getActivityName()));
             } else if (chartBy == ChartConfig.ChartBy.NUM_SESSIONS){
                 entries.add(new PieEntry(dp.getVal(), dp.getActivityName()));
@@ -79,7 +77,7 @@ public class ChartUtil {
     // takes a list of ActivityAggregates and enters them into a LineDataSet with their corresponding
     // dates (given by the dates list, which must have at least as many elements). So, each aggregate
     // will be paired with its corresponding date in the Dates list. Dates are converted to hours.
-    // If ChartBy = TOTAL_DURATION, convert the millisecond aggregates to hours (float)
+    // If ChartBy = TIME_SPENT, convert the millisecond aggregates to hours (float)
     public static LineDataSet aggsToLineData(List<ActivityAggregate> aggregates,
                                              List<Date> dates,
                                              ChartConfig.ChartBy chartBy) throws IllegalArgumentException {
@@ -89,7 +87,7 @@ public class ChartUtil {
 //        }
         List<Entry> entries = new ArrayList<>();
         for (int i = 0; i < aggregates.size(); i++) {
-            if (chartBy == ChartConfig.ChartBy.TOTAL_DURATION) { // convert to hours
+            if (chartBy == ChartConfig.ChartBy.TIME_SPENT) { // convert to hours
                 entries.add(new Entry((float) dates.get(i).getTime() / 3_600_000,
                         (float) aggregates.get(i).getVal() / 3_600_000));
             } else {

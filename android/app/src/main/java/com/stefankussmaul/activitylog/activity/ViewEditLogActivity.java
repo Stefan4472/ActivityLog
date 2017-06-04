@@ -18,7 +18,6 @@ import com.stefankussmaul.activitylog.content.LogEntry;
 import com.stefankussmaul.activitylog.content.LogEntryAdapter;
 import com.stefankussmaul.activitylog.content.QueryBuilder;
 
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -27,7 +26,7 @@ import java.util.List;
 
 public class ViewEditLogActivity extends AppCompatActivity implements
         LogFilterFragment.OnFilterUpdatedListener, LogEntryAdapter.LogEntryListener,
-        EditLogEntryFragment.LogDialogListener {
+        EditLogEntryDialog.LogDialogListener {
 
     // RecyclerView displaying the list of queried LogEntries
     private RecyclerView logEntryDisplay;
@@ -66,13 +65,13 @@ public class ViewEditLogActivity extends AppCompatActivity implements
         Log.d("ViewEditLog", "Received Action for " + selected);
         // make a copy of the selected LogEntry so it can be updated or deleted
         editing = new LogEntry(selected);
-        EditLogEntryFragment dialog = EditLogEntryFragment.newInstance(selected);
+        EditLogEntryDialog dialog = EditLogEntryDialog.newInstance(selected);
         dialog.show(getFragmentManager(), "Edit Selected Dialog");
     }
 
     @Override // called when a LogEntry is being edited and has been saved. Update RecyclerView,
     // database, and close the DialogFragment
-    public void onLogSaved(EditLogEntryFragment dialogFragment, LogEntry createdEntry) {
+    public void onLogSaved(EditLogEntryDialog dialogFragment, LogEntry createdEntry) {
         dbManager.updateEntry(editing, createdEntry);
         editing = null;
         dialogFragment.dismiss();

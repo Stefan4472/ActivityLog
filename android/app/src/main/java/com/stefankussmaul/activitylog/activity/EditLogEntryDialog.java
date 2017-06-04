@@ -32,7 +32,7 @@ import java.util.List;
  * DatePicker.
  */
 
-public class EditLogEntryFragment extends DialogFragment implements DatePickerFragment.DatePickerListener {
+public class EditLogEntryDialog extends DialogFragment implements DatePickerFragment.DatePickerListener {
 
     // keys used for storing data in bundle
     private static final String ACTIVITY_KEY = "LOGGED_ACTIVITY";
@@ -48,7 +48,7 @@ public class EditLogEntryFragment extends DialogFragment implements DatePickerFr
 
     // interface for receiving dialog callbacks
     public interface LogDialogListener {
-        void onLogSaved(EditLogEntryFragment dialogFragment, LogEntry createdEntry);
+        void onLogSaved(EditLogEntryDialog dialogFragment, LogEntry createdEntry);
     }
 
     // listener that receives callbacks
@@ -56,8 +56,8 @@ public class EditLogEntryFragment extends DialogFragment implements DatePickerFr
 
     // returns a new instance of the fragment with bundle that has the values given by toEdit.
     // Will populate the dialog with data from toEdit.
-    public static EditLogEntryFragment newInstance(LogEntry toEdit) {
-        EditLogEntryFragment fragment = new EditLogEntryFragment();
+    public static EditLogEntryDialog newInstance(LogEntry toEdit) {
+        EditLogEntryDialog fragment = new EditLogEntryDialog();
 
         // populate bundle
         Bundle args = new Bundle();
@@ -184,7 +184,7 @@ public class EditLogEntryFragment extends DialogFragment implements DatePickerFr
             Log.d("LogActivityDialog", "Showing DatePicker");
             // will be initialized to today's date
             DatePickerFragment date_picker = DatePickerFragment.newInstance(selectedDate);
-            date_picker.setListener(EditLogEntryFragment.this);
+            date_picker.setListener(EditLogEntryDialog.this);
             date_picker.show(getFragmentManager(), "DatePicker");
             }
         });

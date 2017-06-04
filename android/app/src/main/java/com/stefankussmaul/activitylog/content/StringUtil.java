@@ -2,6 +2,7 @@ package com.stefankussmaul.activitylog.content;
 
 import android.database.Cursor;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,5 +32,13 @@ public class StringUtil {
 
     public static String cursorToString(Cursor cursor) {
         return logListToString(DBUtil.getLogsFromCursor(cursor));
+    }
+
+    public static String datesToString(List<Date> dates) {
+        String str = "";
+        for (Date d : dates) {
+            str += d.toString() + "\n";
+        }
+        return str;
     }
 }

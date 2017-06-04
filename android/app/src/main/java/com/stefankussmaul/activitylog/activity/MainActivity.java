@@ -23,7 +23,7 @@ import java.util.List;
  * Displays MainScreen of the app.
  */
 
-public class MainActivity extends AppCompatActivity implements EditLogEntryFragment.LogDialogListener {
+public class MainActivity extends AppCompatActivity implements EditLogEntryDialog.LogDialogListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +59,10 @@ public class MainActivity extends AppCompatActivity implements EditLogEntryFragm
             Log.d("MainActivity", counter + ". " + c.toString());
             counter++;
         }
+
+        // show daily report dialog
+        DailyReportDialog report = new DailyReportDialog();
+        report.show(getFragmentManager(), "Daily Report");
     }
 
     @Override
@@ -80,12 +84,12 @@ public class MainActivity extends AppCompatActivity implements EditLogEntryFragm
 
     public void launchLogDialog(View view) {
         Log.d("MainActivity", "Launching Log Activity");
-        EditLogEntryFragment log_dialog = new EditLogEntryFragment();
+        EditLogEntryDialog log_dialog = new EditLogEntryDialog();
         log_dialog.show(getFragmentManager(), "Log");
     }
 
     @Override // called when a LogEntry is being closed
-    public void onLogSaved(EditLogEntryFragment dialogFragment, LogEntry createdEntry) {
+    public void onLogSaved(EditLogEntryDialog dialogFragment, LogEntry createdEntry) {
         DBManager.insertEntry(createdEntry);
         dialogFragment.dismiss();
     }
