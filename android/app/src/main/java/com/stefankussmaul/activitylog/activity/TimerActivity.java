@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -11,9 +12,11 @@ import android.widget.TextView;
 
 import com.stefankussmaul.activitylog.R;
 import com.stefankussmaul.activitylog.content.DBManager;
+import com.stefankussmaul.activitylog.content.DateUtil;
 import com.stefankussmaul.activitylog.content.LogEntry;
 import com.stefankussmaul.activitylog.content.MsTimer;
 
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -109,7 +112,31 @@ public class TimerActivity extends AppCompatActivity implements EditLogEntryDial
 
     // handles user choosing a mode for the timer (count up or count down)
     public void onModeSelected(View view) {
-        
+        switch (view.getId()) {
+            case R.id.count_down:
+                // show DurationPickerDialog with current hour/min/sec field
+                DurationPickerDialog dialog = DurationPickerDialog.newInstance(true,
+                        msTimer.getHoursField(), true, msTimer.getMinutesField(), true,
+                        msTimer.getSecondsField());
+                // set listener to update msTimer
+                dialog.setOnDurationChangedListener(new DurationPickerDialog.OnDurationChangedListener() {
+                    @Override
+                    public void onDurationSet(DurationPickerDialog dialog, int hours, int minutes, int seconds) {
+                        long ms = hours * DateUtil.HOUR_MS + minutes * DateUtil.MINUTE_MS +
+                                seconds * DateUtil.SECOND_MS;
+                        msTimer.setCountDown(ms);
+                        updateTimerDisplay();
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show(getFragmentManager(), "Pick Duration");
+                break;
+            case R.id.count_up:
+                msTimer.setCountUp();
+                break;
+            default:
+                throw new IllegalArgumentException("Only Radiobutton should be passed");
+        }
     }
 
     // handles user clicking button to log the Timer's current time. Pauses the timer and displays

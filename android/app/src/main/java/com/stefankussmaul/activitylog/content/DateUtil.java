@@ -18,6 +18,13 @@ public class DateUtil {
     // used to format dates
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy"); // todo: correct locale
 
+    // millisecond values
+    public static final long SECOND_MS = 1_000;
+    public static final long MINUTE_MS = 60_000;
+    public static final long HOUR_MS = 3_600_000;
+    public static final long DAY_MS = 84_000_000;
+    public static final long WEEK_MS = 604_800_000;
+
     // takes the given calendar and sets all values below DAY_OF_MONTH to zero. Returns a Date object
     // with the Calendar's ms value to get the exact date the day started in ms
     public static Calendar getMidnightVal(Calendar calendar) {
