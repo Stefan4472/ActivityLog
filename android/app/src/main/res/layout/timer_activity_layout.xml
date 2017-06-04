@@ -1,50 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+    <!-- toolbar -->
+    <include layout="@layout/toolbar_layout"
+        android:id="@+id/toolbar" />
     <!-- displays the time remaining -->
     <TextView
         android:id="@+id/timer_display"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="35sp"
-        android:gravity="center"
-        android:text="00:00:00"/>
-    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:orientation="vertical">
-        <Button
-            android:id="@+id/play_pause_button"
+        android:layout_marginTop="25dp"
+        android:padding="5dp"
+        android:layout_below="@+id/toolbar"
+        android:layout_centerHorizontal="true"
+        android:textSize="35sp"
+        android:gravity="center"
+        android:text="00:00:00"
+        android:background="@drawable/timer_outline"/>
+    <!-- count up/count down selector -->
+    <RadioGroup
+        android:id="@+id/mode_selector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/timer_display"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true">
+        <!-- selector to count_up (stop watch) -->
+        <RadioButton
+            android:id="@+id/count_up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:text="@string/start_timer"
-            android:onClick="toggleTimer"/>
-        <Button
-            android:id="@+id/log_time_button"
+            android:checked="true"
+            android:gravity="center"
+            android:text="@string/count_up"
+            android:onClick="onModeSelected"/>
+        <!-- selector to count_down (timer) -->
+        <RadioButton
+            android:id="@+id/count_down"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/log_timer"
-            android:textSize="20sp"
-            android:onClick="logTime"/>
-        <Button
-            android:id="@+id/reset_time_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/reset_timer"
-            android:textSize="20sp"
-            android:onClick="resetTimer"/>
-    </LinearLayout>
-</LinearLayout>
+            android:gravity="center"
+            android:text="@string/count_down"
+            android:onClick="onModeSelected"/>
+    </RadioGroup>
+    <Button
+        android:id="@+id/play_pause_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mode_selector"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"
+        android:text="@string/start_timer"
+        android:onClick="toggleTimer" />
+    <Button
+        android:id="@+id/log_time_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/play_pause_button"
+        android:layout_centerHorizontal="true"
+        android:text="@string/log_timer"
+        android:textSize="20sp"
+        android:onClick="logTime" />
+    <Button
+        android:id="@+id/reset_time_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/log_time_button"
+        android:layout_centerHorizontal="true"
+        android:text="@string/reset_timer"
+        android:textSize="20sp"
+        android:onClick="resetTimer"/>
+</RelativeLayout>

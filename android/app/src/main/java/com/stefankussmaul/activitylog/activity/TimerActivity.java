@@ -84,8 +84,10 @@ public class TimerActivity extends AppCompatActivity implements EditLogEntryDial
 
     // updates timer hour, minute, second fields with data from Timer
     private void updateTimerDisplay() {
-        timerDisplay.setText(msTimer.getHoursField() + ":" + msTimer.getMinutesField() + ":" +
-            msTimer.getSecondsField());
+        timerDisplay.setText(
+                MsTimer.formatField(msTimer.getHoursField()) + ":" +
+                MsTimer.formatField(msTimer.getMinutesField()) + ":" +
+                MsTimer.formatField(msTimer.getSecondsField()));
     }
 
     // handles user clicking play/pause button, toggling the state of the timer
@@ -103,6 +105,11 @@ public class TimerActivity extends AppCompatActivity implements EditLogEntryDial
             playPauseButton.setText(getString(R.string.start_timer));
         }
         paused = !paused;
+    }
+
+    // handles user choosing a mode for the timer (count up or count down)
+    public void onModeSelected(View view) {
+        
     }
 
     // handles user clicking button to log the Timer's current time. Pauses the timer and displays

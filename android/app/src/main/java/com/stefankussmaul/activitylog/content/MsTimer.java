@@ -57,4 +57,15 @@ public class MsTimer {
         long timed_ms = getTimedMs();
         return (int) (((timed_ms % 3_600_000) % 60_000) / 1_000);
     }
+
+    // formats the value of a field into a String that can be displayed on a timer
+    public static String formatField(int fieldVal) {
+        if (fieldVal == 0) {
+            return "00";
+        } else if (fieldVal < 10) {
+            return  "0" + fieldVal;
+        } else {
+            return Integer.toString(fieldVal);
+        }
+    }
 }
