@@ -7,7 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import com.stefankussmaul.activitylog.R;
 import com.stefankussmaul.activitylog.content.DBManager;
@@ -27,14 +27,13 @@ public class TimerActivity extends AppCompatActivity implements EditLogEntryDial
     private Timer timerThread;
     private TimerTask timerTask;
 
-    private EditText hoursField;
-    private EditText minutesField;
-    private EditText secondsField;
+    private TextView timerDisplay;
 
-    private Button startButton;
-    private Button pauseButton;
+    private Button playPauseButton;
     private Button logTimeButton;
     private Button resetTimeButton;
+
+    private boolean paused = true;
 
     // alpha value for disabled buttons
     private static final float DISABLED_ALPHA = 0.7f;
@@ -53,18 +52,10 @@ public class TimerActivity extends AppCompatActivity implements EditLogEntryDial
 
         msTimer = new MsTimer();
 
-        hoursField = (EditText) findViewById(R.id.hours_field);
-        minutesField = (EditText) findViewById(R.id.minutes_field);
-        secondsField = (EditText) findViewById(R.id.seconds_field);
-
-        startButton = (Button) findViewById(R.id.start_button);
-        pauseButton = (Button) findViewById(R.id.pause_button);
+        timerDisplay = (TextView) findViewById(R.id.timer_display);
+        playPauseButton = (Button) findViewById(R.id.play_pause_button);
         logTimeButton = (Button) findViewById(R.id.log_time_button);
         resetTimeButton = (Button) findViewById(R.id.reset_time_button);
-
-        // disable pause button
-        pauseButton.setEnabled(false);
-        pauseButton.setAlpha(DISABLED_ALPHA);
 
         // disable reset button
         resetTimeButton.setEnabled(false);
@@ -93,45 +84,33 @@ public class TimerActivity extends AppCompatActivity implements EditLogEntryDial
 
     // updates timer hour, minute, second fields with data from Timer
     private void updateTimerDisplay() {
-        hoursField.setText(msTimer.getHoursField() + "");
-        minutesField.setText(msTimer.getMinutesField() + "");
-        secondsField.setText(msTimer.getSecondsField() + "");
+        timerDisplay.setText(msTimer.getHoursField() + ":" + msTimer.getMinutesField() + ":" +
+            msTimer.getSecondsField());
     }
 
-    // handles user clicking Start button. Starts Timer object and TimerThread, disables
-    // the start button and enables the pause button
-    public void startTimer(View view) {
-        if (!msTimer.isTiming()) {
+    // handles user clicking play/pause button, toggling the state of the timer
+    public void toggleTimer(View view) {
+        if (paused) { // play
             msTimer.start();
             timerThread = new Timer();
             timerThread.schedule(createTimerTask(), 1_000, 1_000);
-            startButton.setEnabled(false);
-            startButton.setAlpha(DISABLED_ALPHA);
-            pauseButton.setEnabled(true);
-            pauseButton.setAlpha(1);
+            playPauseButton.setText(getString(R.string.pause_timer));
             resetTimeButton.setEnabled(true);
             resetTimeButton.setAlpha(1);
-        }
-    }
-
-    // handles user clicking Pause button. Stops Timer object and TimerThread, disables pause button
-    // and enables start button
-    public void pauseTimer(View view) {
-        if (msTimer.isTiming()) {
+        } else { // pause
             msTimer.pause();
             timerThread.cancel();
-            pauseButton.setEnabled(false);
-            pauseButton.setAlpha(DISABLED_ALPHA);
-            startButton.setEnabled(true);
-            startButton.setAlpha(1);
+            playPauseButton.setText(getString(R.string.start_timer));
         }
+        paused = !paused;
     }
 
     // handles user clicking button to log the Timer's current time. Pauses the timer and displays
-    // LogEntry dialog pre-filled with duration from timer and current date. Sets listener to save
-    // the entry to the DB when user is done
+    // LogEntry dialog pre-filled with duration from timer and current date.
     public void logTime(View view) {
-        pauseTimer(null);
+        if (!paused) {
+            toggleTimer(null);
+        }
         LogEntry new_entry = new LogEntry("", System.currentTimeMillis(), (int) msTimer.getTimedMs());
         EditLogEntryDialog log_dialog = EditLogEntryDialog.newInstance(new_entry);
         log_dialog.show(getFragmentManager(), "Log");
@@ -148,13 +127,7 @@ public class TimerActivity extends AppCompatActivity implements EditLogEntryDial
     public void resetTimer(View view) {
         timerThread.cancel();
         msTimer.reset();
-        hoursField.setText("00");
-        minutesField.setText("00");
-        secondsField.setText("00");
-        startButton.setEnabled(true);
-        startButton.setAlpha(1);
-        pauseButton.setEnabled(false);
-        pauseButton.setAlpha(DISABLED_ALPHA);
+        timerDisplay.setText("00:00:00");
     }
 
     @Override
