@@ -14,43 +14,72 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
     <!-- dashboard layout: 2x2 imagebuttons with text -->
     <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
 
         <TableRow
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
+            android:layout_height="wrap_content">
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/log_activity"
+                android:layout_margin="5dp"
                 android:drawableTop="@drawable/ic_create_black_24dp"
-                android:onClick="launchLogDialog"/>
+                android:onClick="launchLogDialog"
+                android:text="@string/log_activity" />
+
             <Button
+                android:id="@+id/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/start_activity"
+                android:layout_margin="5dp"
                 android:drawableTop="@drawable/ic_alarm_black_24dp"
-                android:onClick="launchStartActivity"/>
+                android:onClick="launchStartActivity"
+                android:text="@string/start_activity" />
         </TableRow>
+
         <TableRow
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
+            android:layout_height="wrap_content">
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/analytics"
+                android:layout_margin="5dp"
                 android:drawableTop="@drawable/ic_assessment_black_24dp"
-                android:onClick="launchAnalytics"/>
+                android:onClick="launchAnalytics"
+                android:text="@string/analytics" />
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/view_edit_log"
+                android:layout_margin="5dp"
                 android:drawableTop="@drawable/ic_assignment_black_24dp"
-                android:onClick="launchViewEditLog"/>
+                android:onClick="launchViewEditLog"
+                android:text="@string/view_edit_log" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:drawableTop="@drawable/ic_done_black_32dp_2x"
+                android:onClick="launchNewGoal"
+                android:text="@string/new_goal" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:drawableTop="@drawable/ic_done_black_32dp_2x"
+                android:onClick="launchManageGoals"
+                android:text="@string/manage_goals" />
         </TableRow>
     </TableLayout>
 

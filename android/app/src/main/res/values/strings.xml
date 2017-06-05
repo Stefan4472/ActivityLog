@@ -6,6 +6,8 @@
     <string name="start_activity">Start an Activity</string>
     <string name="analytics">Analytics</string>
     <string name="view_edit_log">View/Edit Log</string>
+    <string name="new_goal">Create New Goal</string>
+    <string name="manage_goals">View/Edit Goals</string>
 
     <!-- LogActivityDialogFragment strings -->
     <string name="log_name_field">Activity Name:</string>
