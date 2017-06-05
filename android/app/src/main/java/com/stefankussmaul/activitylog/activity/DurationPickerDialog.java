@@ -160,5 +160,14 @@ public class DurationPickerDialog extends DialogFragment {
                 }
             }
         });
+
+        // set OnClickListener of cancel button to dismiss the dialog
+        Button cancel = (Button) view.findViewById(R.id.cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss(); // todo: callback method?
+            }
+        });
     }
 }
