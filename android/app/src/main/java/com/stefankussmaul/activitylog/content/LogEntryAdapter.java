@@ -50,7 +50,7 @@ public class LogEntryAdapter extends RecyclerView.Adapter<LogEntryAdapter.LogEnt
     public void onBindViewHolder(LogEntryViewHolder holder, final int position) {
         LogEntry binded_log = displayedLogs.get(position);
         holder.logName.setText(binded_log.getActivityName());
-        holder.logDuration.setText(binded_log.getDuration() + "");
+        holder.logDuration.setText(DateUtil.format(binded_log.getDuration()));
         holder.logDate.setText(DateUtil.format(binded_log.getDate()));
         // notify listener when button is clicked
         holder.actionButton.setOnClickListener(new View.OnClickListener() {

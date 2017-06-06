@@ -77,7 +77,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:drawableTop="@drawable/ic_done_black_32dp_2x"
+                android:drawableTop="@drawable/ic_assignment_turned_in_black_36dp"
                 android:onClick="launchManageGoals"
                 android:text="@string/manage_goals" />
         </TableRow>

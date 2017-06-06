@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements EditLogEntryDialo
 
     public void launchViewEditLog(View view) {
         Log.d("MainActivity", "Launching View/Edit Log");
-        Intent view_intent = new Intent(this, ViewEditLogActivity.class);
+        Intent view_intent = new Intent(this, ManageLogActivity.class);
         startActivity(view_intent);
 
     }

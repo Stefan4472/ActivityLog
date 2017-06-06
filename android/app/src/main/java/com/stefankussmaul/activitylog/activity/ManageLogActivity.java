@@ -24,7 +24,7 @@ import java.util.List;
  * Created by Stefan on 5/29/2017.
  */
 
-public class ViewEditLogActivity extends AppCompatActivity implements
+public class ManageLogActivity extends AppCompatActivity implements
         LogFilterFragment.OnFilterUpdatedListener, LogEntryAdapter.LogEntryListener,
         EditLogEntryDialog.LogDialogListener {
 
@@ -42,7 +42,7 @@ public class ViewEditLogActivity extends AppCompatActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.viewlog_layout);
+        setContentView(R.layout.managelog_layout);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

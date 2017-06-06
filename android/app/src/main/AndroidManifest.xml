@@ -38,7 +38,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity"/>
         </activity>
-        <activity android:name=".activity.ViewEditLogActivity"
+        <activity android:name=".activity.ManageLogActivity"
             android:label="@string/view_edit_log"
             android:screenOrientation="portrait"
             android:parentActivityName=".activity.MainActivity">
