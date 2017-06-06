@@ -19,11 +19,15 @@ public class DateUtil {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy"); // todo: correct locale
 
     // millisecond values
-    public static final long SECOND_MS = 1_000;
-    public static final long MINUTE_MS = 60_000;
-    public static final long HOUR_MS = 3_600_000;
-    public static final long DAY_MS = 84_000_000;
-    public static final long WEEK_MS = 604_800_000;
+    public static final int SECOND_MS = 1_000;
+    public static final int MINUTE_MS = 60_000;
+    public static final int HOUR_MS = 3_600_000;
+    public static final int DAY_MS = 84_000_000;
+    public static final int WEEK_MS = 604_800_000;
+
+    public static long timeToMs(int hours, int minutes, int seconds) {
+        return hours * HOUR_MS + minutes * MINUTE_MS + seconds * SECOND_MS;
+    }
 
     // takes the given calendar and sets all values below DAY_OF_MONTH to zero. Returns a Date object
     // with the Calendar's ms value to get the exact date the day started in ms

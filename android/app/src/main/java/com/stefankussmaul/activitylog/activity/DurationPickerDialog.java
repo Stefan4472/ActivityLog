@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 
 import com.stefankussmaul.activitylog.R;
+import com.stefankussmaul.activitylog.content.DateUtil;
+
+import java.util.Date;
 
 /**
  * Dialog that allows user to set/choose a specific duration in Hours/Minutes/Seconds format. Can
@@ -44,6 +47,12 @@ public class DurationPickerDialog extends DialogFragment {
 //        void onDurationChanged(DurationPickerDialog dialog, int hours, int minutes, int seconds);
         // called when the duration is confirmed
         void onDurationSet(DurationPickerDialog dialog, int hours, int minutes, int seconds);
+    }
+
+    public static DurationPickerDialog newInstance(boolean showHours, boolean showMinutes,
+                                                   boolean showSeconds, int startTime) {
+        return newInstance(showHours, startTime / DateUtil.HOUR_MS, showMinutes,
+                startTime / DateUtil.MINUTE_MS, showSeconds, startTime/ DateUtil.SECOND_MS);
     }
 
     public static DurationPickerDialog newInstance(boolean showHours, int hours, boolean showMinutes,

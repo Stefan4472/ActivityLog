@@ -11,7 +11,7 @@
 
     <!-- LogActivityDialogFragment strings -->
     <string name="log_name_field">Activity Name:</string>
-    <string name="log_duration_field">Duration:</string>
+    <string name="log_duration_field">Duration: %s</string>
     <string name="log_date_field">Date:%s</string>
     <string name="confirm">Save</string>
     <string name="cancel">Cancel</string>

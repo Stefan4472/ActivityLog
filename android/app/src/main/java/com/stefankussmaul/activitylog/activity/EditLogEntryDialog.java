@@ -41,7 +41,8 @@ public class EditLogEntryDialog extends DialogFragment implements DatePickerFrag
 
     private Spinner nameSpinner;
     private EditText newActivityField;
-    private EditText durationField;
+    private TextView durationField;
+    private int duration;
     private TextView dateField;
     private Date selectedDate;
     private TextView errorMessage;
@@ -104,7 +105,8 @@ public class EditLogEntryDialog extends DialogFragment implements DatePickerFrag
         // todo: use AutoCompleteTextView to give suggestions of Activity names
         nameSpinner = (Spinner) view.findViewById(R.id.name_spinner);
         newActivityField = (EditText) view.findViewById(R.id.new_activity_field);
-        durationField = (EditText) view.findViewById(R.id.duration_field);
+        durationField = (TextView) view.findViewById(R.id.display_duration);
+        duration = 0;
         dateField = (TextView) view.findViewById(R.id.selected_date);
         final ImageButton show_date_picker = (ImageButton) view.findViewById(R.id.show_date_picker);
         selectedDate = new Date(System.currentTimeMillis());
@@ -148,7 +150,7 @@ public class EditLogEntryDialog extends DialogFragment implements DatePickerFrag
                 }
             }
             if (args.containsKey(DURATION_KEY)) {
-                durationField.setText(args.getInt(DURATION_KEY) + "");
+                duration = args.getInt(DURATION_KEY);
             }
             if (args.containsKey(DATE_KEY)) {
                 selectedDate.setTime(args.getLong(DATE_KEY));
@@ -160,17 +162,29 @@ public class EditLogEntryDialog extends DialogFragment implements DatePickerFrag
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 Log.d("LogActivityDialog", "Moving to activity duration field");
-                durationField.requestFocus();
+//                durationField.requestFocus();
                 return true;
             }
         });
 
-        // forward Duration field to the Date Picker button
-        durationField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        durationField.setText(getString(R.string.log_duration_field, DateUtil.format(duration)));
+
+        // set duration button pops up a DurationPicker Dialog Fragment
+        ImageButton set_duration = (ImageButton) view.findViewById(R.id.set_duration);
+        set_duration.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                show_date_picker.requestFocus();
-                return true;
+            public void onClick(View v) {
+                DurationPickerDialog duration_picker =
+                        DurationPickerDialog.newInstance(true, true, false, duration);
+                duration_picker.setOnDurationChangedListener(new DurationPickerDialog.OnDurationChangedListener() {
+                    @Override // update duration and durationField
+                    public void onDurationSet(DurationPickerDialog dialog, int hours, int minutes, int seconds) {
+                        duration = (int) DateUtil.timeToMs(hours, minutes, seconds);
+                        durationField.setText(getString(R.string.log_duration_field, DateUtil.format(duration)));
+                        dialog.dismiss();
+                    }
+                });
+                duration_picker.show(getFragmentManager(), "Duration Picker");
             }
         });
 
