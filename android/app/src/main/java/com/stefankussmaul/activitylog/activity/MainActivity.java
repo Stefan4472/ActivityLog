@@ -94,6 +94,11 @@ public class MainActivity extends AppCompatActivity implements EditLogEntryDialo
         dialogFragment.dismiss();
     }
 
+    @Override
+    public void onLogCancelled(EditLogEntryDialog dialogFragment) {
+        dialogFragment.dismiss();
+    }
+
     public void launchStartActivity(View view) {
         Log.d("MainActivity", "Launching Start Activity");
         Intent timer_intent = new Intent(this, TimerActivity.class);

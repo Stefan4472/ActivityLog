@@ -77,6 +77,11 @@ public class ManageLogActivity extends AppCompatActivity implements
         dialogFragment.dismiss();
     }
 
+    @Override
+    public void onLogCancelled(EditLogEntryDialog dialogFragment) {
+        dialogFragment.dismiss();
+    }
+
     @Override // called when the filter is changed. Get LogEntries from the database and swap out the
     // RecyclerView adapter with a new one that contains the new data
     public void onFilterUpdated(LogFilterFragment logFilterFragment, QueryBuilder query) {

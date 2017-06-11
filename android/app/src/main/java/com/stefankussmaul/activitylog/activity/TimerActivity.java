@@ -115,9 +115,8 @@ public class TimerActivity extends AppCompatActivity implements EditLogEntryDial
         switch (view.getId()) {
             case R.id.count_down:
                 // show DurationPickerDialog with current hour/min/sec field
-                DurationPickerDialog dialog = DurationPickerDialog.newInstance(true,
-                        msTimer.getHoursField(), true, msTimer.getMinutesField(), true,
-                        msTimer.getSecondsField());
+                DurationPickerDialog dialog = DurationPickerDialog.newInstance(
+                        getString(R.string.set_count_down), true, true, true, (int) msTimer.getTimedMs());
                 // set listener to update msTimer
                 dialog.setOnDurationChangedListener(new DurationPickerDialog.OnDurationChangedListener() {
                     @Override
@@ -153,6 +152,11 @@ public class TimerActivity extends AppCompatActivity implements EditLogEntryDial
     @Override // handles user saving a LogEntry they edited through EditLogEntryFragment
     public void onLogSaved(EditLogEntryDialog dialogFragment, LogEntry createdEntry) {
         DBManager.insertEntry(createdEntry);
+        dialogFragment.dismiss();
+    }
+
+    @Override
+    public void onLogCancelled(EditLogEntryDialog dialogFragment) {
         dialogFragment.dismiss();
     }
 

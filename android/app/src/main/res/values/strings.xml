@@ -9,14 +9,15 @@
     <string name="new_goal">Create New Goal</string>
     <string name="manage_goals">View/Edit Goals</string>
 
-    <!-- LogActivityDialogFragment strings -->
+    <!-- EditLogEntryDialog strings -->
     <string name="log_name_field">Activity Name:</string>
     <string name="log_duration_field">Duration: %s</string>
-    <string name="log_date_field">Date:%s</string>
+    <string name="log_date_field">Date: %s</string>
     <string name="confirm">Save</string>
     <string name="cancel">Cancel</string>
     <string name="error_no_name">Please Specify an Activity Name</string>
     <string name="new_activity">New Activity</string>
+    <string name="set_duration">Set Duration</string>
 
     <!-- TimerActivity Strings -->
     <string name="timer_activity_label">Time an Activity</string>
@@ -26,6 +27,7 @@
     <string name="reset_timer">Reset</string>
     <string name="count_up">Count Up</string>
     <string name="count_down">Count Down</string>
+    <string name="set_count_down">Set Count Down Time</string>
 
     <!-- Filter Strings -->
     <string name="filter_by">Filter By</string>

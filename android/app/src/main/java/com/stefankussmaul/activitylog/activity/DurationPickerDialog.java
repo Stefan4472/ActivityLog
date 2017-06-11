@@ -1,6 +1,5 @@
 package com.stefankussmaul.activitylog.activity;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
@@ -8,14 +7,11 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.NumberPicker;
 
 import com.stefankussmaul.activitylog.R;
 import com.stefankussmaul.activitylog.content.DateUtil;
-
-import java.util.Date;
 
 /**
  * Dialog that allows user to set/choose a specific duration in Hours/Minutes/Seconds format. Can
@@ -24,6 +20,7 @@ import java.util.Date;
 
 public class DurationPickerDialog extends DialogFragment {
 
+    private static final String TITLE_KEY = "TITLE";
     private static final String SHOW_HOURS_KEY = "SHOW_HOURS_KEY";
     private static final String HOURS_KEY = "HOURS_KEY";
     private static final String SHOW_MINS_KEY = "SHOW_MINUTES_KEY";
@@ -49,18 +46,19 @@ public class DurationPickerDialog extends DialogFragment {
         void onDurationSet(DurationPickerDialog dialog, int hours, int minutes, int seconds);
     }
 
-    public static DurationPickerDialog newInstance(boolean showHours, boolean showMinutes,
+    public static DurationPickerDialog newInstance(String title, boolean showHours, boolean showMinutes,
                                                    boolean showSeconds, int startTime) {
-        return newInstance(showHours, startTime / DateUtil.HOUR_MS, showMinutes,
+        return newInstance(title, showHours, startTime / DateUtil.HOUR_MS, showMinutes,
                 startTime / DateUtil.MINUTE_MS, showSeconds, startTime/ DateUtil.SECOND_MS);
     }
 
-    public static DurationPickerDialog newInstance(boolean showHours, int hours, boolean showMinutes,
+    public static DurationPickerDialog newInstance(String title, boolean showHours, int hours, boolean showMinutes,
                                             int minutes, boolean showSeconds, int seconds) {
         DurationPickerDialog dialog = new DurationPickerDialog();
 
         // populate the bundle
         Bundle bundle = new Bundle();
+        bundle.putString(TITLE_KEY, title);
         bundle.putBoolean(SHOW_HOURS_KEY, showHours);
         bundle.putInt(HOURS_KEY, hours);
         bundle.putBoolean(SHOW_MINS_KEY, showMinutes);
@@ -81,9 +79,7 @@ public class DurationPickerDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
 
-        // request window without title
-//        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialog.setTitle("Select Countdown Time");
+        dialog.setTitle(getArguments().getString(TITLE_KEY));
 
         return dialog;
     }
@@ -98,6 +94,7 @@ public class DurationPickerDialog extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         // get args from bundle
         Bundle args = getArguments();
+
         // extract settings for initial hour/min/sec
         curHour = args.getInt(HOURS_KEY);
         curMin = args.getInt(MINUTES_KEY);
@@ -124,9 +121,6 @@ public class DurationPickerDialog extends DialogFragment {
                     default:
                         throw new IllegalArgumentException("Unrecognized NumberPicker");
                 }
-//                if (mListener != null) {
-//                    mListener.onDurationChanged(DurationPickerDialog.this, curHour, curMin, curSec);
-//                }
             }
         };
 
@@ -171,7 +165,7 @@ public class DurationPickerDialog extends DialogFragment {
         });
 
         // set OnClickListener of cancel button to dismiss the dialog
-        Button cancel = (Button) view.findViewById(R.id.cancel);
+        Button cancel = (Button) view.findViewById(R.id.edit_log);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
