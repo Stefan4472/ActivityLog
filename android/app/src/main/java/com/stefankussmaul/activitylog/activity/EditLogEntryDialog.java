@@ -227,6 +227,7 @@ public class EditLogEntryDialog extends DialogFragment implements DatePickerFrag
 
     @Override
     public void onDurationSet(DurationPickerDialog dialog, int hours, int minutes, int seconds) {
+        Log.d("", hours + "," + minutes + "," + seconds);
         duration = (int) DateUtil.timeToMs(hours, minutes, seconds);
         durationField.setText(getString(R.string.log_duration_field, DateUtil.format(duration)));
         dialog.dismiss();

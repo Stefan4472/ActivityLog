@@ -47,19 +47,19 @@ public class DateUtil {
         return dateFormat.format(date);
     }
 
-    // formats and returns the duration (given in ms) into hours and minutes
+    // formats and returns the duration (given in ms) into hours and minutes e.g. 5h43m
     public static String format(long ms) {
         String formatted = "";
-        int hours = (int) ms / 3_600_000;
+        int hours = (int) ms / HOUR_MS;
         formatted += hours + "h";
-        int min = (int) ((ms % 3_600_000) / 60_000);
+        int min = (int) ((ms % HOUR_MS) / MINUTE_MS);
         formatted += min + "m";
         return formatted;
     }
 
     // converts given value in milliseconds to a float of hours
     public static float msToHours(long ms) {
-        return (float) ms / 3_600_000;
+        return (float) ms / HOUR_MS;
     }
 
     // takes a date and a precision, which must be a Calendar field. Sets vals of any more-precise
@@ -128,20 +128,20 @@ public class DateUtil {
             case Calendar.MILLISECOND:
                 return 1;
             case Calendar.SECOND:
-                return 1_000;
+                return SECOND_MS;
             case Calendar.MINUTE:
-                return 60_000;
+                return MINUTE_MS;
             case Calendar.HOUR:
             case Calendar.HOUR_OF_DAY:
-                return 3_600_000;
+                return HOUR_MS;
             case Calendar.DAY_OF_WEEK:
             case Calendar.DAY_OF_MONTH:
             case Calendar.DAY_OF_WEEK_IN_MONTH:
             case Calendar.DAY_OF_YEAR:
-                return 86_400_000;
+                return DAY_MS;
             case Calendar.WEEK_OF_MONTH:
             case Calendar.WEEK_OF_YEAR:
-                return 604_800_000;
+                return WEEK_MS;
             default:
                 throw new IllegalArgumentException("Precision hasn't been accounted for");
         }

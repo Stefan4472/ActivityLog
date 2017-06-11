@@ -1,5 +1,9 @@
 package com.stefankussmaul.activitylog.content;
 
+import static com.stefankussmaul.activitylog.content.DateUtil.HOUR_MS;
+import static com.stefankussmaul.activitylog.content.DateUtil.MINUTE_MS;
+import static com.stefankussmaul.activitylog.content.DateUtil.SECOND_MS;
+
 /**
  *
  */
@@ -64,27 +68,27 @@ public class MsTimer {
 
     public int getHoursField() {
         if (curMode == Mode.COUNT_UP) {
-            return (int) getTimedMs() / 3_600_000;
+            return (int) getTimedMs() / HOUR_MS;
         } else {
-            return (int) (goalMs - getTimedMs()) / 3_600_000;
+            return (int) (goalMs - getTimedMs()) / HOUR_MS;
         }
     }
 
     public int getMinutesField() {
         long timed_ms = getTimedMs();
         if (curMode == Mode.COUNT_UP) {
-            return (int) ((timed_ms % 3_600_000) / 60_000);
+            return (int) ((timed_ms % HOUR_MS) / MINUTE_MS);
         } else {
-            return (int) (((goalMs - timed_ms) % 3_600_000) / 60_000);
+            return (int) (((goalMs - timed_ms) % HOUR_MS) / MINUTE_MS);
         }
     }
 
     public int getSecondsField() {
         long timed_ms = getTimedMs();
         if (curMode == Mode.COUNT_UP) {
-            return (int) (((timed_ms % 3_600_000) % 60_000) / 1_000);
+            return (int) (((timed_ms % HOUR_MS) % MINUTE_MS) / SECOND_MS);
         } else {
-            return (int) ((((goalMs - timed_ms) % 3_600_000) % 60_000) / 1_000);
+            return (int) ((((goalMs - timed_ms) % HOUR_MS) % MINUTE_MS) / SECOND_MS);
 
         }
     }

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,10 @@ import android.widget.NumberPicker;
 
 import com.stefankussmaul.activitylog.R;
 import com.stefankussmaul.activitylog.content.DateUtil;
+
+import static com.stefankussmaul.activitylog.content.DateUtil.HOUR_MS;
+import static com.stefankussmaul.activitylog.content.DateUtil.MINUTE_MS;
+import static com.stefankussmaul.activitylog.content.DateUtil.SECOND_MS;
 
 /**
  * Dialog that allows user to set/choose a specific duration in Hours/Minutes/Seconds format. Can
@@ -46,10 +51,13 @@ public class DurationPickerDialog extends DialogFragment {
         void onDurationSet(DurationPickerDialog dialog, int hours, int minutes, int seconds);
     }
 
+    // todo: startTime as a long?
     public static DurationPickerDialog newInstance(String title, boolean showHours, boolean showMinutes,
                                                    boolean showSeconds, int startTime) {
-        return newInstance(title, showHours, startTime / DateUtil.HOUR_MS, showMinutes,
-                startTime / DateUtil.MINUTE_MS, showSeconds, startTime/ DateUtil.SECOND_MS);
+        int hours = startTime / HOUR_MS;
+        int minutes = (startTime % HOUR_MS) / MINUTE_MS;
+        int seconds = ((startTime % HOUR_MS) % MINUTE_MS) / SECOND_MS;
+        return newInstance(title, showHours, hours, showMinutes, minutes, showSeconds, seconds);
     }
 
     public static DurationPickerDialog newInstance(String title, boolean showHours, int hours, boolean showMinutes,
@@ -99,6 +107,7 @@ public class DurationPickerDialog extends DialogFragment {
         curHour = args.getInt(HOURS_KEY);
         curMin = args.getInt(MINUTES_KEY);
         curSec = args.getInt(SECONDS_KEY);
+        Log.d("DPD", "retrieving " + curHour + "," + curMin + "," + curSec);
 
         hourPicker = (NumberPicker) view.findViewById(R.id.hour_picker);
         minutePicker = (NumberPicker) view.findViewById(R.id.minute_picker);
@@ -158,7 +167,8 @@ public class DurationPickerDialog extends DialogFragment {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mListener != null) {
+                if (mListener != null) { // todo: only call once
+                    Log.d("DPD", "sending " + curHour + "," + curMin + "," + curSec);
                     mListener.onDurationSet(DurationPickerDialog.this, curHour, curMin, curSec);
                 }
             }
@@ -169,7 +179,7 @@ public class DurationPickerDialog extends DialogFragment {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dismiss(); // todo: callback method?
+                dismiss(); // todo: callback method? and only call once
             }
         });
     }
