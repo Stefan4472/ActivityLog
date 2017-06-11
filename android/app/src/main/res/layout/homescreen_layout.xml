@@ -1,32 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/home_toolbar"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <!-- default toolbar -->
+    <include layout="@layout/toolbar_layout"
+        android:id="@+id/toolbar"/>
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/dash_layout"
+        android:gravity="center"
+        android:textSize="32sp"
+        android:text="@string/home_msg"/>
     <!-- dashboard layout: 2x2 imagebuttons with text -->
     <TableLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/dash_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center">
+        android:layout_centerInParent="true">
 
         <TableRow
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center">
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:drawableTop="@drawable/ic_create_black_24dp"
+                android:drawableTop="@drawable/ic_create_black_36dp"
                 android:onClick="launchLogDialog"
                 android:text="@string/log_activity" />
 
@@ -35,20 +39,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:drawableTop="@drawable/ic_alarm_black_24dp"
+                android:drawableTop="@drawable/ic_alarm_black_36dp"
                 android:onClick="launchStartActivity"
                 android:text="@string/start_activity" />
         </TableRow>
 
         <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center">
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:drawableTop="@drawable/ic_assessment_black_24dp"
+                android:drawableTop="@drawable/ic_assessment_black_36dp"
                 android:onClick="launchAnalytics"
                 android:text="@string/analytics" />
 
@@ -56,14 +62,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:drawableTop="@drawable/ic_assignment_black_24dp"
+                android:drawableTop="@drawable/ic_assignment_black_36dp"
                 android:onClick="launchViewEditLog"
                 android:text="@string/view_edit_log" />
         </TableRow>
 
         <TableRow
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center">
 
             <Button
                 android:layout_width="wrap_content"
@@ -83,4 +91,4 @@
         </TableRow>
     </TableLayout>
 
-</LinearLayout>
+</RelativeLayout>

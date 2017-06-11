@@ -41,6 +41,9 @@ public class DurationPickerDialog extends DialogFragment {
     private int curMin;
     private int curSec;
 
+    // tracks whether changes have been made since confirm or cancel were pressed
+    private boolean changed = true;
+
     private OnDurationChangedListener mListener;
 
     // interface parent activity must implement
@@ -107,7 +110,6 @@ public class DurationPickerDialog extends DialogFragment {
         curHour = args.getInt(HOURS_KEY);
         curMin = args.getInt(MINUTES_KEY);
         curSec = args.getInt(SECONDS_KEY);
-        Log.d("DPD", "retrieving " + curHour + "," + curMin + "," + curSec);
 
         hourPicker = (NumberPicker) view.findViewById(R.id.hour_picker);
         minutePicker = (NumberPicker) view.findViewById(R.id.minute_picker);
@@ -117,6 +119,7 @@ public class DurationPickerDialog extends DialogFragment {
         NumberPicker.OnValueChangeListener change_listener = new NumberPicker.OnValueChangeListener() {
             @Override // check which
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                changed = true;
                 switch (picker.getId()) {
                     case R.id.hour_picker:
                         curHour = hourPicker.getValue();
@@ -167,10 +170,10 @@ public class DurationPickerDialog extends DialogFragment {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mListener != null) { // todo: only call once
-                    Log.d("DPD", "sending " + curHour + "," + curMin + "," + curSec);
+                if (changed && mListener != null) {
                     mListener.onDurationSet(DurationPickerDialog.this, curHour, curMin, curSec);
                 }
+                changed = false;
             }
         });
 

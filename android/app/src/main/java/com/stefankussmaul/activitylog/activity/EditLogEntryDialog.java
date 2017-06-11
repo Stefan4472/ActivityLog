@@ -220,14 +220,12 @@ public class EditLogEntryDialog extends DialogFragment implements DatePickerFrag
 
     @Override
     public void onDateSelected(DatePickerFragment dialogFragment, Date selectedDate) {
-        Log.d("LogActivityDialog", "Chose " + selectedDate.toString());
         this.selectedDate = selectedDate;
         dateField.setText(getString(R.string.log_date_field, DateUtil.format(selectedDate)));
     }
 
     @Override
     public void onDurationSet(DurationPickerDialog dialog, int hours, int minutes, int seconds) {
-        Log.d("", hours + "," + minutes + "," + seconds);
         duration = (int) DateUtil.timeToMs(hours, minutes, seconds);
         durationField.setText(getString(R.string.log_duration_field, DateUtil.format(duration)));
         dialog.dismiss();

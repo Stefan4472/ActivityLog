@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements EditLogEntryDialo
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.homescreen_layout);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.home_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);

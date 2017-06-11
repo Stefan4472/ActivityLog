@@ -4,7 +4,11 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.DatePicker;
+
+import com.stefankussmaul.activitylog.content.DateUtil;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -63,21 +67,23 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         int month = args.getInt(MONTH_KEY);
         int day = args.getInt(DAY_KEY);
 
-        // create and return new instance of DatePickerDialog with the args
-        return new DatePickerDialog(getActivity(), this, year, month, day);
+        // create new dialog initialized to given args and maxed at current date
+        DatePickerDialog d = new DatePickerDialog(getActivity(), this, year, month, day);
+        d.getDatePicker().setMaxDate(System.currentTimeMillis());
+        return d;
     }
 
     @Override // DatePickerDialog.OnDateSetListener override. Called when a date is picked.
     // If a DatePickerListener has been set, this method wraps the chosen year/month/day into a
-    // Date object and sends it to the listening object
+    // Date object, strips off the hour/min/second vals and sends it to the listening object
     public void onDateSet(DatePicker view, int year, int month, int day) {
         if (mListener != null) {
             Calendar c = Calendar.getInstance();
             c.set(year, month, day);
-            c.set(Calendar.HOUR_OF_DAY, 0);
-            c.set(Calendar.MINUTE, 0);
-            c.set(Calendar.SECOND, 0);
-            mListener.onDateSelected(this, c.getTime());
+//            c.set(Calendar.HOUR_OF_DAY, 0);
+//            c.set(Calendar.MINUTE, 0);
+//            c.set(Calendar.SECOND, 0);
+            mListener.onDateSelected(this, DateUtil.stripToPrecision(c.getTime(), Calendar.DAY_OF_MONTH));
         }
     }
 }
