@@ -61,12 +61,17 @@ public class ManageLogActivity extends AppCompatActivity implements
 
     @Override // fired when a LogEntry is selected. Bring up EditLogDialogFragment
     // todo: logic for editing/deleting entries from Adapter
-    public void onLogEntryAction(LogEntry selected) {
-        Log.d("ViewEditLog", "Received Action for " + selected);
+    public void onEditLogEntry(LogEntry toEdit) {
+        Log.d("ViewEditLog", "Received Action for " + toEdit);
         // make a copy of the selected LogEntry so it can be updated or deleted
-        editing = new LogEntry(selected);
-        EditLogEntryDialog dialog = EditLogEntryDialog.newInstance(selected);
+        editing = new LogEntry(toEdit);
+        EditLogEntryDialog dialog = EditLogEntryDialog.newInstance(toEdit);
         dialog.show(getFragmentManager(), "Edit Selected Dialog");
+    }
+
+    @Override
+    public void onDeleteLogEntry(LogEntry toDelete) {
+        Log.d("ViewEditLog", "Received Delete for " + toDelete);
     }
 
     @Override // called when a LogEntry is being edited and has been saved. Update RecyclerView,
