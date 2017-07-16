@@ -2,12 +2,14 @@ package com.stefankussmaul.activitylog.activity;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.stefankussmaul.activitylog.R;
@@ -32,6 +34,8 @@ public class ManageLogActivity extends AppCompatActivity implements
     private RecyclerView logEntryDisplay;
     // TextView displaying aggregateStats from the queried LogEntries
     private TextView aggregateStats;
+    // FloatingActionButton displayed when user selects a LogEntry. Clicking brings up edit dialog
+    private FloatingActionButton editActionBtn;
     // handle to Database to retrieve queries
     private DBManager dbManager;
     // current SQL query generating the LogEntries being displayed
@@ -59,13 +63,18 @@ public class ManageLogActivity extends AppCompatActivity implements
         onFilterUpdated(null, new QueryBuilder());
     }
 
-    @Override // fired when a LogEntry is selected. Bring up EditLogDialogFragment
+    @Override  // fired when a LogEntry is selected. Set editing to a copy of selected and display
+    // the edit action button if it isn't already shown
+    public void onSelectLogEntry(LogEntry selected) {
+        editing = new LogEntry(selected);
+    }
+
     // todo: logic for editing/deleting entries from Adapter
-    public void onEditLogEntry(LogEntry toEdit) {
-        Log.d("ViewEditLog", "Received Action for " + toEdit);
+    // fired when user clicks the editActionBtn to edit the selected LogEntry
+    public void onEditLogEntry(View v) {
+        Log.d("ViewEditLog", "Received Action for " + editing);
         // make a copy of the selected LogEntry so it can be updated or deleted
-        editing = new LogEntry(toEdit);
-        EditLogEntryDialog dialog = EditLogEntryDialog.newInstance(toEdit);
+        EditLogEntryDialog dialog = EditLogEntryDialog.newInstance(editing);
         dialog.show(getFragmentManager(), "Edit Selected Dialog");
     }
 
@@ -77,7 +86,7 @@ public class ManageLogActivity extends AppCompatActivity implements
     @Override // called when a LogEntry is being edited and has been saved. Update RecyclerView,
     // database, and close the DialogFragment
     public void onLogSaved(EditLogEntryDialog dialogFragment, LogEntry createdEntry) {
-        dbManager.updateEntry(editing, createdEntry);
+        DBManager.updateEntry(editing, createdEntry);
         editing = null;
         dialogFragment.dismiss();
     }
@@ -92,14 +101,14 @@ public class ManageLogActivity extends AppCompatActivity implements
     public void onFilterUpdated(LogFilterFragment logFilterFragment, QueryBuilder query) {
         if (!query.equals(currentQuery)) {
             // retrieve new data and create a new adapter. Swap out the current one
-            Cursor new_data = dbManager.runQuery(query.getQuery());
+            Cursor new_data = DBManager.runQuery(query.getQuery());
             List<LogEntry> entries = DBUtil.getLogsFromCursor(new_data);
             logEntryDisplay.swapAdapter(new LogEntryAdapter(this, entries, this), true);
             // calculate and display aggregates
             long agg_time = DBUtil.getTotalOfAggregates(
-                    DBUtil.getAggregatesFromCursor(dbManager.runQuery(query.getTimeSpentQuery())));
+                    DBUtil.getAggregatesFromCursor(DBManager.runQuery(query.getTimeSpentQuery())));
             long agg_sessions = DBUtil.getTotalOfAggregates(
-                    DBUtil.getAggregatesFromCursor(dbManager.runQuery(query.getSessionCountQuery())));
+                    DBUtil.getAggregatesFromCursor(DBManager.runQuery(query.getSessionCountQuery())));
             aggregateStats.setText(ChartUtil.getOverviewLabel(this, agg_sessions, agg_time));
             // update currentQuery
             currentQuery = new QueryBuilder(query);

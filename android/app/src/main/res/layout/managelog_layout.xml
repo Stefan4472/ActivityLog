@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -13,21 +14,35 @@
         android:id="@+id/logfilter_config"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
         android:layout_gravity="center_horizontal"/>
     <!-- displays stats overview of displayed LogEntries -->
     <TextView
         android:id="@+id/stats_overview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/logfilter_config"
         android:layout_gravity="center_horizontal"/>
     <!-- displays the LogEntries visually so they can be scrolled by user -->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/log_display"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/stats_overview"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:gravity="center_horizontal"
         android:scrollbars="vertical"/>
-</LinearLayout>
+    <!-- displays actionbutton to edit the selected LogEntry. Positioned on bottom right of screen -->
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/edit_action_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_assignment_black_36dp"
+        app:elevation="4dp"
+        android:onClick="onEditLogEntry"/>
+</RelativeLayout>

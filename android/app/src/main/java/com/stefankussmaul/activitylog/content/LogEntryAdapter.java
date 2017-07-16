@@ -26,8 +26,10 @@ public class LogEntryAdapter extends RecyclerView.Adapter<LogEntryAdapter.LogEnt
     private LogEntryListener mListener;
 
     public interface LogEntryListener {
+        // fired when the user selects an entry from the list
+        void onSelectLogEntry(LogEntry selected);
         // fired when edit button is clicked on an entry. Passes LogEntry to be edited
-        void onEditLogEntry(LogEntry toEdit);
+//        void onEditLogEntry(LogEntry toEdit);
         // fired when delete button is clicked on an entry. Passes LogEntry to be deleted
         void onDeleteLogEntry(LogEntry toDelete);
     }
@@ -59,7 +61,7 @@ public class LogEntryAdapter extends RecyclerView.Adapter<LogEntryAdapter.LogEnt
         holder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            mListener.onEditLogEntry(displayedLogs.get(position));
+//            mListener.onEditLogEntry(displayedLogs.get(position));
             }
         });
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
@@ -68,13 +70,15 @@ public class LogEntryAdapter extends RecyclerView.Adapter<LogEntryAdapter.LogEnt
                 mListener.onDeleteLogEntry(displayedLogs.get(position));
             }
         });
+        // entire item is clicked
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 holder.clicked = !holder.clicked;
-                if (holder.clicked) {
+                if (holder.clicked) {  // select and fire onSelectLogEntry todo: deselect other
                     holder.itemView.setBackgroundColor(Color.GRAY);
-                } else {
+                    mListener.onSelectLogEntry(displayedLogs.get(position));
+                } else {  // deselect
                     holder.itemView.setBackgroundColor(Color.TRANSPARENT);
                 }
             }
@@ -102,7 +106,6 @@ public class LogEntryAdapter extends RecyclerView.Adapter<LogEntryAdapter.LogEnt
             logName = (TextView) itemView.findViewById(R.id.log_name);
             logDate = (TextView) itemView.findViewById(R.id.log_date);
             logDuration = (TextView) itemView.findViewById(R.id.log_duration);
-            editButton = (ImageButton) itemView.findViewById(R.id.edit_entry);
             deleteButton = (ImageButton) itemView.findViewById(R.id.delete_entry);
         }
     }
