@@ -14,7 +14,11 @@ import com.stefankussmaul.activitylog.R;
 import java.util.List;
 
 /**
- * Created by Stefan on 6/1/2017.
+ * Adapter to visually display a list of LogEntry objects in a RecyclerView. Communicates via the
+ * LogEntryListener interface, which fires events for relevant actions. Background coloring (i.e.
+ * different color for selected and deselected) should be managed by an outside class and use
+ * LogEntryViewHolder.setClicked(). Each LogEntry instance has a trash-icon button which fires
+ * the onDeleteLogEntry callback. The actual delete action must also be handled by an outside class.
  */
 
 public class LogEntryAdapter extends RecyclerView.Adapter<LogEntryAdapter.LogEntryViewHolder> {
@@ -25,17 +29,16 @@ public class LogEntryAdapter extends RecyclerView.Adapter<LogEntryAdapter.LogEnt
     private LayoutInflater inflater;
     private LogEntryListener mListener;
 
+    // callback interface. Each callback passes the index of the selected LogEntry in the Adapter's
+    // internal list, as well as the actual LogEntry instance.
     public interface LogEntryListener {
-        // fired when the user selects an entry from the list
-        void onSelectLogEntry(LogEntry selected);
-        // fired when edit button is clicked on an entry. Passes LogEntry to be edited
-//        void onEditLogEntry(LogEntry toEdit);
-        // fired when delete button is clicked on an entry. Passes LogEntry to be deleted
-        void onDeleteLogEntry(LogEntry toDelete);
-    }
-
-    public void setLogEntryListener(LogEntryListener listener) {
-        mListener = listener;
+        // fired when user selects an entry from the list
+        void onSelectLogEntry(int index, LogEntry selected);
+        // fired when user deselects the selected entry
+        void onDeselectLogEntry(int index, LogEntry toEdit);
+        // fired when delete button is clicked on an entry. Passes the index of the element in the
+        // list to be removed
+        void onDeleteLogEntry(int index, LogEntry toDelete);
     }
 
     // todo: could this be dangerous? make copy of logs?
@@ -57,34 +60,25 @@ public class LogEntryAdapter extends RecyclerView.Adapter<LogEntryAdapter.LogEnt
         holder.logName.setText(binded_log.getActivityName());
         holder.logDuration.setText(DateUtil.format(binded_log.getDuration()));
         holder.logDate.setText(DateUtil.format(binded_log.getDate()));
-        // notify listener when button is clicked
-        holder.editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//            mListener.onEditLogEntry(displayedLogs.get(position));
-            }
-        });
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onDeleteLogEntry(displayedLogs.get(position));
+                mListener.onDeleteLogEntry(position, displayedLogs.get(position));
             }
         });
         // entire item is clicked
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.clicked = !holder.clicked;
-                if (holder.clicked) {  // select and fire onSelectLogEntry todo: deselect other
-                    holder.itemView.setBackgroundColor(Color.GRAY);
-                    mListener.onSelectLogEntry(displayedLogs.get(position));
-                } else {  // deselect
-                    holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+                holder.setClicked(!holder.clicked);
+                // handle selecting LogEntry
+                if (holder.clicked) {
+                    mListener.onSelectLogEntry(position, displayedLogs.get(position));
+                } else {
+                    mListener.onDeselectLogEntry(position, displayedLogs.get(position));
                 }
             }
         });
-     // todo: color background of holder when touched
-//        holder.itemView.setBackgroundColor(Color.GRAY);
     }
 
     @Override
@@ -92,21 +86,34 @@ public class LogEntryAdapter extends RecyclerView.Adapter<LogEntryAdapter.LogEnt
         return displayedLogs.size();
     }
 
-    public class LogEntryViewHolder extends RecyclerView.ViewHolder {
+    public LogEntry get(int index) {
+        return displayedLogs.get(index);
+    }
+
+    public static void setClicked(View v, boolean clicked) {
+        v.setBackgroundColor(clicked ? Color.GRAY : Color.TRANSPARENT);
+    }
+
+    class LogEntryViewHolder extends RecyclerView.ViewHolder {
 
         private TextView logName;
         private TextView logDate;
         private TextView logDuration;
-        private ImageButton editButton;
         private ImageButton deleteButton;
         private boolean clicked;
 
-        public LogEntryViewHolder(View itemView) {
+        LogEntryViewHolder(View itemView) {
             super(itemView);
             logName = (TextView) itemView.findViewById(R.id.log_name);
             logDate = (TextView) itemView.findViewById(R.id.log_date);
             logDuration = (TextView) itemView.findViewById(R.id.log_duration);
             deleteButton = (ImageButton) itemView.findViewById(R.id.delete_entry);
+        }
+
+        // set the clicked state. Sets the background color of the view
+        public void setClicked(boolean clicked) {
+            this.clicked = clicked;
+            itemView.setBackgroundColor(clicked ? Color.GRAY : Color.TRANSPARENT);
         }
     }
 }

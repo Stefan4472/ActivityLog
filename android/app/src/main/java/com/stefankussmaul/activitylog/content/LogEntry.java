@@ -66,7 +66,7 @@ public class LogEntry {
 
     @Override
     public boolean equals(Object o) {
-        if (this == null || o == null) {
+        if (o == null || !(o instanceof LogEntry)) {
             return false;
         } else if (this == o) {
             return true;
@@ -86,6 +86,6 @@ public class LogEntry {
 
     @Override
     public String toString() {
-        return "LogEntry(" + activityName + ", date " + DateUtil.format(date) + ", " + duration + "ms)";
+        return "LogEntry('" + activityName + "', " + DateUtil.format(date) + ", " + duration + "ms)";
     }
 }

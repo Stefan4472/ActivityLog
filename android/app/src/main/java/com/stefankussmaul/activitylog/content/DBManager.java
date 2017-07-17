@@ -91,12 +91,17 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
         return new_id > -1;
     }
 
-    // uses LogEntry's timestamp to look it up in the database. If found, sets new values
+    // uses LogEntry's timestamp to look it up in the database. If found, sets new values. Raise
+    // IllegalArgumentException if oldEntry can't be found in the database
     public static boolean updateEntry(LogEntry oldEntry, LogEntry newEntry) {
+        Log.d("DBManager", "Updating " + oldEntry + " to " + newEntry);
         Cursor result = runQuery("SELECT " + LOG_COLUMN_ID + " FROM " + LOG_TABLE_NAME + " WHERE "
-                + LOG_COLUMN_TIMESTAMP + " = '" + newEntry.getDateInMS() + "'");
+                + LOG_COLUMN_ACTIVITY + " = '" + oldEntry.getActivityName() + "' AND "
+                + LOG_COLUMN_DURATION + " = " + oldEntry.getDuration() + " AND "
+                + LOG_COLUMN_TIMESTAMP + " = " + newEntry.getDateInMS());
         result.moveToFirst();
         long id = result.getLong(result.getColumnIndex(LOG_COLUMN_ID));
+        Log.d("DBManager", "got id " + id);
         result.close();
         return updateEntry(id, newEntry);
     }
@@ -111,8 +116,11 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
     // the TimeStamp will be unique (there is an insanely low chance it isn't) it almost
     // certainly will be
     public static void deleteEntry(LogEntry toDelete) {
-        dbHandle.getWritableDatabase().delete(LOG_TABLE_NAME, LOG_COLUMN_TIMESTAMP + " = '" +
-                toDelete.getDateInMS() + "'", null);
+        Log.d("DBManager", "Deleting " + toDelete);
+        dbHandle.getWritableDatabase().delete(LOG_TABLE_NAME,
+                LOG_COLUMN_ACTIVITY + " = '" + toDelete.getActivityName() + "' AND " +
+                LOG_COLUMN_DURATION + " = " + toDelete.getDuration() + " AND " +
+                LOG_COLUMN_TIMESTAMP + " = " + toDelete.getDateInMS(), null);
     }
 
     // runs the given query and returns the Cursor

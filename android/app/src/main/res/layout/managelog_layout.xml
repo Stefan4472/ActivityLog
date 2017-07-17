@@ -22,7 +22,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/logfilter_config"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
+        android:textSize="16sp"/>
     <!-- displays the LogEntries visually so they can be scrolled by user -->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/log_display"
@@ -44,5 +46,6 @@
         android:layout_alignParentEnd="true"
         android:src="@drawable/ic_assignment_black_36dp"
         app:elevation="4dp"
+        android:visibility="invisible"
         android:onClick="onEditLogEntry"/>
 </RelativeLayout>

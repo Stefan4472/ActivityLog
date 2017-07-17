@@ -19,11 +19,11 @@ import com.stefankussmaul.activitylog.content.DBUtil;
 import com.stefankussmaul.activitylog.content.LogEntry;
 import com.stefankussmaul.activitylog.content.LogEntryAdapter;
 import com.stefankussmaul.activitylog.content.QueryBuilder;
-
 import java.util.List;
 
 /**
- * Created by Stefan on 5/29/2017.
+ * Activity where user can view all logs listed out. The user can apply filters to the data as well
+ * as edit or remove individual entries. Such actions are fulfilled via the database manager.
  */
 
 public class ManageLogActivity extends AppCompatActivity implements
@@ -36,12 +36,15 @@ public class ManageLogActivity extends AppCompatActivity implements
     private TextView aggregateStats;
     // FloatingActionButton displayed when user selects a LogEntry. Clicking brings up edit dialog
     private FloatingActionButton editActionBtn;
-    // handle to Database to retrieve queries
-    private DBManager dbManager;
+    // layout manager used with logEntryDisplay RecyclerView
+    LinearLayoutManager displayManager;
     // current SQL query generating the LogEntries being displayed
     private QueryBuilder currentQuery;
-    // LogEntry currently being edited, if any
-    private LogEntry editing;
+    // list of LogEntry objects that match the current query and are shown in logEntryDisplay
+    private List<LogEntry> displayedEntries;
+    // index of the LogEntry in the RecyclerView that's currently selected.
+    // This will be the same in the displayedEntries list, which mirrors the RecyclerView
+    private int selectedIndex = -1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,38 +59,56 @@ public class ManageLogActivity extends AppCompatActivity implements
         action_bar.setDisplayHomeAsUpEnabled(true);
 
         logEntryDisplay = (RecyclerView) findViewById(R.id.log_display);
-        logEntryDisplay.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-//        logEntryDisplay.setAdapter(new LogEntryAdapter(this, demo, this));
+        displayManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        logEntryDisplay.setLayoutManager(displayManager);
 
+        editActionBtn = (FloatingActionButton) findViewById(R.id.edit_action_button);
         aggregateStats = (TextView) findViewById(R.id.stats_overview);
         onFilterUpdated(null, new QueryBuilder());
     }
 
-    @Override  // fired when a LogEntry is selected. Set editing to a copy of selected and display
-    // the edit action button if it isn't already shown
-    public void onSelectLogEntry(LogEntry selected) {
-        editing = new LogEntry(selected);
-    }
-
-    // todo: logic for editing/deleting entries from Adapter
-    // fired when user clicks the editActionBtn to edit the selected LogEntry
+    // todo: logic for selectedIndex/deleting entries from Adapter
+    // fired when user clicks the editActionBtn to edit the selected LogEntry. Opens
+    // EditLogEntryDialog with copy of the selected LogEntry
     public void onEditLogEntry(View v) {
-        Log.d("ViewEditLog", "Received Action for " + editing);
-        // make a copy of the selected LogEntry so it can be updated or deleted
-        EditLogEntryDialog dialog = EditLogEntryDialog.newInstance(editing);
+        Log.d("ViewEditLog", "Received Action for " + selectedIndex);
+        EditLogEntryDialog dialog = EditLogEntryDialog.newInstance(displayedEntries.get(selectedIndex));
         dialog.show(getFragmentManager(), "Edit Selected Dialog");
     }
 
-    @Override
-    public void onDeleteLogEntry(LogEntry toDelete) {
-        Log.d("ViewEditLog", "Received Delete for " + toDelete);
+    @Override  // fired when a LogEntry is selected. Set selectedIndex to a copy of selected and display
+    // the edit action button if it isn't already shown
+    public void onSelectLogEntry(int index, LogEntry selected) {
+        editActionBtn.setVisibility(View.VISIBLE);
+        LogEntryAdapter.setClicked(displayManager.findViewByPosition(index), true);
+        if (selectedIndex > -1) {
+            LogEntryAdapter.setClicked(displayManager.findViewByPosition(selectedIndex), false);
+        }
+        selectedIndex = index;
+        editActionBtn.setVisibility(View.VISIBLE); // todo: animation
     }
 
-    @Override // called when a LogEntry is being edited and has been saved. Update RecyclerView,
-    // database, and close the DialogFragment
+    @Override // fired when a LogEntry is deselected, and there are no selections made.
+    public void onDeselectLogEntry(int index, LogEntry deselected) {
+        selectedIndex = -1;
+        LogEntryAdapter.setClicked(displayManager.findViewByPosition(index), false);
+        editActionBtn.setVisibility(View.INVISIBLE);
+    }
+
+    @Override // sends request to DBManager to delete the selected LogEntry and makes a call to
+    // update the GUI
+    public void onDeleteLogEntry(int index, LogEntry toDelete) {
+        Log.d("ViewEditLog", "Received Delete for " + toDelete);
+        DBManager.deleteEntry(toDelete);
+        onFilterUpdated(null, currentQuery);
+    }
+
+    @Override // called when a LogEntry is being edited and has been saved. Update database,
+    // update GUI, and close the DialogFragment
     public void onLogSaved(EditLogEntryDialog dialogFragment, LogEntry createdEntry) {
-        DBManager.updateEntry(editing, createdEntry);
-        editing = null;
+        DBManager.updateEntry(displayedEntries.get(selectedIndex), createdEntry);
+        onFilterUpdated(null, currentQuery);
+        selectedIndex = -1;
         dialogFragment.dismiss();
     }
 
@@ -102,8 +123,8 @@ public class ManageLogActivity extends AppCompatActivity implements
         if (!query.equals(currentQuery)) {
             // retrieve new data and create a new adapter. Swap out the current one
             Cursor new_data = DBManager.runQuery(query.getQuery());
-            List<LogEntry> entries = DBUtil.getLogsFromCursor(new_data);
-            logEntryDisplay.swapAdapter(new LogEntryAdapter(this, entries, this), true);
+            displayedEntries = DBUtil.getLogsFromCursor(new_data);
+            logEntryDisplay.swapAdapter(new LogEntryAdapter(this, displayedEntries, this), true);
             // calculate and display aggregates
             long agg_time = DBUtil.getTotalOfAggregates(
                     DBUtil.getAggregatesFromCursor(DBManager.runQuery(query.getTimeSpentQuery())));
@@ -113,5 +134,11 @@ public class ManageLogActivity extends AppCompatActivity implements
             // update currentQuery
             currentQuery = new QueryBuilder(query);
         }
+    }
+
+    // called when the list of LogEntry objects to display changes. Swaps out the adapter and
+    // recalculates aggregate stats. Should be called when filter changes or when an entry is removed
+    private void onEntriesUpdated(List<LogEntry> entries) {
+
     }
 }

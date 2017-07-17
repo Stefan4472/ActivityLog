@@ -248,8 +248,7 @@ public class EditLogEntryDialog extends DialogFragment implements DatePickerFrag
             activity_name = nameSpinner.getSelectedItem().toString();
         }
         if (valid) {
-            LogEntry logged = new LogEntry(activity_name,
-                    selectedDate, Integer.parseInt(durationField.getText().toString()));
+            LogEntry logged = new LogEntry(activity_name, selectedDate, duration);
             mListener.onLogSaved(this, logged);
         }
          // todo: better entry of duration
