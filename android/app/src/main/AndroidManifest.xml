@@ -10,15 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".activity.MainActivity"
+        <activity
+            android:name=".activity.MainActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.TimerActivity"
+        <activity
+            android:name=".activity.TimerActivity"
             android:label="@string/timer_activity_label"
             android:screenOrientation="portrait"
             android:parentActivityName=".activity.MainActivity">
@@ -26,9 +28,10 @@
             <!-- parent activity meta-data to support 4.0 or below -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity"/>
+                android:value=".activity.MainActivity" />
         </activity>
-        <activity android:name=".activity.AnalyticsActivity"
+        <activity
+            android:name=".activity.AnalyticsActivity"
             android:label="@string/analytics"
             android:screenOrientation="portrait"
             android:parentActivityName=".activity.MainActivity">
@@ -36,9 +39,10 @@
             <!-- parent activity meta-data to support 4.0 or below -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity"/>
+                android:value=".activity.MainActivity" />
         </activity>
-        <activity android:name=".activity.ManageLogActivity"
+        <activity
+            android:name=".activity.ManageLogActivity"
             android:label="@string/view_edit_log"
             android:screenOrientation="portrait"
             android:parentActivityName=".activity.MainActivity">
@@ -46,7 +50,29 @@
             <!-- parent activity meta-data to support 4.0 or below -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity"/>
+                android:value=".activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.NewGoalActivity"
+            android:label="NewGoalActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activity.MainActivity">
+
+            <!-- parent activity meta-data to support 4.0 or below -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.ManageGoalsActivity"
+            android:label="ManageGoalsActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activity.MainActivity">
+
+            <!-- parent activity meta-data to support 4.0 or below -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
         </activity>
     </application>
 
