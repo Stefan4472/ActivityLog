@@ -54,7 +54,7 @@
         </activity>
         <activity
             android:name=".activity.NewGoalActivity"
-            android:label="NewGoalActivity"
+            android:label="Create a Goal"
             android:screenOrientation="portrait"
             android:parentActivityName=".activity.MainActivity">
 
@@ -65,7 +65,7 @@
         </activity>
         <activity
             android:name=".activity.ManageGoalsActivity"
-            android:label="ManageGoalsActivity"
+            android:label="Manage Goals"
             android:screenOrientation="portrait"
             android:parentActivityName=".activity.MainActivity">
 
