@@ -1,12 +1,12 @@
 package com.stefankussmaul.activitylog.content;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,6 +31,29 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
     // keyword used for aliasing min values
     public static final String MIN_KEYWORD = "MinVal";
 
+    // columns of Goals table. This is where goals that exist/have existed are stored.
+    // They can be generated from the Scheduled Goals table
+    public static final String GOALS_TABLE_NAME = "goals";
+    public static final String GOAL_ID = "_id";
+    public static final String GOAL_START_TIME = "goal.start_time";
+    public static final String GOAL_END_TIME = "goal.end_time";
+    public static final String GOAL_QUERY = "goal.query";
+    public static final String GOAL_NOTE = "goal.note";
+
+    // columns of Scheduled Goals table. This is where recurring goals are stored
+    public static final String SCHEDGOALS_TABLE = "scheduled_goals";
+    public static final String SCHEDGOAL_QUERY = "scheduled_goals.query";
+    public static final String SCHEDGOAL_RECUR_MON = "scheduled_goals.recur_mon";
+    public static final String SCHEDGOAL_RECUR_TUE = "scheduled_goals.recur_tue";
+    public static final String SCHEDGOAL_RECUR_WED = "scheduled_goals.recur_wed";
+    public static final String SCHEDGOAL_RECUR_THU = "scheduled_goals.recur_thu";
+    public static final String SCHEDGOAL_RECUR_FRI = "scheduled_goals.recur_fri";
+    public static final String SCHEDGOAL_RECUR_SAT = "scheduled_goals.recur_sat";
+    public static final String SCHEDGOAL_RECUR_SUN = "scheduled_goals.recur_sun";
+    public static final String SCHEDGOAL_RECUR_WEEKLY = "scheduled_goals.recur_weekly";
+    public static final String SCHEDGOAL_RECUR_MONTHLY = "scheduled_goals.recur_monthly";
+    public static final String SCHEDGOAL_NOTE = "scheduled_goals.note";
+
     // handle to the database
     private static SQLiteOpenHelper dbHandle;
 
@@ -49,10 +72,17 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(
                 "CREATE TABLE " + LOG_TABLE_NAME + " (" +
-                LOG_COLUMN_ID + " INTEGER PRIMARY KEY, " +
-                LOG_COLUMN_ACTIVITY + " INTEGER, " +
-                LOG_COLUMN_DURATION + " INTEGER, " +
-                LOG_COLUMN_TIMESTAMP + " INTEGER)");
+                    LOG_COLUMN_ID + " INTEGER PRIMARY KEY, " +
+                    LOG_COLUMN_ACTIVITY + " INTEGER, " +
+                    LOG_COLUMN_DURATION + " INTEGER, " +
+                    LOG_COLUMN_TIMESTAMP + " INTEGER)");
+        database.execSQL(
+                "CREATE TABLE " + GOALS_TABLE_NAME + " (" +
+                    GOAL_ID + " INTEGER PRIMARY KEY, " +
+                    GOAL_START_TIME + " INTEGER, " +
+                    GOAL_END_TIME + " INTEGER, " +
+                    GOAL_QUERY + " TEXT, " +
+                    GOAL_NOTE + " TEXT)");
         Log.d("DBManager", "Created Database");
     }
 
@@ -60,6 +90,7 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
         Log.d("DBManager", "Request to upgrade from " + oldVersion + " to " + newVersion);
         database.execSQL("DROP TABLE IF EXISTS " + LOG_TABLE_NAME);
+        database.execSQL("DROP TABLE IF EXISTS " + GOALS_TABLE_NAME);
         onCreate(database);
     }
     // todo: need to defend against leaks by ensuring DBManager and all Cursors are closed after use
@@ -140,5 +171,16 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
         }
         cursor.close();
         return names;
+    }
+
+    // given the last time an update was made, goes through recurring goals table and creates
+    // new goals as required. This is used to generate goal objects as scheduled.
+    public static void createRecurringGoals(Date lastUpdate) {
+
+    }
+
+    public static void addGoal(Goal goal) {
+        Log.d("DBManager", "Adding Goal " + goal.toString());
+        dbHandle.getWritableDatabase().insert(GOALS_TABLE_NAME, null, DBUtil.getContentVals(goal));
     }
 }

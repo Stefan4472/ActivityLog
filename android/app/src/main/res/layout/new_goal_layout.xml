@@ -101,7 +101,7 @@
             android:id="@+id/repeat_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-        </Spinner>
+        </Spinner> <!-- TODO: ADD OPTION TO SET CUSTOM DATE RANGE -->
     </LinearLayout>
     <!-- Following views are switched -->
     <LinearLayout

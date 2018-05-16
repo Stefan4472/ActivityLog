@@ -11,6 +11,10 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.stefankussmaul.activitylog.content.DBManager.GOAL_END_TIME;
+import static com.stefankussmaul.activitylog.content.DBManager.GOAL_NOTE;
+import static com.stefankussmaul.activitylog.content.DBManager.GOAL_QUERY;
+import static com.stefankussmaul.activitylog.content.DBManager.GOAL_START_TIME;
 import static com.stefankussmaul.activitylog.content.DBManager.LOG_COLUMN_ACTIVITY;
 import static com.stefankussmaul.activitylog.content.DBManager.LOG_COLUMN_DURATION;
 import static com.stefankussmaul.activitylog.content.DBManager.LOG_COLUMN_TIMESTAMP;
@@ -73,6 +77,17 @@ public class DBUtil {
         content_vals.put(LOG_COLUMN_ACTIVITY, log.getActivityName());
         content_vals.put(LOG_COLUMN_DURATION, log.getDuration());
         content_vals.put(LOG_COLUMN_TIMESTAMP, log.getDateInMS());
+        return content_vals;
+    }
+
+    // takes a Goal and stores its data in a ContentValues object, which can be inserted
+    // into a database
+    public static ContentValues getContentVals(Goal goal) {
+        ContentValues content_vals = new ContentValues();
+        content_vals.put(GOAL_START_TIME, goal.getStartDate().getTime());
+        content_vals.put(GOAL_END_TIME, goal.getEndDate().getTime());
+        content_vals.put(GOAL_QUERY, goal.getQuery());
+        content_vals.put(GOAL_NOTE, goal.getNote());
         return content_vals;
     }
 
