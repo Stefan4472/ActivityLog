@@ -1,189 +1,214 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <LinearLayout
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <!-- default toolbar -->
-    <include layout="@layout/toolbar_layout"
-        android:id="@+id/toolbar"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="10dp"
-        android:text="New Goal"
-        android:textSize="40sp"/>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
+        <!-- default toolbar -->
+        <include layout="@layout/toolbar_layout"
+            android:id="@+id/toolbar"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enter Name for Goal"
+                android:textSize="20sp"/>
+            <EditText
+                android:id="@+id/goal_name_entry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Choose Activity"
+                android:textSize="20sp"/>
+            <Spinner
+                android:id="@+id/activity_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="Choose Goal Type"/>
+            <Spinner
+                android:id="@+id/goal_type_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </Spinner>
+        </LinearLayout>
+        <ViewSwitcher
+            android:id="@+id/goal_entry_switcher"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/repetition_goal_setter"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <NumberPicker
+                    android:id="@+id/repetition_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </NumberPicker>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Times"
+                    android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/time_goal_setter"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <NumberPicker
+                    android:id="@+id/hour_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </NumberPicker>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hours"
+                    android:layout_gravity="center_vertical"/>
+                <NumberPicker
+                    android:id="@+id/minute_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </NumberPicker>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Minutes"
+                    android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+        </ViewSwitcher>
+        <!-- Switch views manually, depending on option chosen in the activity_spinner -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="Set For"/>
+            <Spinner
+                android:id="@+id/repeat_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </Spinner> <!-- TODO: ADD OPTION TO SET CUSTOM DATE RANGE -->
+        </LinearLayout>
+        <!-- Following views are switched -->
+        <LinearLayout
+            android:id="@+id/repeat_daily_layout"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="Repeat Every"/>
+            <CheckBox
+                android:id="@+id/recur_mon_btn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Monday"/>
+            <CheckBox
+                android:id="@+id/recur_tue_btn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Tuesday" />
+            <CheckBox
+                android:id="@+id/recur_wed_btn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Wednesday" />
+            <CheckBox
+                android:id="@+id/recur_thu_btn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Thursday" />
+            <CheckBox
+                android:id="@+id/recur_fri_btn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Friday" />
+            <CheckBox
+                android:id="@+id/recur_sat_btn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Saturday" />
+            <CheckBox
+                android:id="@+id/recur_sun_btn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Sunday" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/repeat_weekly_layout"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <CheckBox
+                android:id="@+id/recur_weekly"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Repeat Every Week?"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/repeat_monthly_layout"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <CheckBox
+                android:id="@+id/recur_monthly"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Repeat Every Month?"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Choose Activity"
+            android:text="Optional: Add a Note"
             android:textSize="20sp"/>
-        <Spinner
-            android:id="@+id/activity_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:text="Choose Goal Type"/>
-        <Spinner
-            android:id="@+id/goal_type_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </Spinner>
-    </LinearLayout>
-    <ViewSwitcher
-        android:id="@+id/goal_entry_switcher"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:id="@+id/repetition_goal_setter"
-            android:orientation="horizontal"
+        <EditText
+            android:id="@+id/goal_note_entry"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <NumberPicker
-                android:id="@+id/repetition_picker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </NumberPicker>
-            <TextView
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:lines="1"
+            android:maxLines="2"
+            android:gravity="top|left"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom|end">
+            <Button
+                android:layout_alignParentBottom="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Times"
-                android:layout_gravity="center_vertical"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/time_goal_setter"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <NumberPicker
-                android:id="@+id/hour_picker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </NumberPicker>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hours"
-                android:layout_gravity="center_vertical"/>
-            <NumberPicker
-                android:id="@+id/minute_picker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </NumberPicker>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Minutes"
-                android:layout_gravity="center_vertical"/>
-        </LinearLayout>
-    </ViewSwitcher>
-    <!-- Switch views manually, depending on option chosen in the activity_spinner -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:text="Set For"/>
-        <Spinner
-            android:id="@+id/repeat_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </Spinner> <!-- TODO: ADD OPTION TO SET CUSTOM DATE RANGE -->
+                android:text="Save"
+                android:onClick="onSaveGoal"/>
+        </RelativeLayout>
     </LinearLayout>
-    <!-- Following views are switched -->
-    <LinearLayout
-        android:id="@+id/repeat_daily_layout"
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:text="Repeat Every"/>
-        <CheckBox
-            android:id="@+id/recur_mon_btn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Monday"/>
-        <CheckBox
-            android:id="@+id/recur_tue_btn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Tuesday" />
-        <CheckBox
-            android:id="@+id/recur_wed_btn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Wednesday" />
-        <CheckBox
-            android:id="@+id/recur_thu_btn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Thursday" />
-        <CheckBox
-            android:id="@+id/recur_fri_btn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Friday" />
-        <CheckBox
-            android:id="@+id/recur_sat_btn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Saturday" />
-        <CheckBox
-            android:id="@+id/recur_sun_btn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Sunday" />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/repeat_weekly_layout"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <CheckBox
-            android:id="@+id/recur_weekly"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Repeat Every Week?"/>
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/repeat_monthly_layout"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <CheckBox
-            android:id="@+id/recur_monthly"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Repeat Every Month?"/>
-    </LinearLayout>
-    <!-- End switched views -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="bottom|end">
-        <Button
-            android:layout_alignParentBottom="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Save"
-            android:onClick="onSaveGoal"/>
-    </RelativeLayout>
-</LinearLayout>
+</ScrollView>

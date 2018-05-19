@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.ViewSwitcher;
@@ -31,6 +32,7 @@ public class NewGoalActivity extends AppCompatActivity {
 
     public static final String TIME_GOAL = "Time Goal", REPETITION_GOAL = "Repetition Goal";
     public static final String DAILY_GOAL = "Today", WEEKLY_GOAL = "This Week", MONTHLY_GOAL = "This Month";
+    private EditText goalNameEntry;
     private Spinner goalTypeSpinner;
     private ViewSwitcher goalEntrySwitcher;
     private NumberPicker hourPicker;
@@ -40,6 +42,7 @@ public class NewGoalActivity extends AppCompatActivity {
     private Spinner repeatSpinner;
     private CheckBox recurMonBox, recurTuesBox, recurWedBox, recurThursBox,
             recurFriBox, recurSatBox, recurSunBox, recurWeeklyBox, recurMonthlyBox;
+    private EditText goalNoteEntry;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,7 @@ public class NewGoalActivity extends AppCompatActivity {
         ActionBar action_bar = getSupportActionBar();
         action_bar.setDisplayHomeAsUpEnabled(true);
 
+        goalNameEntry = (EditText) findViewById(R.id.goal_name_entry);
         goalTypeSpinner = (Spinner) findViewById(R.id.goal_type_spinner);
         goalEntrySwitcher = (ViewSwitcher) findViewById(R.id.goal_entry_switcher);
         hourPicker = (NumberPicker) findViewById(R.id.hour_picker);
@@ -61,6 +65,7 @@ public class NewGoalActivity extends AppCompatActivity {
         repetitionPicker = (NumberPicker) findViewById(R.id.repetition_picker);
         activitySpinner = (Spinner) findViewById(R.id.activity_spinner);
         repeatSpinner = (Spinner) findViewById(R.id.repeat_spinner);
+        goalNoteEntry = (EditText) findViewById(R.id.goal_note_entry);
 
         recurMonBox = (CheckBox) findViewById(R.id.recur_mon_btn);
         recurTuesBox = (CheckBox) findViewById(R.id.recur_tue_btn);
@@ -162,6 +167,7 @@ public class NewGoalActivity extends AppCompatActivity {
 
     // called when user clicks to save the goal
     public void onSaveGoal(View view) {
+        String goal_name = goalNameEntry.getText().toString();
         String activity_name = activitySpinner.getSelectedItem().toString();
 
         // calculate numerical value of goal
@@ -197,7 +203,7 @@ public class NewGoalActivity extends AppCompatActivity {
                 break;
         }
 
-        String note = "This note is blank for now";
+        String note = goalNoteEntry.getText().toString();
 
         // check if user wanted the goal to recur--in which case, a RecurringGoal is required
         boolean recur_mon = recurMonBox.isChecked();

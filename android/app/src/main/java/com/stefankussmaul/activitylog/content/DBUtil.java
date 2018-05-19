@@ -62,6 +62,24 @@ public class DBUtil {
         return aggregates;
     }
 
+    public static List<Goal> getGoalsFromCursor(Cursor cursor) {
+        List<Goal> goals = new LinkedList<>();
+        cursor.moveToFirst();
+        // loop through data in the cursor, creating a new Goal for each set
+        while (!cursor.isAfterLast()) {
+            goals.add(
+                    new Goal(
+                            new Date(cursor.getLong(cursor.getColumnIndex(GOAL_START_TIME))),
+                            new Date(cursor.getLong(cursor.getColumnIndex(GOAL_END_TIME))),
+                            cursor.getString(cursor.getColumnIndex(GOAL_QUERY)),
+                            cursor.getString(cursor.getColumnIndex(GOAL_NOTE))
+                    ));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return goals;
+    }
+
     // sums the values of each ActivityAggregate in the list and returns this sum
     public static long getTotalOfAggregates(List<ActivityAggregate> aggregates) {
         long total = 0;

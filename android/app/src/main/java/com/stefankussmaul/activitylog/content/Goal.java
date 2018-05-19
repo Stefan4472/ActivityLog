@@ -34,6 +34,14 @@ public class Goal {
         this.query = generateQuery(activity, startDate, endDate, goalType);
     }
 
+    public Goal(Date startDate, Date endDate, String query, String note) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.goal = 100; // TODO: SAVE IN DB
+        this.query = query;
+        this.note = note;
+    }
+
     public Date getStartDate() {
         return startDate;
     }

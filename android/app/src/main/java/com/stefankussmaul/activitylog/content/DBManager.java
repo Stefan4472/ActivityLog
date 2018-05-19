@@ -34,11 +34,12 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
     // columns of Goals table. This is where goals that exist/have existed are stored.
     // They can be generated from the Scheduled Goals table
     public static final String GOALS_TABLE_NAME = "goals";
-    public static final String GOAL_ID = "_id";
-    public static final String GOAL_START_TIME = "goal.start_time";
-    public static final String GOAL_END_TIME = "goal.end_time";
-    public static final String GOAL_QUERY = "goal.query";
-    public static final String GOAL_NOTE = "goal.note";
+    public static final String GOAL_ID = "goals_id";
+//    public static final String GOAL_ACTIVITY = "goals_activity";
+    public static final String GOAL_START_TIME = "goals_start_time";
+    public static final String GOAL_END_TIME = "goals_end_time";
+    public static final String GOAL_QUERY = "goals_query";
+    public static final String GOAL_NOTE = "goals_note";
 
     // columns of Scheduled Goals table. This is where recurring goals are stored
     public static final String SCHEDGOALS_TABLE = "scheduled_goals";
@@ -66,6 +67,10 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
 
     private DBManager(Context context){
         super(context, DB_NAME, null, 1);
+        // uncomment to wipe the database
+        getWritableDatabase().execSQL("DROP TABLE IF EXISTS " + LOG_TABLE_NAME);
+        getWritableDatabase().execSQL("DROP TABLE IF EXISTS " + GOALS_TABLE_NAME);
+        onCreate(getWritableDatabase());
     }
 
     @Override // run SQL command to create the database with the table and fields
@@ -173,14 +178,22 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
         return names;
     }
 
-    // given the last time an update was made, goes through recurring goals table and creates
-    // new goals as required. This is used to generate goal objects as scheduled.
-    public static void createRecurringGoals(Date lastUpdate) {
-
-    }
-
     public static void addGoal(Goal goal) {
         Log.d("DBManager", "Adding Goal " + goal.toString());
         dbHandle.getWritableDatabase().insert(GOALS_TABLE_NAME, null, DBUtil.getContentVals(goal));
+    }
+
+    // returns list of Goals that are valid today, by increasing end date
+    public static List<Goal> getGoals(Date today) {
+        Cursor cursor = runQuery("SELECT * FROM " + GOALS_TABLE_NAME + " WHERE " + GOAL_START_TIME
+                + " > " + today.getTime() + " OR " + GOAL_END_TIME + " > " + today.getTime() +
+                " ORDER BY " + GOAL_START_TIME + " ASC");
+        return DBUtil.getGoalsFromCursor(cursor);
+    }
+
+    // given the last time an update was made, goes through recurring goals table and creates
+    // new goals as required. This is used to generate goal objects as scheduled.
+    public static void refreshRecurringGoals(Date lastUpdate) {
+
     }
 }
