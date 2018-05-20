@@ -70,9 +70,9 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
     private DBManager(Context context){
         super(context, DB_NAME, null, 1);
         // uncomment to wipe the database
-        getWritableDatabase().execSQL("DROP TABLE IF EXISTS " + LOG_TABLE_NAME);
-        getWritableDatabase().execSQL("DROP TABLE IF EXISTS " + GOALS_TABLE_NAME);
-        onCreate(getWritableDatabase());
+//        getWritableDatabase().execSQL("DROP TABLE IF EXISTS " + LOG_TABLE_NAME);
+//        getWritableDatabase().execSQL("DROP TABLE IF EXISTS " + GOALS_TABLE_NAME);
+//        onCreate(getWritableDatabase());
     }
 
 

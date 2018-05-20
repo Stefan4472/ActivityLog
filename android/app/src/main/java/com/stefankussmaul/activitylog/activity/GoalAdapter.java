@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.stefankussmaul.activitylog.R;
@@ -40,6 +41,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.GoalViewHolder
         Log.d("GoalAdapter", "Goal activity is " + goal.getActivity());
         holder.title.setText(goal.getActivity());
         holder.goalData.setText(goal.toString());
+        holder.progressbar.setProgress((int) goal.getPercentProgress());//, true);
     }
 
     @Override
@@ -50,11 +52,13 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.GoalViewHolder
     class GoalViewHolder extends RecyclerView.ViewHolder {
         protected TextView title;
         protected TextView goalData;
+        protected ProgressBar progressbar;
 
         public GoalViewHolder(View view) {
             super(view);
-            this.title = (TextView) view.findViewById(R.id.goal_title);
-            this.goalData = (TextView) view.findViewById(R.id.goal_info);
+            title = (TextView) view.findViewById(R.id.goal_title);
+            goalData = (TextView) view.findViewById(R.id.goal_info);
+            progressbar = (ProgressBar) view.findViewById(R.id.goal_progressbar);
         }
     }
 }
