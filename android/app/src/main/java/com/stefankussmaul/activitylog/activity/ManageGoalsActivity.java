@@ -10,8 +10,10 @@ import android.util.Log;
 
 import com.stefankussmaul.activitylog.R;
 import com.stefankussmaul.activitylog.content.DBManager;
+import com.stefankussmaul.activitylog.content.Goal;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Stefan on 5/12/2018.
@@ -40,8 +42,13 @@ public class ManageGoalsActivity extends AppCompatActivity {
         goalsRecyclerView = (RecyclerView) findViewById(R.id.goals_recyclerview);
         goalsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // populate with goals relevant to current time
-        goalAdapter = new GoalAdapter(DBManager.getGoals(new Date(System.currentTimeMillis())));
+        // retrieve goals relevant to current time and update progress
+        List<Goal> current_goals = DBManager.getGoals(new Date(System.currentTimeMillis()));
+        for (Goal goal : current_goals) {
+            goal.updateProgress();
+        }
+
+        goalAdapter = new GoalAdapter(current_goals);
         goalsRecyclerView.setAdapter(goalAdapter);
     }
 

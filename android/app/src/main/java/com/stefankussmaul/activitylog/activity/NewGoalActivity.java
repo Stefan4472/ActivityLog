@@ -79,6 +79,7 @@ public class NewGoalActivity extends AppCompatActivity {
 
         hourPicker.setMaxValue(1000);
         minutePicker.setMaxValue(59);
+        repetitionPicker.setMinValue(1);
         repetitionPicker.setMaxValue(1000);
 
         List<String> goal_types = new ArrayList<>();

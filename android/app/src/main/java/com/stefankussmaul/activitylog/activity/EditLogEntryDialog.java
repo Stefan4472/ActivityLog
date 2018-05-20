@@ -28,8 +28,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * DialogFragment that allows the user to set/edit the contents of a LogEntry via TextFields and a
- * DatePicker.
+ * Creation/Editing of LogEntries.
  */
 
 public class EditLogEntryDialog extends DialogFragment implements DatePickerFragment.DatePickerListener,

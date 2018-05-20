@@ -2,6 +2,7 @@ package com.stefankussmaul.activitylog.activity;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.GoalViewHolder
     List<Goal> goals;
 
     public GoalAdapter(List<Goal> goals) {
+        Log.d("GoalAdapter", "Creating adapter with " + goals.size() + " goals");
         this.goals = goals;
     }
 
@@ -35,7 +37,8 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.GoalViewHolder
         // retrieve queried goal
         Goal goal = goals.get(position);
 
-        holder.title.setText(goal.getQuery());
+        Log.d("GoalAdapter", "Goal activity is " + goal.getActivity());
+        holder.title.setText(goal.getActivity());
         holder.goalData.setText(goal.toString());
     }
 

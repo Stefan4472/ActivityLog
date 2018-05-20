@@ -2,6 +2,8 @@ package com.stefankussmaul.activitylog.content;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.stefankussmaul.activitylog.charts.ChartConfig;
@@ -11,10 +13,12 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.stefankussmaul.activitylog.content.DBManager.GOAL_ACTIVITY;
 import static com.stefankussmaul.activitylog.content.DBManager.GOAL_END_TIME;
 import static com.stefankussmaul.activitylog.content.DBManager.GOAL_NOTE;
 import static com.stefankussmaul.activitylog.content.DBManager.GOAL_QUERY;
 import static com.stefankussmaul.activitylog.content.DBManager.GOAL_START_TIME;
+import static com.stefankussmaul.activitylog.content.DBManager.GOAL_TARGET;
 import static com.stefankussmaul.activitylog.content.DBManager.LOG_COLUMN_ACTIVITY;
 import static com.stefankussmaul.activitylog.content.DBManager.LOG_COLUMN_DURATION;
 import static com.stefankussmaul.activitylog.content.DBManager.LOG_COLUMN_TIMESTAMP;
@@ -65,12 +69,15 @@ public class DBUtil {
     public static List<Goal> getGoalsFromCursor(Cursor cursor) {
         List<Goal> goals = new LinkedList<>();
         cursor.moveToFirst();
+        Log.d("DBUTilt", DatabaseUtils.dumpCursorToString(cursor));
         // loop through data in the cursor, creating a new Goal for each set
         while (!cursor.isAfterLast()) {
             goals.add(
                     new Goal(
+                            cursor.getString(cursor.getColumnIndex(GOAL_ACTIVITY)),
                             new Date(cursor.getLong(cursor.getColumnIndex(GOAL_START_TIME))),
                             new Date(cursor.getLong(cursor.getColumnIndex(GOAL_END_TIME))),
+                            cursor.getInt(cursor.getColumnIndex(GOAL_TARGET)),
                             cursor.getString(cursor.getColumnIndex(GOAL_QUERY)),
                             cursor.getString(cursor.getColumnIndex(GOAL_NOTE))
                     ));
@@ -102,8 +109,10 @@ public class DBUtil {
     // into a database
     public static ContentValues getContentVals(Goal goal) {
         ContentValues content_vals = new ContentValues();
+        content_vals.put(GOAL_ACTIVITY, goal.getActivity());
         content_vals.put(GOAL_START_TIME, goal.getStartDate().getTime());
         content_vals.put(GOAL_END_TIME, goal.getEndDate().getTime());
+        content_vals.put(GOAL_TARGET, goal.getTarget());
         content_vals.put(GOAL_QUERY, goal.getQuery());
         content_vals.put(GOAL_NOTE, goal.getNote());
         return content_vals;
