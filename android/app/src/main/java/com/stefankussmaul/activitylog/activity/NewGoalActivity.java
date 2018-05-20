@@ -190,7 +190,8 @@ public class NewGoalActivity extends AppCompatActivity {
             default:
                 // set to start at midnight this morning and run to midnight tonight
                 startDate = DateUtil.getMidnightVal(Calendar.getInstance()).getTime();
-                endDate = DateUtil.addToDate(startDate, 1, Calendar.DAY_OF_YEAR);
+//                endDate = DateUtil.addToDate(startDate, 1, Calendar.DAY_OF_YEAR);
+                endDate = new Date(startDate.getTime() + DateUtil.DAY_MS); // THERE'S AN ISSUE WITH SOMETHING HERE
                 break;
             case WEEKLY_GOAL:
                 // set to start at midnight this morning and run for 7 days // TODO: RUN TO END OF WEEK

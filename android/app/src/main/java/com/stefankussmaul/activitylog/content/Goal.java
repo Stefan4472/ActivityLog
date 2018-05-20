@@ -44,7 +44,7 @@ public class Goal {
     }
 
     public Goal(String activity, Date startDate, Date endDate, int target, String query, String note) {
-        this.activity = activity;
+        this.activity = activity;  // todo: need goal type
         this.startDate = startDate;
         this.endDate = endDate;
         this.target = target;
@@ -124,6 +124,11 @@ public class Goal {
     // returns percentage of target that has been completed
     public float getPercentCompletion() {
         return 0; // TODO
+    }
+
+    // returns formatted target, e.g. "10 hours" or "15 Times"
+    public String getTargetString() {
+        return "No Target";
     }
 
     // generates query that assesses value of progress toward target

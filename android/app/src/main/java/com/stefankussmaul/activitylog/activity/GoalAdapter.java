@@ -1,6 +1,7 @@
 package com.stefankussmaul.activitylog.activity;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,7 +11,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.stefankussmaul.activitylog.R;
+import com.stefankussmaul.activitylog.content.DateUtil;
 import com.stefankussmaul.activitylog.content.Goal;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -41,7 +45,27 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.GoalViewHolder
         Log.d("GoalAdapter", "Goal activity is " + goal.getActivity());
         holder.title.setText(goal.getActivity());
         holder.goalData.setText(goal.toString());
+        holder.target.setText(goal.getTargetString()); // TODO
         holder.progressbar.setProgress((int) goal.getPercentProgress());//, true);
+
+        // calculate how much time is left and set coloring/text based on various cases
+        long ms_left = goal.getEndDate().getTime() - System.currentTimeMillis();
+        if (ms_left < DateUtil.HOUR_MS) {
+            holder.timeLeft.setText((ms_left / DateUtil.MINUTE_MS) + " Minutes");
+            holder.timeLeft.setTextColor(Color.RED);
+        } else if (ms_left < 4 * DateUtil.HOUR_MS) {
+            holder.timeLeft.setText((ms_left / DateUtil.HOUR_MS) + " Hours");
+            holder.timeLeft.setTextColor(Color.YELLOW);
+        } else if (ms_left < DateUtil.DAY_MS) {
+            holder.timeLeft.setText("Today");
+            holder.timeLeft.setTextColor(Color.GREEN);
+        } else if (ms_left < 2 * DateUtil.DAY_MS) {
+            holder.timeLeft.setText("Tomorrow");
+            holder.timeLeft.setTextColor(Color.GREEN);
+        } else {
+            holder.timeLeft.setText((ms_left / DateUtil.DAY_MS) + " Days");
+            holder.timeLeft.setTextColor(Color.GREEN);
+        }
     }
 
     @Override
@@ -50,13 +74,14 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.GoalViewHolder
     }
 
     class GoalViewHolder extends RecyclerView.ViewHolder {
-        protected TextView title;
-        protected TextView goalData;
+        protected TextView title, target, timeLeft, goalData;
         protected ProgressBar progressbar;
 
         public GoalViewHolder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.goal_title);
+            target = (TextView) view.findViewById(R.id.goal_target);
+            timeLeft = (TextView) view.findViewById(R.id.goal_timeleft);
             goalData = (TextView) view.findViewById(R.id.goal_info);
             progressbar = (ProgressBar) view.findViewById(R.id.goal_progressbar);
         }
