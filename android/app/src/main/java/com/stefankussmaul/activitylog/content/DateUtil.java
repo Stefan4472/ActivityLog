@@ -22,7 +22,7 @@ public class DateUtil {
     public static final int SECOND_MS = 1_000;
     public static final int MINUTE_MS = 60_000;
     public static final int HOUR_MS = 3_600_000;
-    public static final int DAY_MS = 84_000_000;
+    public static final int DAY_MS = 84_400_000;
     public static final int WEEK_MS = 604_800_000;
 
     public static long timeToMs(int hours, int minutes, int seconds) {

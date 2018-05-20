@@ -66,6 +66,13 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.GoalViewHolder
             holder.timeLeft.setText((ms_left / DateUtil.DAY_MS) + " Days");
             holder.timeLeft.setTextColor(Color.GREEN);
         }
+
+        // set percentage progress and fraction below progress bar
+        holder.percentage.setText(goal.getPercentProgress() + "%");  // TODO: IMPROVE
+        String progress_str = goal.getProgress() + " / " +
+                (goal.getGoalType() == Goal.GoalType.GOAL_TIME ? (goal.getTarget() / DateUtil.HOUR_MS) :
+                goal.getTarget());
+        holder.progress.setText(progress_str);
     }
 
     @Override
@@ -74,7 +81,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.GoalViewHolder
     }
 
     class GoalViewHolder extends RecyclerView.ViewHolder {
-        protected TextView title, target, timeLeft, goalData;
+        protected TextView title, target, timeLeft, goalData, percentage, progress;
         protected ProgressBar progressbar;
 
         public GoalViewHolder(View view) {
@@ -84,6 +91,8 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.GoalViewHolder
             timeLeft = (TextView) view.findViewById(R.id.goal_timeleft);
             goalData = (TextView) view.findViewById(R.id.goal_info);
             progressbar = (ProgressBar) view.findViewById(R.id.goal_progressbar);
+            percentage = (TextView) view.findViewById(R.id.goal_percentage);
+            progress = (TextView) view.findViewById(R.id.goal_progress);
         }
     }
 }

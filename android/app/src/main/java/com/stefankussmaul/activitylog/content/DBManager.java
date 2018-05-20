@@ -37,6 +37,7 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
     public static final String GOAL_ID = "goals_id";
     public static final String GOAL_ACTIVITY = "goals_activity";
     public static final String GOAL_TARGET = "goals_target";
+    public static final String GOAL_TYPE = "goal_type";
     public static final String GOAL_START_TIME = "goals_start_time";
     public static final String GOAL_END_TIME = "goals_end_time";
     public static final String GOAL_QUERY = "goals_query";
@@ -88,9 +89,10 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
                 "CREATE TABLE " + GOALS_TABLE_NAME + " (" +
                     GOAL_ID + " INTEGER PRIMARY KEY, " +
                     GOAL_ACTIVITY + " TEXT, " +
+                    GOAL_TARGET + " INTEGER, " +
+                    GOAL_TYPE + " TEXT, " +
                     GOAL_START_TIME + " INTEGER, " +
                     GOAL_END_TIME + " INTEGER, " +
-                    GOAL_TARGET + " INTEGER, " +
                     GOAL_QUERY + " TEXT, " +
                     GOAL_NOTE + " TEXT)");
         Log.d("DBManager", "Created Database");

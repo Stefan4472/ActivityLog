@@ -25,6 +25,8 @@ public class Goal {
     private String query;
     // numerical progress sought
     private int target;
+    // type of goal (time or repetition)
+    private GoalType goalType;
     // current progress. This is not a percentage!
     private float progress;
     // user-created note to go along with Goal
@@ -38,15 +40,18 @@ public class Goal {
         this.activity = activity;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.goalType = goalType;
         this.target = target;
         this.query = generateQuery(activity, startDate, endDate, goalType);
         this.note = note;
     }
 
-    public Goal(String activity, Date startDate, Date endDate, int target, String query, String note) {
+    public Goal(String activity, Date startDate, Date endDate, int target, GoalType goalType,
+                String query, String note) {
         this.activity = activity;  // todo: need goal type
         this.startDate = startDate;
         this.endDate = endDate;
+        this.goalType = goalType;
         this.target = target;
         this.query = query;
         this.note = note;
@@ -92,6 +97,14 @@ public class Goal {
         this.target = target;
     }
 
+    public GoalType getGoalType() {
+        return goalType;
+    }
+
+    public void setGoalType(GoalType goalType) {
+        this.goalType = goalType;
+    }
+
     public String getNote() {
         return note;
     }
@@ -121,14 +134,13 @@ public class Goal {
         this.progress = progress;
     }
 
-    // returns percentage of target that has been completed
-    public float getPercentCompletion() {
-        return 0; // TODO
-    }
-
     // returns formatted target, e.g. "10 hours" or "15 Times"
     public String getTargetString() {
-        return "No Target";
+        if (goalType == GoalType.GOAL_REPETITIONS) {
+            return target + " Repetitions";
+        } else {
+            return (target / DateUtil.HOUR_MS) + " Hours";
+        }
     }
 
     // generates query that assesses value of progress toward target
@@ -153,6 +165,6 @@ public class Goal {
     @Override
     public String toString() {
         return "Goal(" + activity + ", " + DateUtil.format(startDate) + ", " + DateUtil.format(endDate)
-                + ", " + query + ", " + target + "ms, note:'" + note + "')";
+                + ", " + query + ", " + target + ", " + goalType + ", note:'" + note + "')";
     }
 }

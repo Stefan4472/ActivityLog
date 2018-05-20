@@ -19,6 +19,7 @@ import static com.stefankussmaul.activitylog.content.DBManager.GOAL_NOTE;
 import static com.stefankussmaul.activitylog.content.DBManager.GOAL_QUERY;
 import static com.stefankussmaul.activitylog.content.DBManager.GOAL_START_TIME;
 import static com.stefankussmaul.activitylog.content.DBManager.GOAL_TARGET;
+import static com.stefankussmaul.activitylog.content.DBManager.GOAL_TYPE;
 import static com.stefankussmaul.activitylog.content.DBManager.LOG_COLUMN_ACTIVITY;
 import static com.stefankussmaul.activitylog.content.DBManager.LOG_COLUMN_DURATION;
 import static com.stefankussmaul.activitylog.content.DBManager.LOG_COLUMN_TIMESTAMP;
@@ -78,6 +79,7 @@ public class DBUtil {
                             new Date(cursor.getLong(cursor.getColumnIndex(GOAL_START_TIME))),
                             new Date(cursor.getLong(cursor.getColumnIndex(GOAL_END_TIME))),
                             cursor.getInt(cursor.getColumnIndex(GOAL_TARGET)),
+                            Goal.GoalType.valueOf(cursor.getString(cursor.getColumnIndex(GOAL_TYPE))),
                             cursor.getString(cursor.getColumnIndex(GOAL_QUERY)),
                             cursor.getString(cursor.getColumnIndex(GOAL_NOTE))
                     ));
@@ -113,6 +115,7 @@ public class DBUtil {
         content_vals.put(GOAL_START_TIME, goal.getStartDate().getTime());
         content_vals.put(GOAL_END_TIME, goal.getEndDate().getTime());
         content_vals.put(GOAL_TARGET, goal.getTarget());
+        content_vals.put(GOAL_TYPE, goal.getGoalType().name());
         content_vals.put(GOAL_QUERY, goal.getQuery());
         content_vals.put(GOAL_NOTE, goal.getNote());
         return content_vals;

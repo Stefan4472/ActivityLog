@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -192,6 +193,7 @@ public class NewGoalActivity extends AppCompatActivity {
                 startDate = DateUtil.getMidnightVal(Calendar.getInstance()).getTime();
 //                endDate = DateUtil.addToDate(startDate, 1, Calendar.DAY_OF_YEAR);
                 endDate = new Date(startDate.getTime() + DateUtil.DAY_MS); // THERE'S AN ISSUE WITH SOMETHING HERE
+                Log.d("NewGoalActivity", "Start is " + startDate.getTime() + " End is " + endDate.getTime());
                 break;
             case WEEKLY_GOAL:
                 // set to start at midnight this morning and run for 7 days // TODO: RUN TO END OF WEEK
