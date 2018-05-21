@@ -105,6 +105,12 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
         database.execSQL("DROP TABLE IF EXISTS " + GOALS_TABLE_NAME);
         onCreate(database);
     }
+
+    // runs the given query and returns the Cursor
+    public static Cursor runQuery(String sqlQuery) {
+        return dbHandle.getWritableDatabase().rawQuery(sqlQuery, null);
+    }
+
     // todo: need to defend against leaks by ensuring DBManager and all Cursors are closed after use
     // returns Cursor containing all the data from the database
     public static Cursor getAllData() {
@@ -166,11 +172,6 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
                 LOG_COLUMN_TIMESTAMP + " = " + toDelete.getDateInMS(), null);
     }
 
-    // runs the given query and returns the Cursor
-    public static Cursor runQuery(String sqlQuery) {
-        return dbHandle.getWritableDatabase().rawQuery(sqlQuery, null);
-    }
-
     // returns alphabetically-sorted list of all Activity names that exist
     public static List<String> getAllActivityNames() {
         Cursor cursor = runQuery("SELECT DISTINCT " + LOG_COLUMN_ACTIVITY + " FROM " + LOG_TABLE_NAME +
@@ -183,6 +184,14 @@ public class DBManager extends SQLiteOpenHelper { // todo: testing
         }
         cursor.close();
         return names;
+    }
+
+    // returns list of activities logged between start and end dates
+    public static List<LogEntry> getActivitiesBtwn(Date start, Date end) {
+        Cursor cursor = runQuery("SELECT * FROM " + LOG_TABLE_NAME + " WHERE " +
+                LOG_COLUMN_TIMESTAMP + " > " + start.getTime() + " AND " + LOG_COLUMN_TIMESTAMP +
+                " < " + end.getTime() + " ORDER BY " + LOG_COLUMN_TIMESTAMP + " ASC");
+        return DBUtil.getLogsFromCursor(cursor);
     }
 
     public static void addGoal(Goal goal) {

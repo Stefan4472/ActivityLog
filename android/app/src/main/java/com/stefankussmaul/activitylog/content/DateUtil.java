@@ -42,6 +42,15 @@ public class DateUtil {
         return calendar1;
     }
 
+    public static Date getMidnightToday() {
+        return stripToPrecision(new Date(System.currentTimeMillis()), Calendar.DAY_OF_YEAR);
+    }
+
+    public static Date getMidnightTomorrow() {
+        Date today = stripToPrecision(new Date(System.currentTimeMillis()), Calendar.DAY_OF_YEAR);
+        return new Date(today.getTime() + DAY_MS);
+    }
+
     // formats and returns the Date in a consistent manner
     public static String format(Date date) {
         return dateFormat.format(date);

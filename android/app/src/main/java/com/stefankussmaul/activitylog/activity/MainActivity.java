@@ -8,15 +8,21 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.stefankussmaul.activitylog.R;
 import com.stefankussmaul.activitylog.content.ActivityAggregate;
 import com.stefankussmaul.activitylog.content.DBManager;
 import com.stefankussmaul.activitylog.content.DBUtil;
+import com.stefankussmaul.activitylog.content.DateUtil;
+import com.stefankussmaul.activitylog.content.Goal;
 import com.stefankussmaul.activitylog.content.LogEntry;
 import com.stefankussmaul.activitylog.content.QueryBuilder;
 import com.stefankussmaul.activitylog.content.StringUtil;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,6 +31,12 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements EditLogEntryDialog.LogDialogListener {
 
+    private TextView titleText;
+    private TextView subtitleText;
+    private TextView activitySummary;
+    private LinearLayout todoLayout;
+    private LinearLayout goalLayout;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,33 +44,36 @@ public class MainActivity extends AppCompatActivity implements EditLogEntryDialo
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        titleText = (TextView) findViewById(R.id.home_title);
+        subtitleText = (TextView) findViewById(R.id.home_subtitle);
+        activitySummary = (TextView) findViewById(R.id.home_activity_summary);
+        todoLayout = (LinearLayout) findViewById(R.id.home_todo_layout);
+        goalLayout = (LinearLayout) findViewById(R.id.home_goal_layout);
+
+        // init database singleton
         DBManager.init(this);
 
-        Log.d("MainActivity", "Printing Database\n" + StringUtil.cursorToString(DBManager.getAllData()));
+        // TODO: LET USER CHANGE DATE BEING SHOWN
+        Date now = new Date(System.currentTimeMillis());
 
-        QueryBuilder query_builder = new QueryBuilder();
+        // set title e.g. Monday, 5/20
+        titleText.setText(new SimpleDateFormat("EEEE, M/d").format(now));
 
-        Log.d("MainActivity", "Printing calculated aggregates");
-        Log.d("MainActivity", query_builder.getSessionCountQuery());
-        Log.d("MainActivity", query_builder.getTimeSpentQuery());
-        Log.d("MainActivity", "Aggregate Durations");
-        int counter = 1;
-        List<ActivityAggregate> sums = DBUtil.getAggregatesFromCursor(DBManager.runQuery(query_builder.getTimeSpentQuery()));
-        for (ActivityAggregate a : sums) {
-            Log.d("MainActivity", counter + ". " + a.toString());
-            counter++;
+        // set subtitle e.g. today, yesterday, 2 days ago, tomorrow, in 2 days, etc. TODO
+        subtitleText.setText("Today");
+
+        // set summary to [number of activities today] activities, [time logged today] hours
+        List<LogEntry> activities_today = DBManager.getActivitiesBtwn(DateUtil.getMidnightToday(),
+                DateUtil.getMidnightTomorrow());
+        long time_today = 0;
+        for (LogEntry activity : activities_today) {
+            time_today += activity.getDuration();
         }
-        Log.d("MainActivity", "Aggregate Logged Sessions");
-        counter = 1;
-        List<ActivityAggregate> counts = DBUtil.getAggregatesFromCursor(DBManager.runQuery(query_builder.getSessionCountQuery()));
-        for (ActivityAggregate c : counts) {
-            Log.d("MainActivity", counter + ". " + c.toString());
-            counter++;
-        }
+        activitySummary.setText(activities_today.size() + " Activities, " +
+                (time_today / (double) DateUtil.HOUR_MS) + " Hours");
+
+        // retrieve goals from database and add to goalLayout, in order TODO
 
         // show daily report dialog
         DailyReportDialog report = new DailyReportDialog();

@@ -1,94 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
     <!-- default toolbar -->
     <include layout="@layout/toolbar_layout"
         android:id="@+id/toolbar"/>
+    <!-- Displays today's day of week and date -->
     <TextView
+        android:id="@+id/home_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/dash_layout"
-        android:gravity="center"
+        android:gravity="center_horizontal"
         android:textSize="32sp"
-        android:text="@string/home_msg"/>
-    <!-- dashboard layout: 2x2 imagebuttons with text -->
-    <TableLayout
-        android:id="@+id/dash_layout"
+        android:text="No Date"/>
+    <TextView
+        android:id="@+id/home_subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
-
-        <TableRow
+        android:gravity="center_horizontal"
+        android:textSize="20sp"
+        android:text="No Day"/>
+    <TextView
+        android:id="@+id/home_activity_summary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textSize="24sp"
+        android:text="No Activities"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:text="Log an Activity"
+            android:onClick="launchLogDialog"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:drawableTop="@drawable/ic_create_black_36dp"
-                android:onClick="launchLogDialog"
-                android:text="@string/log_activity" />
-
-            <Button
-                android:id="@+id/button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:drawableTop="@drawable/ic_alarm_black_36dp"
-                android:onClick="launchStartActivity"
-                android:text="@string/start_activity" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:drawableTop="@drawable/ic_assessment_black_36dp"
-                android:onClick="launchAnalytics"
-                android:text="@string/analytics" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:drawableTop="@drawable/ic_assignment_black_36dp"
-                android:onClick="launchViewEditLog"
-                android:text="@string/view_edit_log" />
-        </TableRow>
-
-        <TableRow
+            android:layout_height="wrap_content" />
+        <Button
+            android:text="Start an Activity"
+            android:onClick="launchStartActivity"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center">
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="To-Dos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:text="Add"
+            android:onClick="launchNewGoal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <!-- displays list of to-do items. Filled dynamically -->
+    <LinearLayout
+        android:id="@+id/home_todo_layout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </LinearLayout>
+    <LinearLayout
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="Goals"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:text="Add"
+            android:onClick="launchNewGoal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <!-- displays list of goals. Filled dynamically -->
+    <LinearLayout
+        android:id="@+id/home_goal_layout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </LinearLayout>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:drawableTop="@drawable/ic_done_black_32dp_2x"
-                android:onClick="launchNewGoal"
-                android:text="@string/new_goal" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:drawableTop="@drawable/ic_assessment_black_36dp"
+        android:onClick="launchAnalytics"
+        android:text="@string/analytics" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:drawableTop="@drawable/ic_assignment_turned_in_black_36dp"
-                android:onClick="launchManageGoals"
-                android:text="@string/manage_goals" />
-        </TableRow>
-    </TableLayout>
-
-</RelativeLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:drawableTop="@drawable/ic_assignment_black_36dp"
+        android:onClick="launchViewEditLog"
+        android:text="@string/view_edit_log" />
+</LinearLayout>
