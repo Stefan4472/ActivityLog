@@ -32,7 +32,7 @@ import java.util.List;
  */
 
 public class EditLogEntryDialog extends DialogFragment implements DatePickerFragment.DatePickerListener,
-    DurationPickerDialog.OnDurationChangedListener {
+    DurationPickerDialog.OnDurationChangedListener {  // TODO: MAKE ACTIVITY
 
     // keys used for storing data in bundle
     private static final String ACTIVITY_KEY = "LOGGED_ACTIVITY";

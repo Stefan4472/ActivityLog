@@ -1,10 +1,12 @@
 package com.stefankussmaul.activitylog.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -74,6 +76,13 @@ public class MainActivity extends AppCompatActivity implements EditLogEntryDialo
                 (time_today / (double) DateUtil.HOUR_MS) + " Hours");
 
         // retrieve goals from database and add to goalLayout, in order TODO
+        LayoutInflater inflator = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        for (Goal goal : DBManager.getGoals(now)) {
+            View goal_view = inflator.inflate(R.layout.goal_adapter, null);
+            TextView title = (TextView) goal_view.findViewById(R.id.goal_title);
+            title.setText("Goal " + goal.getActivity());
+            goalLayout.addView(goal_view);
+        }
 
         // show daily report dialog
         DailyReportDialog report = new DailyReportDialog();
@@ -142,5 +151,11 @@ public class MainActivity extends AppCompatActivity implements EditLogEntryDialo
         Log.d("MainActivity", "Launching Manage Goals");
         Intent goals_intent = new Intent(this, ManageGoalsActivity.class);
         startActivity(goals_intent);
+    }
+
+    public void launchNewTodo(View view) {
+        Log.d("MainActivity", "Launching New Todo");
+        Intent todo_intent = new Intent(this, NewTodoActivity.class);
+        startActivity(todo_intent);
     }
 }

@@ -64,6 +64,17 @@
                 android:value=".activity.MainActivity" />
         </activity>
         <activity
+            android:name=".activity.NewTodoActivity"
+            android:label="Add a Todo"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activity.MainActivity">
+
+            <!-- parent activity meta-data to support 4.0 or below -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
+        <activity
             android:name=".activity.ManageGoalsActivity"
             android:label="Manage Goals"
             android:screenOrientation="portrait"

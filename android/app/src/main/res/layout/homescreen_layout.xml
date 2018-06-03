@@ -55,7 +55,7 @@
             android:layout_height="wrap_content" />
         <Button
             android:text="Add"
-            android:onClick="launchNewGoal"
+            android:onClick="launchNewTodo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
