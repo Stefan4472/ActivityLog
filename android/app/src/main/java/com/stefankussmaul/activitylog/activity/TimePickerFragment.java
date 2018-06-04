@@ -1,6 +1,5 @@
 package com.stefankussmaul.activitylog.activity;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,7 @@ import java.util.Date;
  * Created by Stefan on 6/3/2018.
  */
 // TODO: INITIAL TIME
-public class TimePickerFragment extends Fragment {
+public class TimePickerFragment extends android.support.v4.app.Fragment {
 
     private NumberPicker hourPicker;
     private NumberPicker minutePicker;

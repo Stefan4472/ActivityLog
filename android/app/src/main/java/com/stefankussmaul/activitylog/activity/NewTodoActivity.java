@@ -1,6 +1,8 @@
 package com.stefankussmaul.activitylog.activity;
 
+import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,15 +21,14 @@ import com.stefankussmaul.activitylog.R;
 public class NewTodoActivity extends AppCompatActivity {
 
     private EditText titleEntry;
-    private Button addStartTimeBtn;
-    private LinearLayout setStartTimeLayout;
-    private NumberPicker startHourPicker;
-    private NumberPicker startMinutePicker;
-    private NumberPicker startAMPMPicker;
+    private TimePickerFragment setStartTimeFragment;
+    private TimePickerFragment setEndTimeFragment;
+    private TimePickerFragment setReminderTimeFragment;
     private LinearLayout setNoteLayout;
     private LinearLayout setChecklistLayout;
 
-    private static final String AM_STRING = "AM", PM_STRING = "PM";
+    private FragmentManager fragmentManager;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,26 +42,65 @@ public class NewTodoActivity extends AppCompatActivity {
         ActionBar action_bar = getSupportActionBar();
         action_bar.setDisplayHomeAsUpEnabled(true);
 
+        fragmentManager = getSupportFragmentManager();
+
         titleEntry = (EditText) findViewById(R.id.todo_set_title);
-        addStartTimeBtn = (Button) findViewById(R.id.todo_add_start_btn); // TODO: REMOVE
-        setStartTimeLayout = (LinearLayout) findViewById(R.id.todo_set_start);
-        startHourPicker = (NumberPicker) findViewById(R.id.todo_start_hour_picker);
-        startMinutePicker = (NumberPicker) findViewById(R.id.todo_start_minute_picker);
-        startAMPMPicker = (NumberPicker) findViewById(R.id.todo_start_ampm_picker);
+        setStartTimeFragment = (TimePickerFragment) fragmentManager.findFragmentById(R.id.todo_start_time_picker);
+        setEndTimeFragment = (TimePickerFragment) fragmentManager.findFragmentById(R.id.todo_end_time_picker);
+        setReminderTimeFragment = (TimePickerFragment) fragmentManager.findFragmentById(R.id.todo_remind_time_picker);
         setNoteLayout = (LinearLayout) findViewById(R.id.todo_add_note_layout);
         setChecklistLayout = (LinearLayout) findViewById(R.id.todo_add_checklist_layout);
 
-        startHourPicker.setMinValue(0);
-        startHourPicker.setMaxValue(12);
-        startMinutePicker.setMinValue(0); // TODO: TIME PICKERS SHOULD HAVE INCREMENTS OF 10 MINUTES
-        startMinutePicker.setMaxValue(59);
-        startAMPMPicker.setMinValue(0);
-        startAMPMPicker.setMaxValue(1);
-        startAMPMPicker.setDisplayedValues(new String[] {AM_STRING, PM_STRING});
+        // hide setStartTimeFragment for the moment
+        fragmentManager.beginTransaction()
+                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                .hide(setStartTimeFragment)
+                .hide(setEndTimeFragment)
+                .hide(setReminderTimeFragment)
+                .commit();
+
+        // hide setStartTimeFragment for the moment
+//        fragmentManager.beginTransaction()
+//                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+//                .hide(setEndTimeFragment)
+//                .commit();
+
+        /*if (fragment.isHidden()) {
+            ft.show(fragment);
+            button.setText("Hide");
+        } else {
+            ft.hide(fragment);
+            button.setText("Show");
+        }
+        ft.commit();*/
     }
 
+    //
     public void onAddStartTime(View view) {
-        setStartTimeLayout.setVisibility(View.VISIBLE);
+        // show fragment if not hidden
+        if (setStartTimeFragment.isHidden()) {
+            fragmentManager.beginTransaction()
+                    .show(setStartTimeFragment)
+                    .commit();
+        }
+    }
+
+    public void onAddEndTime(View view) {
+        // show fragment if not hidden
+        if (setEndTimeFragment.isHidden()) {
+            fragmentManager.beginTransaction()
+                    .show(setEndTimeFragment)
+                    .commit();
+        }
+    }
+
+    public void onAddReminder(View view) {
+        // show fragment if not hidden
+        if (setReminderTimeFragment.isHidden()) {
+            fragmentManager.beginTransaction()
+                    .show(setReminderTimeFragment)
+                    .commit();
+        }
     }
 
     public void onAddNote(View view) {

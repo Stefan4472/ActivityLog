@@ -19,40 +19,36 @@
         android:onClick="onAddStartTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    <LinearLayout
-        android:id="@+id/todo_set_start"
-        android:orientation="horizontal"
-        android:visibility="gone"
+    <fragment
+        android:id="@+id/todo_start_time_picker"
+        class="com.stefankussmaul.activitylog.activity.TimePickerFragment"
+        android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <NumberPicker
-            android:id="@+id/todo_start_hour_picker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:text=":"
-            android:layout_gravity="center_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <NumberPicker
-            android:id="@+id/todo_start_minute_picker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <NumberPicker
-            android:id="@+id/todo_start_ampm_picker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
+        android:layout_height="wrap_content"/>
     <Button
         android:id="@+id/todo_add_end_btn"
         android:text="Add an End Time"
+        android:onClick="onAddEndTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    <fragment
+        android:id="@+id/todo_end_time_picker"
+        class="com.stefankussmaul.activitylog.activity.TimePickerFragment"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <Button
         android:id="@+id/todo_add_reminder_btn"
         android:text="Add a Reminder"
+        android:onClick="onAddReminder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    <fragment
+        android:id="@+id/todo_remind_time_picker"
+        class="com.stefankussmaul.activitylog.activity.TimePickerFragment"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <Button
         android:text="Add a Note"
         android:onClick="onAddNote"
