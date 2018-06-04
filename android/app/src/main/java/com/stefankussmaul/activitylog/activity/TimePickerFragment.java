@@ -14,7 +14,7 @@ import java.util.Date;
 /**
  * Created by Stefan on 6/3/2018.
  */
-// TODO: INITIAL TIME
+// TODO: ACCEPT INITIAL TIME PARAMETERS
 public class TimePickerFragment extends android.support.v4.app.Fragment {
 
     private NumberPicker hourPicker;
